@@ -44,9 +44,9 @@ class Home : Fragment() {
     private fun showPerson(personPresence: PresenceService.PersonPresence){
         val view = layoutInflater.inflate(R.layout.person_presence, null)
 
-        view.findViewById<TextView>(R.id.personName).text = personPresence.person.fullName
-        val checkbox = view.findViewById<ImageView>(R.id.isPresent)
+        view.findViewById<TextView>(R.id.personName).text = personPresence.person.displayName
 
+        val checkbox = view.findViewById<ImageView>(R.id.isPresent)
         val drawable = if(personPresence.isPresent){ presentColor } else{ absentColor }
         checkbox.setImageResource(drawable)
 
