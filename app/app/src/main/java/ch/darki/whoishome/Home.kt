@@ -1,16 +1,13 @@
 package ch.darki.whoishome
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatCheckBox
 import ch.darki.whoishome.core.PresenceService
 import org.joda.time.DateTime
 
@@ -19,8 +16,8 @@ class Home : Fragment() {
     private var personPresences : List<PresenceService.PersonPresence>? = null
     private var layout : LinearLayout? = null
 
-    private val presentColor = "#00ff22"
-    private val absentColor = "#ff0000"
+    private val presentColor = android.R.drawable.presence_online
+    private val absentColor = android.R.drawable.presence_busy
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,10 +45,10 @@ class Home : Fragment() {
         val view = layoutInflater.inflate(R.layout.person_presence, null)
 
         view.findViewById<TextView>(R.id.personName).text = personPresence.person.fullName
-        val checkbox = view.findViewById<CheckBox>(R.id.isPresent)
+        val checkbox = view.findViewById<ImageView>(R.id.isPresent)
 
-        val color = if(personPresence.isPresent){ presentColor } else{ absentColor }
-        checkbox.buttonTintList = ColorStateList.valueOf(Color.parseColor(color))
+        val drawable = if(personPresence.isPresent){ presentColor } else{ absentColor }
+        checkbox.setImageResource(drawable)
 
         layout?.addView(view)
     }

@@ -23,21 +23,21 @@
                     android:id="@+id/personName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/isPresent"
-                    android:layout_alignBottom="@id/isPresent"
                     android:gravity="center"
                     android:text="Name"
                     android:textFontWeight="1000"
                     android:textSize="20sp" />
 
-                <CheckBox
+                <ImageView
                     android:id="@+id/isPresent"
-                    android:layout_width="wrap_content"
+                    android:layout_width="35dp"
                     android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/personName"
+                    android:layout_alignBottom="@id/personName"
                     android:layout_alignParentEnd="true"
-                    android:buttonTint="#00ff22"
-                    android:checked="true"
-                    android:clickable="false" />
+                    android:layout_marginBottom="0dp"
+                    android:gravity="center"
+                    app:srcCompat="@android:drawable/presence_invisible" />
 
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
