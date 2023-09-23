@@ -59,7 +59,6 @@ class InspectPerson : Fragment() {
     }
 
     private fun showToday(todayEvents : List<Event>){
-
         todayEvents.forEach (
             fun (e){
                 val view = layoutInflater.inflate(R.layout.event_view, null)
@@ -77,7 +76,7 @@ class InspectPerson : Fragment() {
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
                 view.findViewById<TextView>(R.id.date).text = e.startDate.toString()
 
-                todayEventsLayout?.addView(view)
+                thisWeekEventsLayout?.addView(view)
             }
         )
     }
