@@ -19,6 +19,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        PersonService.loadAllPersons()
+        EventService.loadAllEvents()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
