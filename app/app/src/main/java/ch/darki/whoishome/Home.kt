@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.PresenceService
 import org.joda.time.DateTime
 
@@ -28,8 +29,7 @@ class Home : Fragment() {
 
         layout = fragment.findViewById(R.id.home_presence_container)
 
-        val presenceService = PresenceService()
-        personPresences = presenceService.getPresenceListFrom(DateTime.now())
+        personPresences = PresenceService.instance?.getPresenceListFrom(DateTime.now())
         personPresences!!.forEach { p ->
             showPerson(p)
         }
@@ -44,11 +44,16 @@ class Home : Fragment() {
     private fun showPerson(personPresence: PresenceService.PersonPresence){
         val view = layoutInflater.inflate(R.layout.person_presence, null)
 
+        view.setOnClickListener {
+            val action = HomeDirections.actionHomeToPersonView(personPresence.person.email)
+            NavHostFragment.findNavController(this).navigate(action)
+        }
+
         view.findViewById<TextView>(R.id.personName).text = personPresence.person.displayName
 
-        val checkbox = view.findViewById<ImageView>(R.id.isPresent)
+        val imageView = view.findViewById<ImageView>(R.id.isPresent)
         val drawable = if(personPresence.isPresent){ presentColor } else{ absentColor }
-        checkbox.setImageResource(drawable)
+        imageView.setImageResource(drawable)
 
         layout?.addView(view)
     }

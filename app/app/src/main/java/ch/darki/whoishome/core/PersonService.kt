@@ -1,5 +1,7 @@
 package ch.darki.whoishome.core
 
+import kotlin.jvm.optionals.getOrNull
+
 class PersonService {
     var persons : List<Person>? = null
         private set
@@ -11,5 +13,11 @@ class PersonService {
             Person("Jennifer", "jennifer.baumann@bluewin.ch"),
             Person("Ruth", "ruth.baum@bluewin.ch")
         )
+    }
+
+    fun getPersonByEmail(email: String): Person? {
+        return persons?.stream()?.filter {
+            p -> p.email == email
+        }?.findFirst()?.getOrNull()
     }
 }

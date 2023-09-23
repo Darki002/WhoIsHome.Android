@@ -4,11 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     android:label="@string/home_fragment_label"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/home">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/home"
         android:name="ch.darki.whoishome.Home"
         android:label="@string/home_fragment_label"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_personView"
+            app:destination="@id/personView" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/personView"
+        android:name="ch.darki.whoishome.InspectPerson"
+        android:label="Inspect Person"
+        tools:layout="@layout/inspect_person"
+        >
+        <action
+            android:id="@+id/action_personView_to_home"
+            app:destination="@id/home" />
+        <argument
+            android:name="email"
+            app:argType="string" />
+    </fragment>
 </navigation>

@@ -4,8 +4,21 @@ import org.joda.time.DateTime
 
 class PresenceService {
 
-    private val personService : PersonService = PersonService()
-    private val eventService : EventService = EventService()
+    companion object{
+        var instance : PresenceService? = null
+            private set
+
+        fun new(){
+            instance = PresenceService()
+        }
+    }
+
+
+    var personService : PersonService = PersonService()
+        private set
+
+    var eventService : EventService = EventService()
+        private set
 
     init {
         personService.loadAllPersons()
