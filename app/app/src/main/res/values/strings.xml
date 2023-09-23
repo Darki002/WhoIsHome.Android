@@ -3,4 +3,6 @@
     <string name="create_new_event">Neues Event erstellen</string>
     <!-- Strings used for fragments for navigation -->
     <string name="home_fragment_label">Home</string>
+    <string name="diese_woche">Diese Woche</string>
+    <string name="heute">Heute</string>
 </resources>
