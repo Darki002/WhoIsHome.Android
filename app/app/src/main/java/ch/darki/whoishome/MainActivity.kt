@@ -1,7 +1,6 @@
 package ch.darki.whoishome
 
 import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,9 +17,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        PersonService.loadAllPersons()
-        EventService.loadAllEvents()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,4 +1,4 @@
-package ch.darki.whoishome
+package ch.darki.whoishome.core
 
 import org.joda.time.DateTime
 
