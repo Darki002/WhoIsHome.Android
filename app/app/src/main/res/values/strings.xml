@@ -5,4 +5,8 @@
     <string name="home_fragment_label">Home</string>
     <string name="diese_woche">Diese Woche</string>
     <string name="heute">Heute</string>
+    <string name="log_in">Log In</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="ausloggen">Ausloggen</string>
 </resources>

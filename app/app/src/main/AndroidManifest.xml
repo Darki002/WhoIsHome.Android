@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WhoIsHome"
         tools:targetApi="34">
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

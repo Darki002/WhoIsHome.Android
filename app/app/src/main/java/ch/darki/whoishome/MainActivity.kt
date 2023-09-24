@@ -1,5 +1,7 @@
 package ch.darki.whoishome
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -8,6 +10,8 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBar.DisplayOptions
+import ch.darki.whoishome.core.LogInService
 import ch.darki.whoishome.core.PresenceService
 import ch.darki.whoishome.databinding.ActivityMainBinding
 
@@ -20,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         PresenceService.new()
+        LogInService.new(getSharedPreferences("userManager", Context.MODE_PRIVATE))
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

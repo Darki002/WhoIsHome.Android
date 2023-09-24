@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_home_to_personView"
             app:destination="@id/personView" />
+        <action
+            android:id="@+id/action_home_to_loginView"
+            app:destination="@id/loginView" />
     </fragment>
 
     <fragment
@@ -28,5 +31,14 @@
         <argument
             android:name="email"
             app:argType="string" />
+    </fragment>
+
+    <fragment android:id="@+id/loginView"
+        android:name="ch.darki.whoishome.LogIn"
+        tools:label="Log In"
+        tools:layout="@layout/log_in" >
+        <action
+            android:id="@+id/action_loginView_to_home"
+            app:destination="@id/home" />
     </fragment>
 </navigation>

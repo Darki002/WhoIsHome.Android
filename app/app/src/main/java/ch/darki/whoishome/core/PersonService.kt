@@ -1,13 +1,14 @@
 package ch.darki.whoishome.core
 
+import java.util.ArrayList
 import kotlin.jvm.optionals.getOrNull
 
 class PersonService {
-    var persons : List<Person>? = null
+    var persons : ArrayList<Person>? = null
         private set
 
     fun loadAllPersons(){
-        persons = listOf(
+        persons = arrayListOf(
             Person("Llyn", "llyn.baumann@gmx.ch"),
             Person("Ryanne", "ryanne@gmx.ch"),
             Person("Jennifer", "jennifer.baumann@bluewin.ch"),
@@ -19,5 +20,15 @@ class PersonService {
         return persons?.stream()?.filter {
             p -> p.email == email
         }?.findFirst()?.getOrNull()
+    }
+
+    fun createPersonIfNotExists(person: Person){
+        val foundPerson = persons?.any {
+            p -> p.email == person.email
+        }
+
+        if(!foundPerson!!){
+            persons?.add(person)
+        }
     }
 }

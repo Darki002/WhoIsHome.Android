@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
+import ch.darki.whoishome.core.LogInService
 import ch.darki.whoishome.core.PresenceService
 import org.joda.time.DateTime
 
@@ -24,6 +25,11 @@ class Home : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        if(LogInService.instance?.isLoggedIn() == false){
+            val action = HomeDirections.actionHomeToLoginView()
+            NavHostFragment.findNavController(this).navigate(action)
+        }
 
         val fragment = inflater.inflate(R.layout.fragment_home, container, false)
 
