@@ -1,6 +1,5 @@
 package ch.darki.whoishome
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,10 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.LogInService
 import ch.darki.whoishome.core.PresenceService
-import ch.darki.whoishome.core.ServiceManager
 import org.joda.time.DateTime
 
 class Home : Fragment() {
@@ -27,17 +25,10 @@ class Home : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        service = activity?.applicationContext as ServiceManager
-
-        if(!service.logInService.isLoggedIn()){
-            val action = HomeDirections.actionHomeToLoginView()
-            NavHostFragment.findNavController(this).navigate(action)
-        }
-
         val fragment = inflater.inflate(R.layout.fragment_home, container, false)
 
         layout = fragment.findViewById(R.id.home_presence_container)
+        service = activity?.applicationContext as ServiceManager
 
         personPresences = service.presenceService.getPresenceListFrom(DateTime.now())
         personPresences!!.forEach { p ->

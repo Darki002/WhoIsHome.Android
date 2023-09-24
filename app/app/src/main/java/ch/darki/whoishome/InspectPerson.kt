@@ -4,16 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.core.Person
-import ch.darki.whoishome.core.PresenceService
-import ch.darki.whoishome.core.ServiceManager
 
 class InspectPerson : Fragment() {
 

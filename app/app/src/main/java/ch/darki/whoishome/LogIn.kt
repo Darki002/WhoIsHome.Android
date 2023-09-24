@@ -1,48 +1,38 @@
 package ch.darki.whoishome
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.LogInService
-import ch.darki.whoishome.core.ServiceManager
+import com.google.android.material.snackbar.Snackbar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import ch.darki.whoishome.databinding.ActivityLogInBinding
 
-class LogIn : Fragment() {
+class LogIn : AppCompatActivity() {
 
-
+    private lateinit var binding: ActivityLogInBinding
     private lateinit var service: ServiceManager
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        super.onCreateView(inflater, container, savedInstanceState)
-        return inflater.inflate(R.layout.log_in, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        service = applicationContext as ServiceManager
+        service.init(getSharedPreferences("userManager", MODE_PRIVATE)!!)
+
+        binding = ActivityLogInBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        service = activity?.applicationContext as ServiceManager
-
-        view.findViewById<Button>(R.id.logInButton).setOnClickListener {
-
-            val email = view.findViewById<TextView>(R.id.emailLogIn).text.toString()
-            val displayName = view.findViewById<TextView>(R.id.displayNameLogIn).text.toString()
-            service.logInService.register(email, displayName)
-            goToHome()
-            Toast.makeText(this.context, "Logged In", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun goToHome(){
-        val action = LogInDirections.actionLoginViewToHome()
-        NavHostFragment.findNavController(this).navigate(action)
+    fun onLogIn(view: View){
+        val email = findViewById<TextView>(R.id.emailLogIn).text.toString()
+        val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
+        service.logInService.register(email, displayName, service)
+        startActivity(Intent(this, MainActivity::class.java))
+        Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
     }
 }

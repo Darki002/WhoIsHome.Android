@@ -10,8 +10,8 @@ android {
 
     defaultConfig {
         applicationId = "ch.darki.whoishome"
-        minSdk = 34
-        targetSdk = 34
+        minSdk = 33
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 

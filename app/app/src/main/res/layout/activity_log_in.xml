@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    tools:context=".Home">
+    android:fitsSystemWindows="true"
+    tools:context=".LogIn">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -36,14 +36,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="48dp"
+            android:autofillHints="username"
+            android:hint="@string/name"
+            android:inputType="text"
             android:textAlignment="center"
             android:textSize="20sp"
-            android:hint="@string/name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/log_in_title"
-            android:autofillHints="username"
-            android:inputType="text" />
+            app:layout_constraintTop_toBottomOf="@id/log_in_title" />
 
         <EditText
             android:id="@+id/emailLogIn"
@@ -60,15 +60,17 @@
             app:layout_constraintTop_toBottomOf="@id/displayNameLogIn" />
 
         <Button
-            android:id="@+id/logInButton"
+            android:id="@+id/log_in_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:onClick="onLogIn"
             android:text="@string/log_in"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailLogIn" />
+            app:layout_constraintTop_toBottomOf="@id/emailLogIn"
+            tools:onClick="onLogIn"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

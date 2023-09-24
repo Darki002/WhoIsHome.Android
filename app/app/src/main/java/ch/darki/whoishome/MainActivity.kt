@@ -1,6 +1,5 @@
 package ch.darki.whoishome
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,12 +9,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.ActionBar.DisplayOptions
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.LogInService
-import ch.darki.whoishome.core.PresenceService
-import ch.darki.whoishome.core.ServiceManager
 import ch.darki.whoishome.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -29,7 +23,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.toolbar)
 
         navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -52,7 +45,7 @@ class MainActivity : AppCompatActivity() {
             R.id.log_out -> {
                 val serviceManager = applicationContext as ServiceManager
                 serviceManager.logInService.logout()
-                navController.popBackStack(R.id.loginView, true)
+                startActivity(Intent(this, LogIn::class.java))
                 return true
             }
             else -> super.onOptionsItemSelected(item)
