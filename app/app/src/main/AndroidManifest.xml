@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WhoIsHome"
-        tools:targetApi="34">
+        tools:targetApi="34"
+        android:name=".core.ServiceManager">
 
         <activity
             android:name=".MainActivity"

@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.LogInService
 import ch.darki.whoishome.core.PresenceService
+import ch.darki.whoishome.core.ServiceManager
 import ch.darki.whoishome.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -25,9 +26,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        PresenceService.new()
-        LogInService.new(getSharedPreferences("userManager", Context.MODE_PRIVATE))
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -52,7 +50,8 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.create_new_event -> true
             R.id.log_out -> {
-                LogInService.instance?.logout()
+                val serviceManager = applicationContext as ServiceManager
+                serviceManager.logInService.logout()
                 navController.popBackStack(R.id.loginView, true)
                 return true
             }

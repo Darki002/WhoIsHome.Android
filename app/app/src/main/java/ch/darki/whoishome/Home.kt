@@ -1,5 +1,6 @@
 package ch.darki.whoishome
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,11 +12,13 @@ import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.LogInService
 import ch.darki.whoishome.core.PresenceService
+import ch.darki.whoishome.core.ServiceManager
 import org.joda.time.DateTime
 
 class Home : Fragment() {
     private var personPresences : List<PresenceService.PersonPresence>? = null
     private var layout : LinearLayout? = null
+    private lateinit var service: ServiceManager
 
     private val presentColor = android.R.drawable.presence_online
     private val absentColor = android.R.drawable.presence_busy
@@ -25,7 +28,9 @@ class Home : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        if(LogInService.instance?.isLoggedIn() == false){
+        service = activity?.applicationContext as ServiceManager
+
+        if(!service.logInService.isLoggedIn()){
             val action = HomeDirections.actionHomeToLoginView()
             NavHostFragment.findNavController(this).navigate(action)
         }
@@ -34,7 +39,7 @@ class Home : Fragment() {
 
         layout = fragment.findViewById(R.id.home_presence_container)
 
-        personPresences = PresenceService.instance?.getPresenceListFrom(DateTime.now())
+        personPresences = service.presenceService.getPresenceListFrom(DateTime.now())
         personPresences!!.forEach { p ->
             showPerson(p)
         }
@@ -54,7 +59,7 @@ class Home : Fragment() {
             NavHostFragment.findNavController(this).navigate(action)
         }
 
-        if(LogInService.instance?.currentPerson?.email == personPresence.person.email){
+        if(service.logInService.currentPerson?.email == personPresence.person.email){
             view.findViewById<TextView>(R.id.isYou).text = "Du"
         }
 

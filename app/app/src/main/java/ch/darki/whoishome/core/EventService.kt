@@ -1,5 +1,6 @@
 package ch.darki.whoishome.core
 
+import android.app.Application
 import androidx.annotation.RequiresApi
 import org.joda.time.DateTime
 import kotlin.jvm.optionals.getOrNull

@@ -13,8 +13,11 @@ import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.core.Person
 import ch.darki.whoishome.core.PresenceService
+import ch.darki.whoishome.core.ServiceManager
 
 class InspectPerson : Fragment() {
+
+    private lateinit var service: ServiceManager
 
     var person : Person? = null
     private var todayEventsLayout : LinearLayout? = null
@@ -30,6 +33,7 @@ class InspectPerson : Fragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         val fragment = inflater.inflate(R.layout.inspect_person, container, false)
+        service = activity?.applicationContext as ServiceManager
 
         todayEventsLayout = fragment.findViewById(R.id.todayEvents)
         thisWeekEventsLayout = fragment.findViewById(R.id.thisWeekEvents)
@@ -42,12 +46,12 @@ class InspectPerson : Fragment() {
 
         val args: InspectPersonArgs = InspectPersonArgs.fromBundle(requireArguments())
 
-        person = PresenceService.instance?.personService?.getPersonByEmail(args.email)
+        person = service.presenceService.personService.getPersonByEmail(args.email)
         setTitle(view, person?.displayName)
 
-        val eventsForPerson = PresenceService.instance?.eventService?.getEventsForPersonByEmail(args.email)
-        todayEvents = eventsForPerson?.today
-        thisWeekEvents = eventsForPerson?.thisWeek
+        val eventsForPerson = service.presenceService.eventService.getEventsForPersonByEmail(args.email)
+        todayEvents = eventsForPerson.today
+        thisWeekEvents = eventsForPerson.thisWeek
 
 
         showToday(todayEvents!!)

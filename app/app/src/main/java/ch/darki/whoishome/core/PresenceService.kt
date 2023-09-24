@@ -1,19 +1,9 @@
 package ch.darki.whoishome.core
 
+import android.app.Application
 import org.joda.time.DateTime
 
 class PresenceService {
-
-    companion object{
-        var instance : PresenceService? = null
-            private set
-
-        fun new(){
-            instance = PresenceService()
-        }
-    }
-
-
     var personService : PersonService = PersonService()
         private set
 
