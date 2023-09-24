@@ -2,6 +2,7 @@ package ch.darki.whoishome
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -33,6 +34,8 @@ class LogIn : AppCompatActivity() {
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
         service.logInService.register(email, displayName, service)
         startActivity(Intent(this, MainActivity::class.java))
-        Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
+        val toast = Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.BOTTOM, 0, 0)
+        toast.show()
     }
 }
