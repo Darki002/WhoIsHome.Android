@@ -4,7 +4,10 @@ import android.content.SharedPreferences
 
 class LogInService (private val sharedPreferences: SharedPreferences) {
 
-    private var currentPerson : Person? = null
+    val key = "email"
+
+    var currentPerson : Person? = null
+        private set
 
     companion object {
         var instance : LogInService? = null
@@ -14,16 +17,21 @@ class LogInService (private val sharedPreferences: SharedPreferences) {
         }
     }
 
+    fun logout(){
+        currentPerson = null
+        sharedPreferences.edit().remove(key).apply()
+    }
+
     fun register(email : String, displayName : String){
         currentPerson = Person(displayName, email)
         PresenceService.instance?.personService?.createPersonIfNotExists(currentPerson!!)
         sharedPreferences.edit().apply{
-            putString("email", email)
+            putString(key, email)
         }.apply()
     }
 
     fun isLoggedIn() : Boolean {
-        val login = sharedPreferences.getString("email", null)
+        val login = sharedPreferences.getString(key, null)
         return login != null
     }
 

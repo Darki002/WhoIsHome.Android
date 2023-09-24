@@ -11,6 +11,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBar.DisplayOptions
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.LogInService
 import ch.darki.whoishome.core.PresenceService
 import ch.darki.whoishome.databinding.ActivityMainBinding
@@ -19,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
 
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
     }
@@ -48,6 +51,11 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.create_new_event -> true
+            R.id.log_out -> {
+                LogInService.instance?.logout()
+                navController.popBackStack(R.id.loginView, true)
+                return true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

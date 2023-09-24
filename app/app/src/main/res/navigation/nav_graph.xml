@@ -33,10 +33,11 @@
             app:argType="string" />
     </fragment>
 
-    <fragment android:id="@+id/loginView"
+    <fragment
+        android:id="@+id/loginView"
         android:name="ch.darki.whoishome.LogIn"
-        tools:label="Log In"
-        tools:layout="@layout/log_in" >
+        android:label="@string/log_in"
+        tools:layout="@layout/log_in">
         <action
             android:id="@+id/action_loginView_to_home"
             app:destination="@id/home" />

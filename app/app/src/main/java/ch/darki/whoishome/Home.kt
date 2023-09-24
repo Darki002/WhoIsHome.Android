@@ -14,7 +14,6 @@ import ch.darki.whoishome.core.PresenceService
 import org.joda.time.DateTime
 
 class Home : Fragment() {
-
     private var personPresences : List<PresenceService.PersonPresence>? = null
     private var layout : LinearLayout? = null
 
@@ -53,6 +52,10 @@ class Home : Fragment() {
         view.setOnClickListener {
             val action = HomeDirections.actionHomeToPersonView(personPresence.person.email)
             NavHostFragment.findNavController(this).navigate(action)
+        }
+
+        if(LogInService.instance?.currentPerson?.email == personPresence.person.email){
+            view.findViewById<TextView>(R.id.isYou).text = "Du"
         }
 
         view.findViewById<TextView>(R.id.personName).text = personPresence.person.displayName
