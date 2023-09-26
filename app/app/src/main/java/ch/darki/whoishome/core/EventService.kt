@@ -18,6 +18,12 @@ class EventService {
                 DateTime.now().withTime(18, 0, 0, 0)
             ),
             Event(
+                Person("Llyn", "llyn.baumann@gmx.ch"),
+                "GYM",
+                DateTime.now().plusDays(1).withTime(17, 0, 0, 0),
+                DateTime.now().plusDays(1).withTime(18, 0, 0, 0)
+            ),
+            Event(
                 Person("Ryanne", "ryanne@gmx.ch"),
                 "GYM",
                 DateTime.now().plusDays(1).withTime(17, 0, 0, 0),
@@ -42,15 +48,15 @@ class EventService {
 
         val today = personEvents?.filter {
                 e -> e.startDate.dayOfYear() == now.dayOfYear()
-        }?.toList()
+        }?.toArray<Event> {arrayOfNulls<Event>(it) }
 
         val thisWeek = events?.stream()?.filter {
                 e -> e.person.email == email
         }?.filter {
                 e -> (e.startDate.monthOfYear() == now.monthOfYear() && e.startDate.weekOfWeekyear() == now.weekOfWeekyear() && e.startDate.dayOfWeek().get() > now.dayOfWeek().get())
-        }?.toList()
+        }?.toArray<Event> {arrayOfNulls<Event>(it) }
 
-        return EventsForPerson(today ?: ArrayList(), thisWeek ?: ArrayList())
+        return EventsForPerson(today?.asList() ?: ArrayList(), thisWeek?.asList() ?: ArrayList())
 
     }
 
