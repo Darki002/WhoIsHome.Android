@@ -1,9 +1,6 @@
 package ch.darki.whoishome.core
 
-import android.app.Application
-import androidx.annotation.RequiresApi
 import org.joda.time.DateTime
-import kotlin.jvm.optionals.getOrNull
 
 class EventService {
     var events : List<Event>? = null
@@ -46,18 +43,17 @@ class EventService {
             e -> e.person.email == email
         }
 
-        val today = personEvents?.filter {
+        val todaysEvents = personEvents?.filter {
                 e -> e.startDate.dayOfYear() == now.dayOfYear()
         }?.toArray<Event> {arrayOfNulls<Event>(it) }
 
-        val thisWeek = events?.stream()?.filter {
+        val thisWeeksEvents = events?.stream()?.filter {
                 e -> e.person.email == email
         }?.filter {
                 e -> (e.startDate.monthOfYear() == now.monthOfYear() && e.startDate.weekOfWeekyear() == now.weekOfWeekyear() && e.startDate.dayOfWeek().get() > now.dayOfWeek().get())
         }?.toArray<Event> {arrayOfNulls<Event>(it) }
 
-        return EventsForPerson(today?.asList() ?: ArrayList(), thisWeek?.asList() ?: ArrayList())
-
+        return EventsForPerson(todaysEvents?.asList() ?: ArrayList(), thisWeeksEvents?.asList() ?: ArrayList())
     }
 
     data class EventsForPerson(val today : List<Event>, val thisWeek : List<Event>)
