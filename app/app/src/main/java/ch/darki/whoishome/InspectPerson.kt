@@ -8,6 +8,7 @@ import android.view.ViewManager
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.core.Person
@@ -65,8 +66,14 @@ class InspectPerson : Fragment() {
                 view.findViewById<TextView>(R.id.date).text = "Heute"
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
-                    service.presenceService.eventService.deleteEvent(e.id)
-                    (view.parent as ViewManager).removeView(view)
+
+                    if(person?.email == e.person.email){
+                        service.presenceService.eventService.deleteEvent(e.id)
+                        (view.parent as ViewManager).removeView(view)
+                    }
+                    else{
+                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 todayEventsLayout?.addView(view)
@@ -82,8 +89,14 @@ class InspectPerson : Fragment() {
                 view.findViewById<TextView>(R.id.date).text = e.startDate.toString()
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
-                    service.presenceService.eventService.deleteEvent(e.id)
-                    (view.parent as ViewManager).removeView(view)
+
+                    if(person?.email != e.person.email){
+                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        service.presenceService.eventService.deleteEvent(e.id)
+                        (view.parent as ViewManager).removeView(view)
+                    }
                 }
 
                 thisWeekEventsLayout?.addView(view)

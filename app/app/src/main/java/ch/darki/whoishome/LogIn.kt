@@ -32,8 +32,10 @@ class LogIn : AppCompatActivity() {
     fun onLogIn(view: View){
         val email = findViewById<TextView>(R.id.emailLogIn).text.toString()
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
+
         service.logInService.register(email, displayName, service)
         startActivity(Intent(this, MainActivity::class.java))
+
         val toast = Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT)
         toast.setGravity(Gravity.BOTTOM, 0, 0)
         toast.show()
