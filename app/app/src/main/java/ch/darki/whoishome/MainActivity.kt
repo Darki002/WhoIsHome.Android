@@ -46,7 +46,10 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.create_new_event -> {
                 if(service.logInService.currentPerson != null){
-                    service.presenceService.eventService.createEvent(service.logInService.currentPerson!!, "Test", DateTime.now())
+                    service.presenceService.eventService.createEvent(
+                        service.logInService.currentPerson!!,
+                        "Test",
+                        DateTime.now())
                 }
                 return true
             }
