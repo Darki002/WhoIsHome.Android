@@ -1,6 +1,5 @@
 package ch.darki.whoishome.core
 
-import android.system.Os.remove
 import org.joda.time.DateTime
 
 class EventService {
@@ -40,10 +39,35 @@ class EventService {
         )
     }
 
+    private fun getNewId() : Int {
+        var curId = 0
+
+        events?.forEach {
+        e ->
+            if(e.id > curId){
+                curId = e.id
+            }
+        }
+
+        return curId + 1
+    }
+
     fun deleteEvent(id : Int){
         events?.removeIf {
                 e -> e.id == id
         }
+    }
+
+    fun createEvent(person: Person, eventName: String, startDate: DateTime, endDate: DateTime? = null){
+        events?.add(
+            Event(
+                getNewId(),
+                person,
+                eventName,
+                startDate,
+                endDate
+            )
+        )
     }
 
     fun getEventsForPersonByEmail(email : String) : EventsForPerson {

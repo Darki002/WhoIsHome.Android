@@ -11,16 +11,19 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.navigation.NavController
 import ch.darki.whoishome.databinding.ActivityMainBinding
+import org.joda.time.DateTime
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController : NavController
+    private lateinit var service: ServiceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        service = applicationContext as ServiceManager
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -41,10 +44,14 @@ class MainActivity : AppCompatActivity() {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
-            R.id.create_new_event -> true
+            R.id.create_new_event -> {
+                if(service.logInService.currentPerson != null){
+                    service.presenceService.eventService.createEvent(service.logInService.currentPerson!!, "Test", DateTime.now())
+                }
+                return true
+            }
             R.id.log_out -> {
-                val serviceManager = applicationContext as ServiceManager
-                serviceManager.logInService.logout()
+                service.logInService.logout()
                 startActivity(Intent(this, LogIn::class.java))
                 return true
             }
