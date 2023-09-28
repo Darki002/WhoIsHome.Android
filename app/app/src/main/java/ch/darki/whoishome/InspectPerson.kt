@@ -67,12 +67,12 @@ class InspectPerson : Fragment() {
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 
-                    if(person?.email == e.person.email){
-                        service.presenceService.eventService.deleteEvent(e.id)
-                        (view.parent as ViewManager).removeView(view)
+                    if(person?.email != service.logInService.currentPerson?.email || person == null){
+                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                     }
                     else{
-                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+                        service.presenceService.eventService.deleteEvent(e.id)
+                        (view.parent as ViewManager).removeView(view)
                     }
                 }
 
@@ -90,7 +90,8 @@ class InspectPerson : Fragment() {
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 
-                    if(person?.email != e.person.email){
+
+                    if(person?.email != service.logInService.currentPerson?.email || person == null){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                     }
                     else{

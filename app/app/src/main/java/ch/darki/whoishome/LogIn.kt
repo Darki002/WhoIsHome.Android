@@ -6,12 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
 import ch.darki.whoishome.databinding.ActivityLogInBinding
 
 class LogIn : AppCompatActivity() {
@@ -33,7 +28,7 @@ class LogIn : AppCompatActivity() {
         val email = findViewById<TextView>(R.id.emailLogIn).text.toString()
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
 
-        service.logInService.register(email, displayName, service)
+        service.logInService.tryRegister(email, displayName, service)
         startActivity(Intent(this, MainActivity::class.java))
 
         val toast = Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT)
