@@ -1,5 +1,8 @@
 package ch.darki.whoishome
 
+import android.app.DatePickerDialog
+import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -9,9 +12,16 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.Window
+import android.widget.Button
+import android.widget.DatePicker
+import android.widget.EditText
+import android.widget.TimePicker
+import android.widget.Toast
 import androidx.navigation.NavController
 import ch.darki.whoishome.databinding.ActivityMainBinding
 import org.joda.time.DateTime
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,12 +55,7 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.create_new_event -> {
-                if(service.logInService.currentPerson != null){
-                    service.presenceService.eventService.createEvent(
-                        service.logInService.currentPerson!!,
-                        "Test",
-                        DateTime.now())
-                }
+                showCreateNewEventDialog()
                 return true
             }
             R.id.log_out -> {
@@ -66,5 +71,47 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    private fun showCreateNewEventDialog(){
+
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.new_event_dialog)
+
+        val nameEt = dialog.findViewById<EditText>(R.id.event_name)
+        val startDateEt = dialog.findViewById<EditText>(R.id.start_date)
+        val endDateEt = dialog.findViewById<EditText>(R.id.end_date)
+
+        val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
+        val createButton = dialog.findViewById<Button>(R.id.create_event)
+
+        cancelButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        createButton.setOnClickListener {
+
+            val name = nameEt.text.toString()
+            val startDate = DateTime.parse(startDateEt.text.toString())
+            val endDate = DateTime.parse(endDateEt.text.toString())
+
+            createNewEvent(name, startDate, endDate)
+            dialog.dismiss()
+            Toast.makeText(this, "Event erstellt", Toast.LENGTH_SHORT).show()
+        }
+
+        dialog.show()
+    }
+
+    private fun createNewEvent(name : String, startDate : DateTime, endDate : DateTime?){
+        if(service.logInService.currentPerson != null){
+            service.presenceService.eventService.createEvent(
+                service.logInService.currentPerson!!,
+                name,
+                startDate,
+                endDate)
+        }
     }
 }
