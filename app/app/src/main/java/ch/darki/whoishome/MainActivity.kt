@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
         val createButton = dialog.findViewById<Button>(R.id.create_event)
 
-        var startDate = DateTime.now()
+        var startDate : DateTime? = null
         var endDate : DateTime? = null
 
         startDateEt.setOnClickListener {
@@ -112,7 +112,12 @@ class MainActivity : AppCompatActivity() {
         createButton.setOnClickListener {
             val name = nameEt.text.toString()
 
-            createNewEvent(name, startDate, endDate)
+            if(name.isEmpty() || startDate == null){
+                Toast.makeText(this, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            createNewEvent(name, startDate!!, endDate)
             dialog.dismiss()
             Toast.makeText(this, "Event erstellt", Toast.LENGTH_SHORT).show()
         }
