@@ -18,9 +18,9 @@ class EventService {
             Event(
                 2,
                 Person("Llyn", "llyn.baumann@gmx.ch"),
-                "GYM",
-                DateTime.now().plusDays(1).withTime(17, 0, 0, 0),
-                DateTime.now().plusDays(1).withTime(18, 0, 0, 0)
+                "Auto Fahre",
+                DateTime.now().plusDays(1).withTime(18, 0, 0, 0),
+                DateTime.now().plusDays(1).withTime(19, 0, 0, 0)
             ),
             Event(
                 3,
