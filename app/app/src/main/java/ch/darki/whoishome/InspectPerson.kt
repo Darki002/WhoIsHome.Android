@@ -86,7 +86,7 @@ class InspectPerson : Fragment() {
                 val view = layoutInflater.inflate(R.layout.event_view, null)
                 view.id = e.id
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
-                view.findViewById<TextView>(R.id.date).text = e.startDate.toString()
+                view.findViewById<TextView>(R.id.date).text = e.startDate.toString("dd.MM.yyyy HH:mm")
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 

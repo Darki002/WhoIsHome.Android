@@ -93,14 +93,14 @@ class MainActivity : AppCompatActivity() {
 
         startDateEt.setOnClickListener {
             DateTimePicker(this) { dateTime ->
-                startDateEt.setText(dateTime.toString())
+                startDateEt.setText(dateTime.toString("dd.MM.yyyy HH:mm"))
                 startDate = dateTime
             }.show()
         }
 
         endDateEt.setOnClickListener {
             DateTimePicker(this) { dateTime ->
-                endDateEt.setText(dateTime.toString())
+                endDateEt.setText(dateTime.toString("dd.MM.yyyy HH:mm"))
                 endDate = dateTime
             }.show()
         }
