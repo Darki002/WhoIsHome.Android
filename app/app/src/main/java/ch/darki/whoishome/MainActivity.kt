@@ -5,6 +5,7 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -87,15 +88,29 @@ class MainActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
         val createButton = dialog.findViewById<Button>(R.id.create_event)
 
+        var startDate = DateTime.now()
+        var endDate : DateTime? = null
+
+        startDateEt.setOnClickListener {
+            DateTimePicker(this) { dateTime ->
+                startDateEt.setText(dateTime.toString())
+                startDate = dateTime
+            }.show()
+        }
+
+        endDateEt.setOnClickListener {
+            DateTimePicker(this) { dateTime ->
+                endDateEt.setText(dateTime.toString())
+                endDate = dateTime
+            }.show()
+        }
+
         cancelButton.setOnClickListener {
             dialog.dismiss()
         }
 
         createButton.setOnClickListener {
-
             val name = nameEt.text.toString()
-            val startDate = DateTime.parse(startDateEt.text.toString())
-            val endDate = DateTime.parse(endDateEt.text.toString())
 
             createNewEvent(name, startDate, endDate)
             dialog.dismiss()
