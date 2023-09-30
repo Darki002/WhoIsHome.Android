@@ -3,10 +3,10 @@ package ch.darki.whoishome.core
 import org.joda.time.DateTime
 
 class EventService {
-    var events : ArrayList<Event>? = null
+    var events: ArrayList<Event>? = null
         private set
 
-    fun loadAllEvents(){
+    fun loadAllEvents() {
         events = arrayListOf(
             Event(
                 1,
@@ -39,12 +39,11 @@ class EventService {
         )
     }
 
-    private fun getNewId() : Int {
+    private fun getNewId(): Int {
         var curId = 0
 
-        events?.forEach {
-        e ->
-            if(e.id > curId){
+        events?.forEach { e ->
+            if (e.id > curId) {
                 curId = e.id
             }
         }
@@ -52,13 +51,18 @@ class EventService {
         return curId + 1
     }
 
-    fun deleteEvent(id : Int){
-        events?.removeIf {
-                e -> e.id == id
+    fun deleteEvent(id: Int) {
+        events?.removeIf { e ->
+            e.id == id
         }
     }
 
-    fun createEvent(person: Person, eventName: String, startDate: DateTime, endDate: DateTime? = null){
+    fun createEvent(
+        person: Person,
+        eventName: String,
+        startDate: DateTime,
+        endDate: DateTime? = null
+    ) {
         events?.add(
             Event(
                 getNewId(),
@@ -70,26 +74,38 @@ class EventService {
         )
     }
 
-    fun getEventsForPersonByEmail(email : String) : EventsForPerson {
+    fun getEventsForPersonByEmail(email: String): EventsForPerson {
 
         val now = DateTime.now()
 
-        val personEvents = events?.stream()?.filter {
-            e -> e.person.email == email
-        }
+        val todaysEvents = events?.stream()?.filter { e ->
+            e.person.email.lowercase() == email.lowercase()
+        }?.filter { e ->
+            e.startDate.dayOfYear() == now.dayOfYear()
+        }?.toArray<Event> { arrayOfNulls<Event>(it) }
 
-        val todaysEvents = personEvents?.filter {
-                e -> e.startDate.dayOfYear() == now.dayOfYear()
-        }?.toArray<Event> {arrayOfNulls<Event>(it) }
+        val thisWeeksEvents = events?.stream()?.filter { e ->
+            e.person.email.lowercase() == email.lowercase()
+        }?.filter { e ->
+            (e.startDate.year == now.year && e.startDate.weekOfWeekyear == now.weekOfWeekyear && e.startDate.dayOfWeek > now.dayOfWeek)
+        }?.toArray<Event> { arrayOfNulls<Event>(it) }
 
-        val thisWeeksEvents = events?.stream()?.filter {
-                e -> e.person.email == email
-        }?.filter {
-                e -> (e.startDate.monthOfYear() == now.monthOfYear() && e.startDate.weekOfWeekyear() == now.weekOfWeekyear() && e.startDate.dayOfWeek().get() > now.dayOfWeek().get())
-        }?.toArray<Event> {arrayOfNulls<Event>(it) }
+        val otherEvents = events?.stream()?.filter { e ->
+            e.person.email.lowercase() == email.lowercase()
+        }?.filter { e ->
+            e.startDate > now
+        }?.toArray<Event> { arrayOfNulls<Event>(it) }
 
-        return EventsForPerson(todaysEvents?.asList() ?: ArrayList(), thisWeeksEvents?.asList() ?: ArrayList())
+        return EventsForPerson(
+            todaysEvents?.asList() ?: ArrayList(),
+            thisWeeksEvents?.asList() ?: ArrayList(),
+            otherEvents?.asList() ?: ArrayList()
+        )
     }
 
-    data class EventsForPerson(val today : List<Event>, val thisWeek : List<Event>)
+    data class EventsForPerson(
+        val today: List<Event>,
+        val thisWeek: List<Event>,
+        val otherEvents: List<Event>
+    )
 }

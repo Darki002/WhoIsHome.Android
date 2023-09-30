@@ -85,6 +85,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/this_week_title_line" />
 
+            <TextView
+                android:id="@+id/others_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="72dp"
+                android:text="Weitere"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/thisWeekEvents" />
+
+            <View
+                android:id="@+id/others_title_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="2dp"
+                android:background="@android:color/black"
+                app:layout_constraintTop_toBottomOf="@id/others_title" />
+
+            <LinearLayout
+                android:id="@+id/otherEvents"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/others_title_line" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>

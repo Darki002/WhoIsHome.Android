@@ -21,6 +21,7 @@ class InspectPerson : Fragment() {
     private var person : Person? = null
     private var todayEventsLayout : LinearLayout? = null
     private var thisWeekEventsLayout : LinearLayout? = null
+    private var otherEventsLayout : LinearLayout? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,6 +34,7 @@ class InspectPerson : Fragment() {
 
         todayEventsLayout = fragment.findViewById(R.id.todayEvents)
         thisWeekEventsLayout = fragment.findViewById(R.id.thisWeekEvents)
+        otherEventsLayout = fragment.findViewById(R.id.otherEvents)
 
         return fragment
     }
@@ -51,7 +53,8 @@ class InspectPerson : Fragment() {
 
 
         showToday(todayEvents)
-        showThisWeek(thisWeekEvents)
+        showEventsAt(thisWeekEvents, thisWeekEventsLayout)
+        showEventsAt(thisWeekEvents, otherEventsLayout)
     }
 
     private fun setTitle(view : View, displayName : String?){
@@ -80,8 +83,9 @@ class InspectPerson : Fragment() {
             }
         )
     }
-    private fun showThisWeek(thisWeekEvents : List<Event>){
-        thisWeekEvents.forEach (
+
+    private fun showEventsAt(events : List<Event>, layout : LinearLayout?){
+        events.forEach (
             fun (e) {
                 val view = layoutInflater.inflate(R.layout.event_view, null)
                 view.id = e.id
@@ -100,8 +104,8 @@ class InspectPerson : Fragment() {
                     }
                 }
 
-                thisWeekEventsLayout?.addView(view)
-            }
-        )
+                layout?.addView(view)
+            })
     }
+
 }
