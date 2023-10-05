@@ -1,11 +1,8 @@
 package ch.darki.whoishome
 
-import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,20 +12,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.Window
 import android.widget.Button
-import android.widget.DatePicker
 import android.widget.EditText
-import android.widget.TimePicker
 import android.widget.Toast
 import androidx.navigation.NavController
 import ch.darki.whoishome.databinding.ActivityMainBinding
 import org.joda.time.DateTime
-import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
-    private lateinit var navController : NavController
+    private lateinit var navController: NavController
     private lateinit var service: ServiceManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,11 +53,13 @@ class MainActivity : AppCompatActivity() {
                 showCreateNewEventDialog()
                 return true
             }
+
             R.id.log_out -> {
                 service.logInService.logout()
                 startActivity(Intent(this, LogIn::class.java))
                 return true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -74,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                 || super.onSupportNavigateUp()
     }
 
-    private fun showCreateNewEventDialog(){
+    private fun showCreateNewEventDialog() {
 
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -88,8 +84,8 @@ class MainActivity : AppCompatActivity() {
         val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
         val createButton = dialog.findViewById<Button>(R.id.create_event)
 
-        var startDate : DateTime? = null
-        var endDate : DateTime? = null
+        var startDate: DateTime? = null
+        var endDate: DateTime? = null
 
         startDateEt.setOnClickListener {
             DateTimePicker(this) { dateTime ->
@@ -112,7 +108,7 @@ class MainActivity : AppCompatActivity() {
         createButton.setOnClickListener {
             val name = nameEt.text.toString()
 
-            if(name.isEmpty() || startDate == null){
+            if (name.isEmpty() || startDate == null) {
                 Toast.makeText(this, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -125,13 +121,14 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun createNewEvent(name : String, startDate : DateTime, endDate : DateTime?){
-        if(service.logInService.currentPerson != null){
+    private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime?) {
+        if (service.logInService.currentPerson != null) {
             service.presenceService.eventService.createEvent(
                 service.logInService.currentPerson!!,
                 name,
                 startDate,
-                endDate)
+                endDate
+            )
         }
     }
 }

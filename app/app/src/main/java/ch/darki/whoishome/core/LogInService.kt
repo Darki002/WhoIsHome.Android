@@ -3,19 +3,26 @@ package ch.darki.whoishome.core
 import android.content.SharedPreferences
 import ch.darki.whoishome.ServiceManager
 
-class LogInService (private val sharedPreferences: SharedPreferences){
+class LogInService (private val sharedPreferences: SharedPreferences, val serviceManager: ServiceManager){
 
     private val key = "email"
 
     var currentPerson : Person? = null
         private set
 
+    init {
+        val email = sharedPreferences.getString(key, null)
+        if(email != null){
+            currentPerson = serviceManager.presenceService.personService.getPersonByEmail(email)
+        }
+    }
+
     fun logout(){
         currentPerson = null
         sharedPreferences.edit().remove(key).apply()
     }
 
-    fun tryRegister(email : String, displayName : String, serviceManager: ServiceManager){
+    fun tryRegister(email : String, displayName : String){
         currentPerson = Person(displayName, email)
 
         serviceManager.presenceService.personService.createPersonIfNotExists(currentPerson!!)

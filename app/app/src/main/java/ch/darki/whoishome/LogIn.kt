@@ -20,6 +20,10 @@ class LogIn : AppCompatActivity() {
         service = applicationContext as ServiceManager
         service.init(getSharedPreferences("userManager", MODE_PRIVATE)!!)
 
+        if(service.logInService.currentPerson != null){
+            startActivity(Intent(this, MainActivity::class.java))
+        }
+
         binding = ActivityLogInBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }
@@ -28,7 +32,7 @@ class LogIn : AppCompatActivity() {
         val email = findViewById<TextView>(R.id.emailLogIn).text.toString()
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
 
-        service.logInService.tryRegister(email, displayName, service)
+        service.logInService.tryRegister(email, displayName)
         startActivity(Intent(this, MainActivity::class.java))
 
         val toast = Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT)
