@@ -3,7 +3,7 @@ package ch.darki.whoishome.core
 import android.content.SharedPreferences
 import ch.darki.whoishome.ServiceManager
 
-class LogInService (private val sharedPreferences: SharedPreferences, val serviceManager: ServiceManager){
+class LogInService (private val sharedPreferences: SharedPreferences, private val serviceManager: ServiceManager){
 
     private val key = "email"
 
@@ -11,8 +11,8 @@ class LogInService (private val sharedPreferences: SharedPreferences, val servic
         private set
 
     init {
-        val email = sharedPreferences.getString(key, null)
-        if(email != null){
+        val email = sharedPreferences.getString(key, "")
+        if(!email.isNullOrEmpty()){
             currentPerson = serviceManager.presenceService.personService.getPersonByEmail(email)
         }
     }

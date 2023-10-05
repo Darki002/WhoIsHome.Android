@@ -23,7 +23,7 @@ class PresenceService {
                 val isPresent = eventService.events?.stream()?.filter{
                     e -> e.person.email == person.email
                 }?.filter {
-                    e -> e.startDate.dayOfYear() == dateTime.dayOfYear()
+                    e -> e.startDate.year == dateTime.year && e.startDate.dayOfYear() == dateTime.dayOfYear()
                 }?.toArray()?.isEmpty() ?: true
 
                 val personPresence = PersonPresence(person, isPresent)

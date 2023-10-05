@@ -81,19 +81,23 @@ class EventService {
         val todaysEvents = events?.stream()?.filter { e ->
             e.person.email.lowercase() == email.lowercase()
         }?.filter { e ->
+            e.startDate.year == now.year &&
             e.startDate.dayOfYear() == now.dayOfYear()
         }?.toArray<Event> { arrayOfNulls<Event>(it) }
 
         val thisWeeksEvents = events?.stream()?.filter { e ->
             e.person.email.lowercase() == email.lowercase()
-        }?.filter { e ->
-            (e.startDate.year == now.year && e.startDate.weekOfWeekyear == now.weekOfWeekyear && e.startDate.dayOfWeek > now.dayOfWeek)
+        }?.filter { e -> (
+                    e.startDate.year == now.year &&
+                    e.startDate.weekOfWeekyear == now.weekOfWeekyear &&
+                    e.startDate.dayOfWeek > now.dayOfWeek)
         }?.toArray<Event> { arrayOfNulls<Event>(it) }
 
+        val endOfWeek = DateTime.now().withDayOfWeek(7)
         val otherEvents = events?.stream()?.filter { e ->
             e.person.email.lowercase() == email.lowercase()
         }?.filter { e ->
-            e.startDate > now
+            e.startDate > endOfWeek
         }?.toArray<Event> { arrayOfNulls<Event>(it) }
 
         return EventsForPerson(
