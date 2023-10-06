@@ -69,6 +69,8 @@ class InspectPerson : Fragment() {
     }
 
     private fun showToday(todayEvents : List<Event>){
+
+        todayEventsLayout?.removeAllViews()
         todayEvents.forEach (
             fun (e){
                 val view = layoutInflater.inflate(R.layout.event_view, null)
@@ -86,13 +88,14 @@ class InspectPerson : Fragment() {
                     }
                 }
 
-                todayEventsLayout?.removeAllViews()
                 todayEventsLayout?.addView(view)
             }
         )
     }
 
     private fun showEventsAt(events : List<Event>, layout : LinearLayout?){
+
+        layout?.removeAllViews()
         events.forEach (
             fun (e) {
                 val view = layoutInflater.inflate(R.layout.event_view, null)
@@ -112,7 +115,6 @@ class InspectPerson : Fragment() {
                     }
                 }
 
-                layout?.removeAllViews()
                 layout?.addView(view)
             })
     }

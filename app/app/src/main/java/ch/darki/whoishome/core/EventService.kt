@@ -1,5 +1,6 @@
 package ch.darki.whoishome.core
 
+import android.util.Log
 import org.joda.time.DateTime
 
 class EventService {
