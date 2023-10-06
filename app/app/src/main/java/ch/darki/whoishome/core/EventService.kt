@@ -3,6 +3,7 @@ package ch.darki.whoishome.core
 import org.joda.time.DateTime
 
 class EventService {
+
     var events: ArrayList<Event>? = null
         private set
 
@@ -63,15 +64,15 @@ class EventService {
         startDate: DateTime,
         endDate: DateTime? = null
     ) {
-        events?.add(
-            Event(
-                getNewId(),
-                person,
-                eventName,
-                startDate,
-                endDate
-            )
+
+        val event = Event(
+            getNewId(),
+            person,
+            eventName,
+            startDate,
+            endDate
         )
+        events?.add(event)
     }
 
     fun getEventsForPersonByEmail(email: String): EventsForPerson {

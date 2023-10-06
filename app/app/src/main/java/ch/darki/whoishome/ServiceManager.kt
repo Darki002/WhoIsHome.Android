@@ -11,8 +11,8 @@ class ServiceManager : Application() {
     lateinit var presenceService : PresenceService
 
     fun init(sharedPreferences: SharedPreferences){
-        logInService = LogInService(sharedPreferences, this)
         presenceService = PresenceService()
+        logInService = LogInService(sharedPreferences, this)
     }
 
 }

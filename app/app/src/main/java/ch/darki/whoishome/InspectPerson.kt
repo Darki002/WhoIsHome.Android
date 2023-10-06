@@ -18,7 +18,7 @@ class InspectPerson : Fragment() {
 
     private lateinit var service: ServiceManager
 
-    private var person : Person? = null
+    private lateinit var person : Person
     private var todayEventsLayout : LinearLayout? = null
     private var thisWeekEventsLayout : LinearLayout? = null
     private var otherEventsLayout : LinearLayout? = null
@@ -44,21 +44,28 @@ class InspectPerson : Fragment() {
 
         val args: InspectPersonArgs = InspectPersonArgs.fromBundle(requireArguments())
 
-        person = service.presenceService.personService.getPersonByEmail(args.email)
-        setTitle(view, person?.displayName)
+        person = service.presenceService.personService.getPersonByEmail(args.email)!!
+        setTitle(view, person.displayName)
+    }
 
-        val eventsForPerson = service.presenceService.eventService.getEventsForPersonByEmail(args.email)
-        val todayEvents = eventsForPerson.today
-        val thisWeekEvents = eventsForPerson.thisWeek
-
-
-        showToday(todayEvents)
-        showEventsAt(thisWeekEvents, thisWeekEventsLayout)
-        showEventsAt(thisWeekEvents, otherEventsLayout)
+    override fun onResume() {
+        super.onResume()
+        showAllEvents()
     }
 
     private fun setTitle(view : View, displayName : String?){
         view.findViewById<TextView>(R.id.person_inspect_name).text = displayName
+    }
+
+    private fun showAllEvents(){
+        val eventsForPerson = service.presenceService.eventService.getEventsForPersonByEmail(person.email)
+        val todayEvents = eventsForPerson.today
+        val thisWeekEvents = eventsForPerson.thisWeek
+        val otherEvents = eventsForPerson.otherEvents
+
+        showToday(todayEvents)
+        showEventsAt(thisWeekEvents, thisWeekEventsLayout)
+        showEventsAt(otherEvents, otherEventsLayout)
     }
 
     private fun showToday(todayEvents : List<Event>){
@@ -70,7 +77,7 @@ class InspectPerson : Fragment() {
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 
-                    if(person?.email != service.logInService.currentPerson?.email || person == null){
+                    if(person.email != service.logInService.currentPerson?.email){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                     }
                     else{
@@ -79,6 +86,7 @@ class InspectPerson : Fragment() {
                     }
                 }
 
+                todayEventsLayout?.removeAllViews()
                 todayEventsLayout?.addView(view)
             }
         )
@@ -95,7 +103,7 @@ class InspectPerson : Fragment() {
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 
 
-                    if(person?.email != service.logInService.currentPerson?.email || person == null){
+                    if(person.email != service.logInService.currentPerson?.email){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                     }
                     else{
@@ -104,6 +112,7 @@ class InspectPerson : Fragment() {
                     }
                 }
 
+                layout?.removeAllViews()
                 layout?.addView(view)
             })
     }

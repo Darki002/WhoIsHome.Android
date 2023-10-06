@@ -8,7 +8,7 @@ import android.widget.TimePicker
 import org.joda.time.DateTime
 import java.util.Calendar
 
-class DateTimePicker(val context : Context, val callback : (dateTime: DateTime) -> Unit) : DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+class DateTimePicker(private val context : Context, private val callback : (dateTime: DateTime) -> Unit) : DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private var day = 0
     private var month = 0
