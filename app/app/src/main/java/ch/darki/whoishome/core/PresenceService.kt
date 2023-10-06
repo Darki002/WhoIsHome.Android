@@ -2,6 +2,7 @@ package ch.darki.whoishome.core
 
 import android.app.Application
 import org.joda.time.DateTime
+import kotlin.jvm.optionals.getOrNull
 
 class PresenceService {
     var personService : PersonService = PersonService()
@@ -21,18 +22,41 @@ class PresenceService {
         personService.persons?.forEach(
             fun(person){
                 val isPresent = eventService.events?.stream()?.filter{
-                    e -> e.person.email == person.email
+                    e -> e.person.email.lowercase() == person.email.lowercase()
                 }?.filter {
-                    e -> e.startDate.year == dateTime.year && e.startDate.dayOfYear() == dateTime.dayOfYear()
+                    e -> e.startDate.year == dateTime.year && e.startDate.dayOfYear == dateTime.dayOfYear
+                }?.filter {
+                    isEventAtDinnerTime(it)
                 }?.toArray()?.isEmpty() ?: true
 
-                val personPresence = PersonPresence(person, isPresent)
+                val lastEvent = eventService.events?.stream()?.filter {
+                        e -> e.person.email.lowercase() == person.email.lowercase()
+                }?.filter {
+                        e -> e.startDate.year == dateTime.year && e.startDate.dayOfYear == dateTime.dayOfYear
+                }?.max { p, c -> p.startDate.compareTo(c.startDate) }?.getOrNull()
+
+                val personPresence = PersonPresence(person, isPresent, lastEvent)
                 presenceList.add(personPresence)
             }
         )
         return presenceList
     }
 
-    data class PersonPresence(val person: Person, val isPresent : Boolean)
+    private fun isEventAtDinnerTime(e : Event) : Boolean{
+        if(e.hasEndDate()){
+            if(e.endDate!!.hourOfDay >= 19){
+                return false
+            }
+            return true
+        }
+        else{
+            if(e.startDate.hourOfDay >= 18){
+                return false
+            }
+            return true
+        }
+    }
+
+    data class PersonPresence(val person: Person, val isPresent : Boolean, val lastEvent: Event?)
 
 }

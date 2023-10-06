@@ -24,34 +24,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="Name"
+                    android:textAlignment="center"
+                    android:text="Missing Name"
                     android:textFontWeight="1000"
                     android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/isYou"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:layout_alignTop="@id/personName"
-                    android:layout_alignBottom="@id/personName"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true"
-                    android:text=""
-                    android:textStyle="italic"
-                    android:textFontWeight="1000"
-                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/isPresent"
                     android:layout_width="35dp"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/isYou"
-                    android:layout_alignBottom="@id/isYou"
+                    android:layout_alignTop="@id/personName"
+                    android:layout_alignBottom="@id/personName"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="0dp"
                     android:gravity="center"
                     app:srcCompat="@android:drawable/presence_invisible" />
+
+                <TextView
+                    android:id="@+id/lastEventAt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Missing Time"
+                    android:layout_below="@id/personName"
+                    />
 
             </RelativeLayout>
         </androidx.cardview.widget.CardView>

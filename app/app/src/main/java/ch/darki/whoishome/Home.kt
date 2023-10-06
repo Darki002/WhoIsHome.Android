@@ -8,8 +8,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
+import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.core.Person
 import ch.darki.whoishome.core.PresenceService
 import org.joda.time.DateTime
 
@@ -38,10 +39,6 @@ class Home : Fragment() {
         return fragment
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
     private fun showPerson(personPresence: PresenceService.PersonPresence){
         val view = layoutInflater.inflate(R.layout.person_presence, null)
 
@@ -50,16 +47,34 @@ class Home : Fragment() {
             NavHostFragment.findNavController(this).navigate(action)
         }
 
-        if(service.logInService.currentPerson?.email == personPresence.person.email){
-            view.findViewById<TextView>(R.id.isYou).text = "Du"
-        }
+        view.findViewById<TextView>(R.id.personName).text = getDisplayName(personPresence.person)
 
-        view.findViewById<TextView>(R.id.personName).text = personPresence.person.displayName
+        view.findViewById<TextView>(R.id.lastEventAt).text = getLastEventText(personPresence.lastEvent)
 
         val imageView = view.findViewById<ImageView>(R.id.isPresent)
         val drawable = if(personPresence.isPresent){ presentColor } else{ absentColor }
         imageView.setImageResource(drawable)
 
         layout?.addView(view)
+    }
+
+    private fun getDisplayName(person : Person) : String {
+        if(service.logInService.currentPerson?.email?.lowercase() == person.email.lowercase()){
+            return person.displayName + " (Du)"
+        }
+        return person.displayName
+    }
+
+    private fun getLastEventText(event : Event?) : String{
+
+        if(event == null){
+            return "Kein Event mehr Heute"
+        }
+        if(event.hasEndDate()){
+            return "Letztes Event endet: ${event.endDate?.toString("HH:mm")}"
+        }
+        else{
+            return "Letztes Event startet: ${event.startDate.toString("HH:mm")}"
+        }
     }
 }
