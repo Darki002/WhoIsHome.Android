@@ -62,7 +62,7 @@ class EventService {
         person: Person,
         eventName: String,
         startDate: DateTime,
-        endDate: DateTime? = null
+        endDate: DateTime
     ) {
 
         val event = Event(

@@ -108,12 +108,12 @@ class MainActivity : AppCompatActivity() {
         createButton.setOnClickListener {
             val name = nameEt.text.toString()
 
-            if (name.isEmpty() || startDate == null) {
+            if (name.isEmpty() || startDate == null || endDate == null) {
                 Toast.makeText(this, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            createNewEvent(name, startDate!!, endDate)
+            createNewEvent(name, startDate!!, endDate!!)
             dialog.dismiss()
             Toast.makeText(this, "Event erstellt", Toast.LENGTH_SHORT).show()
         }
@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime?) {
+    private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime) {
         if (service.logInService.currentPerson != null) {
             service.presenceService.eventService.createEvent(
                 service.logInService.currentPerson!!,

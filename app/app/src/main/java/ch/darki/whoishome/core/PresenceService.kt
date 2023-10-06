@@ -24,7 +24,7 @@ class PresenceService {
                 val isPresent = eventService.events?.stream()?.filter{
                     e -> e.person.email.lowercase() == person.email.lowercase()
                 }?.filter {
-                    e -> e.startDate.year == dateTime.year && e.startDate.dayOfYear == dateTime.dayOfYear
+                    e -> e.endDate.year == dateTime.year && e.endDate.dayOfYear == dateTime.dayOfYear
                 }?.filter {
                     isEventAtDinnerTime(it)
                 }?.toArray()?.isEmpty() ?: true
@@ -32,8 +32,8 @@ class PresenceService {
                 val lastEvent = eventService.events?.stream()?.filter {
                         e -> e.person.email.lowercase() == person.email.lowercase()
                 }?.filter {
-                        e -> e.startDate.year == dateTime.year && e.startDate.dayOfYear == dateTime.dayOfYear
-                }?.max { p, c -> p.startDate.compareTo(c.startDate) }?.getOrNull()
+                        e -> e.endDate.year == dateTime.year && e.endDate.dayOfYear == dateTime.dayOfYear
+                }?.max { p, c -> p.endDate.compareTo(c.endDate) }?.getOrNull()
 
                 val personPresence = PersonPresence(person, isPresent, lastEvent)
                 presenceList.add(personPresence)
@@ -43,18 +43,10 @@ class PresenceService {
     }
 
     private fun isEventAtDinnerTime(e : Event) : Boolean{
-        if(e.hasEndDate()){
-            if(e.endDate!!.hourOfDay >= 19){
-                return false
-            }
+        if(e.endDate.hourOfDay >= 19){
             return true
         }
-        else{
-            if(e.startDate.hourOfDay >= 18){
-                return false
-            }
-            return true
-        }
+        return false
     }
 
     data class PersonPresence(val person: Person, val isPresent : Boolean, val lastEvent: Event?)

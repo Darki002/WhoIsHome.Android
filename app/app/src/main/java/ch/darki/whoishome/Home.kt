@@ -70,11 +70,6 @@ class Home : Fragment() {
         if(event == null){
             return "Kein Event mehr Heute"
         }
-        if(event.hasEndDate()){
-            return "Letztes Event endet: ${event.endDate?.toString("HH:mm")}"
-        }
-        else{
-            return "Letztes Event startet: ${event.startDate.toString("HH:mm")}"
-        }
+        return "Letztes Event endet: ${event.endDate.toString("HH:mm")}"
     }
 }
