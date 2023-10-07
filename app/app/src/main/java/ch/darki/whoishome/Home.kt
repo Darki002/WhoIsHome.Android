@@ -68,7 +68,7 @@ class Home : Fragment() {
     private fun getLastEventText(event : Event?) : String{
 
         if(event == null){
-            return "Kein Event mehr Heute"
+            return "Kein Event Heute"
         }
         return "Letztes Event endet: ${event.endDate.toString("HH:mm")}"
     }
