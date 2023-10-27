@@ -8,11 +8,13 @@ import android.widget.TimePicker
 import org.joda.time.DateTime
 import java.util.Calendar
 
-class DateTimePicker(private val context : Context, private val callback : (dateTime: DateTime) -> Unit) : DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+class DateTimePicker(private val context : Context) : DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     private var day = 0
     private var month = 0
     private var year = 0
+    private var hour = 0
+    private var min = 0
 
     private var defaultDay = 0
     private var defaultMonth = 0
@@ -20,9 +22,10 @@ class DateTimePicker(private val context : Context, private val callback : (date
     private val defaultHour = 12
     private val defaultMinute = 0
 
-    fun show(){
+    fun show() : DateTime{
         getDateTimeCalender()
         DatePickerDialog(context, this, defaultYear, defaultMonth, defaultDay).show()
+        return DateTime(year, month, day, hour, min)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
@@ -33,8 +36,8 @@ class DateTimePicker(private val context : Context, private val callback : (date
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        val dateTime = DateTime(year, month, day, hourOfDay, minute)
-        callback.invoke(dateTime)
+        hour = hourOfDay
+        min = minute
     }
 
     private fun getDateTimeCalender() {

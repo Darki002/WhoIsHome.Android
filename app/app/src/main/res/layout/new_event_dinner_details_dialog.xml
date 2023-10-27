@@ -46,7 +46,7 @@
         android:text="@string/ready_f_r_znacht" />
 
     <EditText
-        android:id="@+id/start_date"
+        android:id="@+id/readyForDinnerAt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/ready_um"
@@ -68,16 +68,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancle"
-            android:layout_alignParentStart="true"
-            />
+            android:layout_alignParentStart="true" />
 
         <Button
             android:id="@+id/create_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/erstellen"
-            android:layout_alignParentEnd="true"
-            />
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
