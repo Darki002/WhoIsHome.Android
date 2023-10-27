@@ -19,4 +19,8 @@
     <string name="end_datum">End Datum</string>
     <string name="erstellen">Erstellen</string>
     <string name="cancle">Abbrechen</string>
+    <string name="relevant_f_r_znacht">Relevant für zNacht?</string>
+    <string name="ready_f_r_znacht">Ready für zNacht</string>
+    <string name="ready_um">ready um</string>
+    <string name="weiter">Weiter</string>
 </resources>

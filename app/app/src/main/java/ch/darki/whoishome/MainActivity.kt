@@ -15,7 +15,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.navigation.NavController
+import ch.darki.whoishome.dialogs.DateTimePicker
 import ch.darki.whoishome.databinding.ActivityMainBinding
+import ch.darki.whoishome.dialogs.CreateNewEntryDialog
 import org.joda.time.DateTime
 
 class MainActivity : AppCompatActivity() {
@@ -72,63 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showCreateNewEventDialog() {
 
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(true)
-        dialog.setContentView(R.layout.new_event_dialog)
-
-        val nameEt = dialog.findViewById<EditText>(R.id.event_name)
-        val startDateEt = dialog.findViewById<EditText>(R.id.start_date)
-        val endDateEt = dialog.findViewById<EditText>(R.id.end_date)
-
-        val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
-        val createButton = dialog.findViewById<Button>(R.id.create_event)
-
-        var startDate: DateTime? = null
-        var endDate: DateTime? = null
-
-        startDateEt.setOnClickListener {
-            DateTimePicker(this) { dateTime ->
-                startDateEt.setText(dateTime.toString("dd.MM.yyyy HH:mm"))
-                startDate = dateTime
-            }.show()
-        }
-
-        endDateEt.setOnClickListener {
-            DateTimePicker(this) { dateTime ->
-                endDateEt.setText(dateTime.toString("dd.MM.yyyy HH:mm"))
-                endDate = dateTime
-            }.show()
-        }
-
-        cancelButton.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        createButton.setOnClickListener {
-            val name = nameEt.text.toString()
-
-            if (name.isEmpty() || startDate == null || endDate == null) {
-                Toast.makeText(this, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            createNewEvent(name, startDate!!, endDate!!)
-            dialog.dismiss()
-            Toast.makeText(this, "Event erstellt", Toast.LENGTH_SHORT).show()
-        }
-
+        val dialog = CreateNewEntryDialog(this, service)
         dialog.show()
-    }
-
-    private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime) {
-        if (service.logInService.currentPerson != null) {
-            service.presenceService.eventService.createEvent(
-                service.logInService.currentPerson!!,
-                name,
-                startDate,
-                endDate
-            )
-        }
     }
 }

@@ -1,4 +1,4 @@
-package ch.darki.whoishome
+package ch.darki.whoishome.dialogs
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -6,9 +6,7 @@ import android.content.Context
 import android.widget.DatePicker
 import android.widget.TimePicker
 import org.joda.time.DateTime
-import org.joda.time.DateTimeZone
 import java.util.Calendar
-import java.util.TimeZone
 
 class DateTimePicker(private val context : Context, private val callback : (dateTime: DateTime) -> Unit) : DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
