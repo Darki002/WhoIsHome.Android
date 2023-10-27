@@ -20,18 +20,15 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
     private var dinnerAt: DateTime? = null
 
     fun show() {
-        var isSuccess = showEventDetails()
-        if(isSuccess){
-            isSuccess = showDinnerDetails()
-            if(isSuccess){
+        showEventDetails {
+            showDinnerDetails {
                 createNewEvent(name, startDate, endDate, relevantForDinner, dinnerAt)
                 Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun showEventDetails() : Boolean {
-        var wasSuccess = true
+    private fun showEventDetails(callback : () -> Unit) {
 
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -49,24 +46,23 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         var endDate: DateTime? = null
 
         startDateEt.setOnClickListener {
-            startDate = DateTimePicker(context).show()
-            startDateEt.setText(startDate!!.toString("dd.MM.yyyy HH:mm"))
+            DateTimePicker(context) {d ->
+                startDateEt.setText(d.toString("dd.MM.yyyy HH:mm"))
+                startDate = d
+            }.show()
+
         }
 
         endDateEt.setOnClickListener {
-            endDate = DateTimePicker(context).show()
-            endDateEt.setText(endDate!!.toString("dd.MM.yyyy HH:mm"))
+            DateTimePicker(context) { d ->
+                endDateEt.setText(d.toString("dd.MM.yyyy HH:mm"))
+                endDate = d
+            }.show()
         }
 
         cancelButton.setOnClickListener {
             dialog.dismiss()
-            wasSuccess = false
         }
-
-        dialog.setOnCancelListener {
-            wasSuccess = false
-        }
-
         continueButton.setOnClickListener {
             val name = nameEt.text.toString()
 
@@ -78,17 +74,14 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
             this.name = name
             this.startDate = startDate!!
             this.endDate = endDate!!
-
             dialog.dismiss()
+            callback.invoke()
         }
 
         dialog.show()
-        return wasSuccess
     }
 
-    private fun showDinnerDetails() : Boolean{
-        var wasSuccess = true;
-
+    private fun showDinnerDetails(callback : () -> Unit) {
         val dialog = Dialog(context)
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -106,16 +99,13 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
         cancelButton.setOnClickListener {
             dialog.dismiss()
-            wasSuccess = false
-        }
-
-        dialog.setOnCancelListener {
-            wasSuccess = false
         }
 
         dinnerAtEt.setOnClickListener {
-            dinnerAt = TimePicker(context).show()
-            dinnerAtEt.setText(dinnerAt!!.toString("HH:mm"))
+            TimePicker(context){d ->
+                dinnerAtEt.setText(d.toString("HH:mm"))
+                dinnerAt = d
+            }.show()
         }
 
         createButton.setOnClickListener {
@@ -126,9 +116,11 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
             }
             this.relevantForDinner = relevantForDinner
             this.dinnerAt = dinnerAt
+            dialog.dismiss()
+            callback.invoke()
         }
 
-        return wasSuccess
+        dialog.show()
     }
 
     private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime,
