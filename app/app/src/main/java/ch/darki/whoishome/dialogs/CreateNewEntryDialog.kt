@@ -138,7 +138,9 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
                 service.logInService.currentPerson!!,
                 name,
                 startDate,
-                endDate
+                endDate,
+                relevantForDinner,
+                dinnerAt
             )
         }
     }

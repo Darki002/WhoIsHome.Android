@@ -14,28 +14,32 @@ class EventService {
                 Person("Llyn", "llyn.baumann@gmx.ch"),
                 "GYM",
                 DateTime.now().withTime(17, 0, 0, 0),
-                DateTime.now().withTime(18, 0, 0, 0)
+                DateTime.now().withTime(18, 0, 0, 0),
+                false, null
             ),
             Event(
                 2,
                 Person("Llyn", "llyn.baumann@gmx.ch"),
                 "Auto Fahre",
                 DateTime.now().plusDays(1).withTime(18, 0, 0, 0),
-                DateTime.now().plusDays(1).withTime(19, 0, 0, 0)
+                DateTime.now().plusDays(1).withTime(19, 0, 0, 0),
+                false, null
             ),
             Event(
                 3,
                 Person("Ryanne", "ryanne@gmx.ch"),
                 "GYM",
                 DateTime.now().plusDays(1).withTime(17, 0, 0, 0),
-                DateTime.now().plusDays(1).withTime(18, 0, 0, 0)
+                DateTime.now().plusDays(1).withTime(18, 0, 0, 0),
+                false, null
             ),
             Event(
                 4,
                 Person("Jennifer", "jennifer.baumann@bluewin.ch"),
                 "Chlätere",
                 DateTime.now().plusDays(2).withTime(18, 0, 0, 0),
-                DateTime.now().plusDays(2).withTime(20, 0, 0, 0)
+                DateTime.now().plusDays(2).withTime(20, 0, 0, 0),
+                false, null
             )
         )
     }
@@ -62,7 +66,9 @@ class EventService {
         person: Person,
         eventName: String,
         startDate: DateTime,
-        endDate: DateTime
+        endDate: DateTime,
+        relevantForDinner : Boolean,
+        dinnerAt : DateTime?
     ) {
 
         val event = Event(
@@ -70,7 +76,9 @@ class EventService {
             person,
             eventName,
             startDate,
-            endDate
+            endDate,
+            relevantForDinner,
+            dinnerAt
         )
         events?.add(event)
     }
