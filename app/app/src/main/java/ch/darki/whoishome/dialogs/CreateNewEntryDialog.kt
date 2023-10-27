@@ -103,6 +103,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
         dinnerAtEt.setOnClickListener {
             TimePicker(context){d ->
+                //TODO Fix crash on pick time
                 dinnerAtEt.setText(d.toString("HH:mm"))
                 dinnerAt = d
             }.show()

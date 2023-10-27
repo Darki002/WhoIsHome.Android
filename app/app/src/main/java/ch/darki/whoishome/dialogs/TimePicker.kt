@@ -11,7 +11,7 @@ class TimePicker(private val context : Context, private val callback : (dateTime
     }
 
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
-        val time = DateTime(0, 0, 0,hourOfDay, minute)
+        val time = DateTime(0, 1, 1,hourOfDay, minute)
         callback.invoke(time)
     }
 }
