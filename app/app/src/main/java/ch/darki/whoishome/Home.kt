@@ -44,7 +44,7 @@ class Home : Fragment() {
         }
 
         view.findViewById<TextView>(R.id.personName).text = getDisplayName(personPresence.person)
-        view.findViewById<TextView>(R.id.lastEventAt).text = getDinnerAtText(personPresence.lastEvent)
+        view.findViewById<TextView>(R.id.lastEventAt).text = getDinnerAtText(personPresence.dinnerAt)
 
         layout?.addView(view)
     }
@@ -56,11 +56,11 @@ class Home : Fragment() {
         return person.displayName
     }
 
-    private fun getDinnerAtText(event : Event?) : String{
+    private fun getDinnerAtText(dinnerAt : DateTime?) : String{
 
-        if(event?.dinnerAt == null){
+        if(dinnerAt == null){
             return "Kein Event Heute"
         }
-        return "ready für zNacht: ${event.dinnerAt.toString("HH:mm")}"
+        return "ready für zNacht: ${dinnerAt.toString("HH:mm")}"
     }
 }
