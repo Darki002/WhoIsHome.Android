@@ -4,8 +4,7 @@ import org.joda.time.DateTime
 
 class EventService {
 
-    var events: ArrayList<Event>? = null
-        private set
+    private var events: ArrayList<Event>? = null
 
     fun loadAllEvents() {
         events = arrayListOf(
@@ -81,6 +80,14 @@ class EventService {
             dinnerAt
         )
         events?.add(event)
+    }
+
+    fun getEventsFromPerson(person: Person) : List<Event> {
+        val result = events?.stream()?.filter {
+            e -> e.person.email.lowercase() == person.email.lowercase()
+        }?.toArray<Event> { arrayOfNulls<Event>(it) }
+
+        return result?.asList() ?: ArrayList()
     }
 
     fun getEventsForPersonByEmail(email: String): EventsForPerson {

@@ -16,7 +16,11 @@ data class Event(val id : Int, val person: Person, val eventName: String, val st
             return 0
         }
 
-        return p0.endDate.compareTo(p1.endDate)
+        if(dinnerAt == null){
+            return -1
+        }
+
+        return p0.dinnerAt!!.compareTo(p1.dinnerAt)
     }
 
 }
