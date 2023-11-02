@@ -21,11 +21,17 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
     fun show() {
         showEventDetails {
-            showDinnerDetails {
-                createNewEvent(name, startDate, endDate, relevantForDinner, dinnerAt)
-                Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
-            }
+            showDinnerDetails({ ok() }, { back() })
         }
+    }
+
+    private fun ok(){
+        createNewEvent(name, startDate, endDate, relevantForDinner, dinnerAt)
+        Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun back(){
+        show()
     }
 
     private fun showEventDetails(callback : () -> Unit) {
@@ -81,7 +87,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         dialog.show()
     }
 
-    private fun showDinnerDetails(callback : () -> Unit) {
+    private fun showDinnerDetails(callback : () -> Unit, goBack : () -> Unit) {
         val dialog = Dialog(context)
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -99,6 +105,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
         cancelButton.setOnClickListener {
             dialog.dismiss()
+            goBack.invoke()
         }
 
         dinnerAtEt.setOnClickListener {
