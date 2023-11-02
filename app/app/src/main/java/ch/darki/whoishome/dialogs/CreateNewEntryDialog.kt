@@ -13,28 +13,33 @@ import org.joda.time.DateTime
 
 class CreateNewEntryDialog(private val context : Context, private val service: ServiceManager) {
 
-    private lateinit var name: String
-    private lateinit var startDate: DateTime
-    private lateinit var endDate: DateTime
+    private var name: String? = null
+    private var startDate: DateTime? = null
+    private var endDate: DateTime? = null
     private var relevantForDinner: Boolean = false
     private var dinnerAt: DateTime? = null
 
-    fun show() {
-        showEventDetails {
-            showDinnerDetails({ ok() }, { back() })
+    fun show(fill : Boolean = false) {
+        showEventDetails(fill) {
+            showDinnerDetails(fill, { ok() }, { back() })
         }
     }
 
     private fun ok(){
-        createNewEvent(name, startDate, endDate, relevantForDinner, dinnerAt)
-        Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
+        if(name != null && startDate != null && endDate != null){
+            createNewEvent(name!!, startDate!!, endDate!!, relevantForDinner, dinnerAt)
+            Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun back(){
-        show()
+        show(true)
     }
 
-    private fun showEventDetails(callback : () -> Unit) {
+    private fun showEventDetails(fill : Boolean, callback : () -> Unit) {
 
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -48,8 +53,15 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
         val continueButton = dialog.findViewById<Button>(R.id.continueButton)
 
-        var startDate: DateTime? = null
-        var endDate: DateTime? = null
+        var startDate: DateTime? = this.startDate
+        var endDate: DateTime? = this.endDate
+
+        if(fill){
+
+            nameEt.setText(this.name)
+            startDateEt.setText(this.startDate?.toString("dd.MM.yyyy HH:mm"))
+            endDateEt.setText(this.endDate?.toString("dd.MM.yyyy HH:mm"))
+        }
 
         startDateEt.setOnClickListener {
             DateTimePicker(context) {d ->
@@ -87,7 +99,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         dialog.show()
     }
 
-    private fun showDinnerDetails(callback : () -> Unit, goBack : () -> Unit) {
+    private fun showDinnerDetails(fill : Boolean, callback : () -> Unit, goBack : () -> Unit) {
         val dialog = Dialog(context)
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -102,6 +114,13 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
         var relevantForDinner : Boolean
         var dinnerAt:  DateTime? = null
+
+        if(fill){
+            relevantForDinnerCb.isChecked = this.relevantForDinner
+            if(dinnerAt != null){
+                dinnerAtEt.setText(this.dinnerAt!!.toString("HH:mm"))
+            }
+        }
 
         cancelButton.setOnClickListener {
             dialog.dismiss()
