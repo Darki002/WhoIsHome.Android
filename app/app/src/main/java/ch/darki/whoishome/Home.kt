@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
@@ -18,9 +17,6 @@ class Home : Fragment() {
     private var personPresences : List<PresenceService.PersonPresence>? = null
     private var layout : LinearLayout? = null
     private lateinit var service: ServiceManager
-
-    private val presentColor = android.R.drawable.presence_online
-    private val absentColor = android.R.drawable.presence_busy
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,12 +44,7 @@ class Home : Fragment() {
         }
 
         view.findViewById<TextView>(R.id.personName).text = getDisplayName(personPresence.person)
-
-        view.findViewById<TextView>(R.id.lastEventAt).text = getLastEventText(personPresence.lastEvent)
-
-        val imageView = view.findViewById<ImageView>(R.id.isPresent)
-        val drawable = if(personPresence.isPresent){ presentColor } else{ absentColor }
-        imageView.setImageResource(drawable)
+        view.findViewById<TextView>(R.id.lastEventAt).text = getDinnerAtText(personPresence.lastEvent)
 
         layout?.addView(view)
     }
@@ -65,11 +56,11 @@ class Home : Fragment() {
         return person.displayName
     }
 
-    private fun getLastEventText(event : Event?) : String{
+    private fun getDinnerAtText(event : Event?) : String{
 
-        if(event == null){
+        if(event?.dinnerAt == null){
             return "Kein Event Heute"
         }
-        return "Letztes Event endet: ${event.endDate.toString("HH:mm")}"
+        return "ready für zNacht: ${event.dinnerAt.toString("HH:mm")}"
     }
 }
