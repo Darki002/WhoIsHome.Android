@@ -17,6 +17,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
     private var startDate: DateTime? = null
     private var endDate: DateTime? = null
     private var relevantForDinner: Boolean = false
+    private var notAtHomeForDinner : Boolean = false
     private var dinnerAt: DateTime? = null
 
     fun show(fill : Boolean = false) {
@@ -27,7 +28,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
     private fun ok(){
         if(name != null && startDate != null && endDate != null){
-            createNewEvent(name!!, startDate!!, endDate!!, relevantForDinner, dinnerAt)
+            createNewEvent(name!!, startDate!!, endDate!!, relevantForDinner, dinnerAt, notAtHomeForDinner)
             Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
         }
         else{
@@ -107,16 +108,19 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         dialog.setContentView(R.layout.new_event_dinner_details_dialog)
 
         val relevantForDinnerCb = dialog.findViewById<CheckBox>(R.id.isRelevantForDinner)
+        val notAtHomeForDinnerCb = dialog.findViewById<CheckBox>(R.id.notAteHomeForDinner)
         val dinnerAtEt = dialog.findViewById<EditText>(R.id.readyForDinnerAt)
 
         val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
         val createButton = dialog.findViewById<Button>(R.id.create_event)
 
         var relevantForDinner : Boolean
+        var notAtHomeForDinner : Boolean
         var dinnerAt:  DateTime? = null
 
         if(fill){
             relevantForDinnerCb.isChecked = this.relevantForDinner
+            notAtHomeForDinnerCb.isChecked = this.notAtHomeForDinner
             if(dinnerAt != null){
                 dinnerAtEt.setText(this.dinnerAt!!.toString("HH:mm"))
             }
@@ -136,12 +140,14 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
         createButton.setOnClickListener {
             relevantForDinner = relevantForDinnerCb.isChecked
+            notAtHomeForDinner = notAtHomeForDinnerCb.isChecked
             if(relevantForDinner && dinnerAt == null){
                 Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             this.relevantForDinner = relevantForDinner
             this.dinnerAt = dinnerAt
+            this.notAtHomeForDinner = notAtHomeForDinner
             dialog.dismiss()
             callback.invoke()
         }
@@ -150,8 +156,21 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
     }
 
     private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime,
-                               relevantForDinner : Boolean, dinnerAt : DateTime?) {
+                               relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean) {
         if (service.logInService.currentPerson != null) {
+
+            if(notAtHomeForDinner){
+                service.presenceService.eventService.createEvent(
+                    service.logInService.currentPerson!!,
+                    name,
+                    startDate,
+                    endDate,
+                    true,
+                    null
+                )
+                return
+            }
+
             service.presenceService.eventService.createEvent(
                 service.logInService.currentPerson!!,
                 name,
