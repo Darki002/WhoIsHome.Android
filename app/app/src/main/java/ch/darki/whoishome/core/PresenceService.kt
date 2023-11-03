@@ -29,7 +29,7 @@ class PresenceService {
     private fun getPersonPresence(person: Person) : PersonPresence {
         val events = eventService.getEventsFromPerson(person)
 
-        var now = DateTime.now()
+        val now = DateTime.now()
 
         val today: LocalDate = now.toLocalDate()
         val tomorrow: LocalDate = today.plusDays(1)

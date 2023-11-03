@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
@@ -17,6 +18,9 @@ class Home : Fragment() {
     private var personPresences : List<PresenceService.PersonPresence>? = null
     private var layout : LinearLayout? = null
     private lateinit var service: ServiceManager
+
+    private val presentColor = android.R.drawable.presence_online
+    private val absentColor = android.R.drawable.presence_busy
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +48,11 @@ class Home : Fragment() {
         }
 
         view.findViewById<TextView>(R.id.personName).text = getDisplayName(personPresence.person)
-        view.findViewById<TextView>(R.id.lastEventAt).text = getDinnerAtText(personPresence.dinnerAt)
+        view.findViewById<TextView>(R.id.lastEventAt).text = getDinnerAtText(personPresence.dinnerAt, personPresence.isPresent)
+
+        val imageView = view.findViewById<ImageView>(R.id.isPresent)
+        val drawable = if(personPresence.isPresent){ presentColor } else{ absentColor }
+        imageView.setImageResource(drawable)
 
         layout?.addView(view)
     }
@@ -56,7 +64,11 @@ class Home : Fragment() {
         return person.displayName
     }
 
-    private fun getDinnerAtText(dinnerAt : DateTime?) : String{
+    private fun getDinnerAtText(dinnerAt : DateTime?, isPresent : Boolean) : String{
+
+        if(!isPresent){
+            return "Nicht zuhause"
+        }
 
         if(dinnerAt == null){
             return "Kein Event Heute"
