@@ -1,5 +1,7 @@
 package ch.darki.whoishome.core
 
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
 
 class EventService {
@@ -67,7 +69,8 @@ class EventService {
         startDate: DateTime,
         endDate: DateTime,
         relevantForDinner : Boolean,
-        dinnerAt : DateTime?
+        dinnerAt : DateTime?,
+        callback: (Boolean) -> Unit
     ) {
 
         val event = Event(
@@ -80,6 +83,12 @@ class EventService {
             dinnerAt
         )
         events?.add(event)
+
+        val docName = person.email + " - " + DateTime.now().millis
+
+        Firebase.firestore.collection("events").document(docName).set(event)
+            .addOnSuccessListener {callback.invoke(true)}
+            .addOnFailureListener {callback.invoke(false)}
     }
 
     fun getEventsFromPerson(person: Person) : List<Event> {

@@ -1,34 +1,36 @@
 package ch.darki.whoishome.core
 
-import java.util.ArrayList
-import kotlin.jvm.optionals.getOrNull
+import android.content.Context
+import android.widget.Toast
+import com.google.firebase.firestore.Filter
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class PersonService {
-    var persons : ArrayList<Person>? = null
-        private set
 
-    fun loadAllPersons(){
-        persons = arrayListOf(
-            Person("Llyn", "llyn.baumann@gmx.ch"),
-            Person("Ryanne", "ryanne@gmx.ch"),
-            Person("Jennifer", "jennifer.baumann@bluewin.ch"),
-            Person("Ruth", "ruth.baum@bluewin.ch")
-        )
+    fun getPersonByEmail(email: String, callback: (Person?) -> Unit) {
+        val db = Firebase.firestore
+
+        db.collection("person").whereEqualTo("email", email).get()
+            .addOnFailureListener {
+                callback.invoke(null)
+            }
+            .addOnSuccessListener {
+                val result = it.documents[0].toObject(Person::class.java)
+                callback.invoke(result)
+            }
     }
 
-    fun getPersonByEmail(email: String): Person? {
-        return persons?.stream()?.filter {
-            p -> p.email == email
-        }?.findFirst()?.getOrNull()
-    }
+    fun createPersonIfNotExists(person: Person, context : Context) {
+        val db = Firebase.firestore
 
-    fun createPersonIfNotExists(person: Person){
-        val foundPerson = persons?.any {
-            p -> p.email == person.email
-        }
-
-        if(!foundPerson!!){
-            persons?.add(person)
-        }
+        db.collection("person").where(Filter.equalTo("email", person.email))
+            .get()
+            .addOnFailureListener { Toast.makeText(context, "failed to create Person", Toast.LENGTH_SHORT).show() }
+            .addOnSuccessListener { result ->
+                if(result.isEmpty){
+                    db.collection("person").add(person)
+                }
+            }
     }
 }

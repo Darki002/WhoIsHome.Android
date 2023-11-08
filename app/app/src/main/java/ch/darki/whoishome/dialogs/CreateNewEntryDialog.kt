@@ -28,8 +28,14 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
     private fun ok(){
         if(name != null && startDate != null && endDate != null){
-            createNewEvent(name!!, startDate!!, endDate!!, relevantForDinner, dinnerAt, notAtHomeForDinner)
-            Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
+            createNewEvent(name!!, startDate!!, endDate!!, relevantForDinner, dinnerAt, notAtHomeForDinner, ){
+                if(it){
+                    Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
         else{
             Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
@@ -156,7 +162,8 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
     }
 
     private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime,
-                               relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean) {
+                               relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean,
+                               callback: (Boolean) -> Unit) {
         if (service.logInService.currentPerson != null) {
 
             if(notAtHomeForDinner){
@@ -167,7 +174,9 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
                     endDate,
                     true,
                     null
-                )
+                ){
+                    callback.invoke(it)
+                }
                 return
             }
 
@@ -178,7 +187,9 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
                 endDate,
                 relevantForDinner,
                 dinnerAt
-            )
+            ){
+                callback.invoke(it)
+            }
         }
     }
 }

@@ -13,7 +13,9 @@ class LogInService (private val sharedPreferences: SharedPreferences, private va
     init {
         val email = sharedPreferences.getString(key, "")
         if(!email.isNullOrEmpty()){
-            currentPerson = serviceManager.presenceService.personService.getPersonByEmail(email)
+            serviceManager.presenceService.personService.getPersonByEmail(email){
+                currentPerson = it
+            }
         }
     }
 
@@ -25,7 +27,7 @@ class LogInService (private val sharedPreferences: SharedPreferences, private va
     fun tryRegister(email : String, displayName : String){
         currentPerson = Person(displayName, email)
 
-        serviceManager.presenceService.personService.createPersonIfNotExists(currentPerson!!)
+        serviceManager.presenceService.personService.createPersonIfNotExists(currentPerson!!, serviceManager)
 
         sharedPreferences.edit().apply{
             putString(key, email)
