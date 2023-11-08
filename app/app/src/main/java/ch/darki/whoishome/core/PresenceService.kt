@@ -1,7 +1,10 @@
 package ch.darki.whoishome.core
 
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
+import javax.security.auth.callback.Callback
 import kotlin.jvm.optionals.getOrNull
 
 class PresenceService {
@@ -16,14 +19,23 @@ class PresenceService {
         eventService.loadAllEvents()
     }
 
-    fun getPresenceListFrom(dateTime: DateTime) : List<PersonPresence> {
+    fun getPresenceListFrom(dateTime: DateTime, callback: (List<PersonPresence>) -> Unit) {
         val presenceList = ArrayList<PersonPresence>()
+        val db = Firebase.firestore
 
-        personService.persons?.forEach {
-            val presence = getPersonPresence(it)
-            presenceList.add(presence)
-        }
-        return presenceList
+        db.collection("person").get()
+            .addOnSuccessListener {
+                it.documents.forEach { d ->
+                    val person = d.toObject(Person::class.java)
+                    val presence = getPersonPresence(person!!)
+                    presenceList.add(presence)
+                }
+
+                callback.invoke(presenceList)
+            }
+            .addOnFailureListener {
+                callback.invoke(arrayListOf())
+            }
     }
 
     private fun getPersonPresence(person: Person) : PersonPresence {
