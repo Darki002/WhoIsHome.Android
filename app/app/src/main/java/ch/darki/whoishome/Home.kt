@@ -9,7 +9,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.core.Person
 import ch.darki.whoishome.core.PresenceService
 import org.joda.time.DateTime
