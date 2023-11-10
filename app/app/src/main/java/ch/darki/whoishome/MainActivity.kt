@@ -1,6 +1,5 @@
 package ch.darki.whoishome
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,15 +9,9 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
-import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
 import androidx.navigation.NavController
-import ch.darki.whoishome.dialogs.DateTimePicker
 import ch.darki.whoishome.databinding.ActivityMainBinding
 import ch.darki.whoishome.dialogs.CreateNewEntryDialog
-import org.joda.time.DateTime
 
 class MainActivity : AppCompatActivity() {
 

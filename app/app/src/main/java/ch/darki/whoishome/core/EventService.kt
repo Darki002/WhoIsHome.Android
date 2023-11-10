@@ -7,8 +7,8 @@ import org.joda.time.DateTime
 
 class EventService {
 
-    fun deleteEvent(id: Int) {
-        Firebase.firestore.collection("events")
+    fun deleteEvent(id : String) {
+        Firebase.firestore.collection("events").document(id).delete()
     }
 
     fun createEvent(
@@ -21,17 +21,17 @@ class EventService {
         callback: (Boolean) -> Unit
     ) {
 
+        val docName = person.email + " - " + DateTime.now().millis
+
         val event = Event(
-            getNewId(),
             person,
             eventName,
             startDate,
             endDate,
             relevantForDinner,
-            dinnerAt
+            dinnerAt,
+            docName
         )
-
-        val docName = person.email + " - " + DateTime.now().millis
 
         Firebase.firestore.collection("events").document(docName).set(event)
             .addOnSuccessListener {callback.invoke(true)}

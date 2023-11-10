@@ -44,8 +44,10 @@ class InspectPerson : Fragment() {
 
         val args: InspectPersonArgs = InspectPersonArgs.fromBundle(requireArguments())
 
-        person = service.presenceService.personService.getPersonByEmail(args.email)!!
-        setTitle(view, person.displayName)
+        service.presenceService.personService.getPersonByEmail(args.email){
+            person = it!!
+            setTitle(view, person.displayName)
+        }
     }
 
     override fun onResume() {
@@ -58,14 +60,15 @@ class InspectPerson : Fragment() {
     }
 
     private fun showAllEvents(){
-        val eventsForPerson = service.presenceService.eventService.getEventsForPersonByEmail(person.email)
-        val todayEvents = eventsForPerson.today
-        val thisWeekEvents = eventsForPerson.thisWeek
-        val otherEvents = eventsForPerson.otherEvents
+        service.presenceService.eventService.getEventsForPersonByEmail(person.email){ eventsForPerson ->
+            val todayEvents = eventsForPerson.today
+            val thisWeekEvents = eventsForPerson.thisWeek
+            val otherEvents = eventsForPerson.otherEvents
 
-        showToday(todayEvents)
-        showEventsAt(thisWeekEvents, thisWeekEventsLayout)
-        showEventsAt(otherEvents, otherEventsLayout)
+            showToday(todayEvents)
+            showEventsAt(thisWeekEvents, thisWeekEventsLayout)
+            showEventsAt(otherEvents, otherEventsLayout)
+        }
     }
 
     private fun showToday(todayEvents : List<Event>){
@@ -99,12 +102,11 @@ class InspectPerson : Fragment() {
         events.forEach (
             fun (e) {
                 val view = layoutInflater.inflate(R.layout.event_view, null)
-                view.id = e.id
+                view.findViewById<TextView>(R.id.doc_id).text = e.id
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
                 view.findViewById<TextView>(R.id.date).text = e.startDate.toString("dd.MM.yyyy HH:mm")
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
-
 
                     if(person.email != service.logInService.currentPerson?.email){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()

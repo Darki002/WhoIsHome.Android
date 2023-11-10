@@ -31,9 +31,12 @@ class Home : Fragment() {
         layout = fragment.findViewById(R.id.home_presence_container)
         service = activity?.applicationContext as ServiceManager
 
-        personPresences = service.presenceService.getPresenceListFrom(DateTime.now())
-        personPresences!!.forEach { p ->
-            showPerson(p)
+        service.presenceService.getPresenceListFrom {
+            personPresences = it
+
+            personPresences!!.forEach { p ->
+                showPerson(p)
+            }
         }
 
         return fragment
