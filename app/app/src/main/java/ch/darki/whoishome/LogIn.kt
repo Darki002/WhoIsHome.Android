@@ -3,6 +3,7 @@ package ch.darki.whoishome
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +28,7 @@ class LogIn : AppCompatActivity() {
         setContentView(binding.root)
     }
 
-    fun onLogIn(){
+    fun onLogIn(view: View){
         val email = findViewById<TextView>(R.id.emailLogIn).text.toString()
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
 
