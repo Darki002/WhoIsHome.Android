@@ -3,6 +3,7 @@ package ch.darki.whoishome.core
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
 
@@ -57,5 +58,4 @@ class PresenceService {
     }
 
     data class PersonPresence(val person: Person, val isPresent : Boolean, val dinnerAt: DateTime?)
-
 }

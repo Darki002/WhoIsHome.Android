@@ -1,6 +1,9 @@
 package ch.darki.whoishome.core
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.toObject
+import kotlinx.coroutines.tasks.await
 import org.joda.time.DateTime
 import java.util.Comparator
 
@@ -25,23 +28,47 @@ data class Event(val person: Person, val eventName: String, val startDate: DateT
     }
 
     companion object{
-        fun new(doc : DocumentSnapshot) : Event {
+        fun new(doc : DocumentSnapshot) : Event? {
 
-            val dinnerAt = doc.getDocumentReference("dinnerAt")?.get()?.result?.toObject(DateTime::class.java)
-            val startDate = doc.getDocumentReference("startDate")?.get()?.result?.toObject(DateTime::class.java)
-            val endDate = doc.getDocumentReference("endDate")?.get()?.result?.toObject(DateTime::class.java)
+            val dinnerAt = convertToDateTime(doc, "dinnerAt")
+            val startDate = convertToDateTime(doc, "startDate")
+            if (startDate == null) {
+                Log.e("EventConversion", "Invalid Event in DB: StartDate is null")
+                return null
+            }
+
+            val endDate = convertToDateTime(doc, "endDate")
+            if (endDate == null) {
+                Log.e("EventConversion", "Invalid Event in DB: EndDate is null")
+                return null
+            }
 
             return Event(
-                person = doc.getDocumentReference("person")
-                    ?.get()?.result?.toObject(Person::class.java)
-                    ?: throw Exception("event does not have a person"),
+                person = Person(doc.getString("person.displayName").toString(), doc.getString("person.email").toString()),
                 eventName = doc.getString("eventName").toString(),
-                startDate = startDate!!,
-                endDate = endDate!!,
+                startDate = startDate,
+                endDate = endDate,
                 relevantForDinner = doc.getBoolean("relevantForDinner") ?: false,
                 dinnerAt = dinnerAt,
                 id = doc.getString("id").toString()
             )
+        }
+
+        private fun convertToDateTime(doc: DocumentSnapshot, field: String): DateTime? {
+            val nestedMap = doc[field] as? Map<*, *>
+
+            return if (nestedMap != null && nestedMap.all { it.key is String }) {
+                val year = nestedMap["year"] as? Int ?: 0
+                val month = nestedMap["monthOfYear"] as? Int ?: 1
+                val day = nestedMap["dayOfMonth"] as? Int ?: 1
+                val hour = nestedMap["hourOfDay"] as? Int ?: 0
+                val minute = nestedMap["minuteOfHour"] as? Int ?: 0
+                val second = nestedMap["secondOfMinute"] as? Int ?: 0
+
+                DateTime(year, month, day, hour, minute, second)
+            } else {
+                null
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
 
 class EventService {
@@ -48,15 +49,14 @@ class EventService {
         val db = Firebase.firestore
 
         db.collection("events")
-            .whereEqualTo("email", person.email).get()
+            .whereEqualTo("person.email", person.email).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
                 callback.invoke(listOf())
             }
             .addOnSuccessListener {
                 for (doc in it.documents){
-                    val event = Event.new(doc)
-                    result.add(event)
+                    result.add(Event.new(doc))
                 }
                 callback.invoke(result)
             }
