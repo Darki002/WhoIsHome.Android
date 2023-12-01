@@ -55,7 +55,7 @@ class EventService {
             }
             .addOnSuccessListener {
                 for (doc in it.documents){
-                    val event = Event.New(doc)
+                    val event = Event.new(doc)
                     result.add(event)
                 }
                 callback.invoke(result)

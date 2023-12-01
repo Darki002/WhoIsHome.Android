@@ -35,8 +35,6 @@ class LogIn : AppCompatActivity() {
         service.logInService.tryRegister(email, displayName)
         startActivity(Intent(this, MainActivity::class.java))
 
-        val toast = Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT)
-        toast.setGravity(Gravity.BOTTOM, 0, 0)
-        toast.show()
+        Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
     }
 }

@@ -25,17 +25,18 @@ data class Event(val person: Person, val eventName: String, val startDate: DateT
     }
 
     companion object{
-        fun New(doc : DocumentSnapshot) : Event {
+        fun new(doc : DocumentSnapshot) : Event {
 
             val personDoc = doc.getDocumentReference("person")?.get()?.result!!
-            val dinnerAtString = doc.getString("dinnerAt")
-            val dinnerAt = if (dinnerAtString.isNullOrEmpty()) null else DateTime(dinnerAtString)
+            val dinnerAt = doc.getDocumentReference("dinnerAt")?.get()?.result?.toObject(DateTime::class.java)
+            val startDate = doc.getDocumentReference("startDate")?.get()?.result?.toObject(DateTime::class.java)
+            val endDate = doc.getDocumentReference("endDate")?.get()?.result?.toObject(DateTime::class.java)
 
             return Event(
                 person = Person.new(personDoc),
                 eventName = doc.getString("eventName").toString(),
-                startDate = DateTime(doc.getString("startDate").toString()),
-                endDate = DateTime(doc.getString("endDate").toString()),
+                startDate = startDate!!,
+                endDate = endDate!!,
                 relevantForDinner = doc.getBoolean("relevantForDinner") ?: false,
                 dinnerAt = dinnerAt,
                 id = doc.getString("id").toString()

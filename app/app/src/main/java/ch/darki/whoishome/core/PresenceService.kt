@@ -50,7 +50,7 @@ class PresenceService {
                     e -> (e!!.dinnerAt != null && startOfToday <= e.dinnerAt && e.dinnerAt!! < startOfTomorrow)
             }.max{
                     e, e2 -> e!!.dinnerAt?.compareTo(e2!!.dinnerAt) ?: -1
-            }.get().dinnerAt
+            }.map { it?.dinnerAt }.orElse(null)
 
             callback.invoke(PersonPresence(person, result != null, result))
         }
