@@ -49,7 +49,7 @@ class EventService {
         val db = Firebase.firestore
 
         db.collection("events")
-            .whereEqualTo("person.email", person.email).get()
+            .whereEqualTo(FieldPath.of("person", "email"), person.email).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
                 callback.invoke(listOf())

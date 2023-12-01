@@ -19,14 +19,13 @@ class PresenceService {
         val db = Firebase.firestore
 
         db.collection("person").get()
-            .addOnSuccessListener {
-                it.documents.forEach { d ->
-                    val person = Person.new(d)
+            .addOnSuccessListener { docs ->
+                for (doc in docs.documents){
+                    val person = Person.new(doc)
                     getPersonPresence(person){ presence ->
                         presenceList.add(presence)
                     }
                 }
-
                 callback.invoke(presenceList)
             }
             .addOnFailureListener {
