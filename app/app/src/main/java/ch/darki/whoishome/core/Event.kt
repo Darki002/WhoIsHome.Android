@@ -27,13 +27,14 @@ data class Event(val person: Person, val eventName: String, val startDate: DateT
     companion object{
         fun new(doc : DocumentSnapshot) : Event {
 
-            val personDoc = doc.getDocumentReference("person")?.get()?.result!!
             val dinnerAt = doc.getDocumentReference("dinnerAt")?.get()?.result?.toObject(DateTime::class.java)
             val startDate = doc.getDocumentReference("startDate")?.get()?.result?.toObject(DateTime::class.java)
             val endDate = doc.getDocumentReference("endDate")?.get()?.result?.toObject(DateTime::class.java)
 
             return Event(
-                person = Person.new(personDoc),
+                person = doc.getDocumentReference("person")
+                    ?.get()?.result?.toObject(Person::class.java)
+                    ?: throw Exception("event does not have a person"),
                 eventName = doc.getString("eventName").toString(),
                 startDate = startDate!!,
                 endDate = endDate!!,
