@@ -1,5 +1,6 @@
 package ch.darki.whoishome.core
 
+import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
@@ -19,8 +20,8 @@ class PresenceService {
         db.collection("person").get()
             .addOnSuccessListener {
                 it.documents.forEach { d ->
-                    val person = d.toObject(Person::class.java)
-                    getPersonPresence(person!!){ presence ->
+                    val person = Person.new(d)
+                    getPersonPresence(person){ presence ->
                         presenceList.add(presence)
                     }
                 }
@@ -28,6 +29,7 @@ class PresenceService {
                 callback.invoke(presenceList)
             }
             .addOnFailureListener {
+                Log.e("DB Err", it.message.toString())
                 callback.invoke(arrayListOf())
             }
     }

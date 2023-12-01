@@ -1,5 +1,6 @@
 package ch.darki.whoishome.core
 
+import android.util.Log
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -35,7 +36,10 @@ class EventService {
 
         Firebase.firestore.collection("events").document(docName).set(event)
             .addOnSuccessListener {callback.invoke(true)}
-            .addOnFailureListener {callback.invoke(false)}
+            .addOnFailureListener {
+                Log.e("DB Err", it.message.toString())
+                callback.invoke(false)
+            }
     }
 
     fun getEventsFromPerson(person: Person, callback: (List<Event?>) -> Unit) {
@@ -46,11 +50,12 @@ class EventService {
         db.collection("events")
             .whereEqualTo("email", person.email).get()
             .addOnFailureListener {
+                Log.e("DB Err", it.message.toString())
                 callback.invoke(listOf())
             }
             .addOnSuccessListener {
-                it.documents.forEach { e ->
-                    val event = e.toObject(Event::class.java)
+                for (doc in it.documents){
+                    val event = Event.New(doc)
                     result.add(event)
                 }
                 callback.invoke(result)
@@ -59,7 +64,7 @@ class EventService {
 
     fun getEventsForPersonByEmail(email: String, callback: (EventsForPerson) -> Unit) {
 
-        val eventsByPerson = Firebase.firestore.collection("events")
+        Firebase.firestore.collection("events")
             .whereEqualTo(FieldPath.of("person", "email"), email).get()
             .addOnSuccessListener {
                 val events = arrayListOf<Event?>()
@@ -69,6 +74,9 @@ class EventService {
                 }
                 val result = getPresences(events)
                 callback.invoke(result)
+            }
+            .addOnFailureListener {
+                Log.e("DB Err", it.message.toString())
             }
 
 
