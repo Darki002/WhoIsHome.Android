@@ -2,8 +2,6 @@ package ch.darki.whoishome.core
 
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.toObject
-import kotlinx.coroutines.tasks.await
 import org.joda.time.DateTime
 import java.util.Comparator
 

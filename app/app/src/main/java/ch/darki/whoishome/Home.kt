@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Person
 import ch.darki.whoishome.core.PresenceService
@@ -30,7 +31,7 @@ class Home : Fragment() {
         layout = fragment.findViewById(R.id.home_presence_container)
         service = activity?.applicationContext as ServiceManager
 
-        service.presenceService.getPresenceListFrom {
+        service.presenceService.getPresenceListFrom(viewLifecycleOwner.lifecycleScope) {
             personPresences = it
 
             personPresences!!.forEach { p ->

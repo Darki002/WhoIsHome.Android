@@ -4,7 +4,6 @@ import android.util.Log
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
 
 class EventService {

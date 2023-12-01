@@ -3,9 +3,12 @@ package ch.darki.whoishome.core
 import android.util.Log
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import kotlinx.coroutines.runBlocking
 import org.joda.time.DateTime
 import org.joda.time.LocalDate
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class PresenceService {
     var personService : PersonService = PersonService()
@@ -14,24 +17,34 @@ class PresenceService {
     var eventService : EventService = EventService()
         private set
 
-    fun getPresenceListFrom(callback: (List<PersonPresence>) -> Unit) {
+    fun getPresenceListFrom(scope: CoroutineScope, callback: (List<PersonPresence>) -> Unit) {
         val presenceList = ArrayList<PersonPresence>()
         val db = Firebase.firestore
 
-        db.collection("person").get()
-            .addOnSuccessListener { docs ->
-                for (doc in docs.documents){
-                    val person = Person.new(doc)
-                    getPersonPresence(person){ presence ->
-                        presenceList.add(presence)
+        scope.launch {
+            try {
+                val docs = db.collection("person").get().await()
+
+                // Use async to parallelize the asynchronous calls
+                val deferredList = docs.documents.map { doc ->
+                    async {
+                        suspendCoroutine { continuation ->
+                            val person = Person.new(doc)
+                            getPersonPresence(person) { presence ->
+                                continuation.resume(presence)
+                            }
+                        }
                     }
                 }
+
+                presenceList.addAll(deferredList.awaitAll())
+
                 callback.invoke(presenceList)
+            } catch (e: Exception) {
+                Log.e("DB Err", e.message.toString())
+                callback.invoke(emptyList())
             }
-            .addOnFailureListener {
-                Log.e("DB Err", it.message.toString())
-                callback.invoke(arrayListOf())
-            }
+        }
     }
 
     private fun getPersonPresence(person: Person, callback : (PersonPresence) -> Unit) {
