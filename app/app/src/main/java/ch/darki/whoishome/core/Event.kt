@@ -56,14 +56,14 @@ data class Event(val person: Person, val eventName: String, val startDate: DateT
             val nestedMap = doc[field] as? Map<*, *>
 
             return if (nestedMap != null && nestedMap.all { it.key is String }) {
-                val year = nestedMap["year"] as? Int ?: 0
-                val month = nestedMap["monthOfYear"] as? Int ?: 1
-                val day = nestedMap["dayOfMonth"] as? Int ?: 1
-                val hour = nestedMap["hourOfDay"] as? Int ?: 0
-                val minute = nestedMap["minuteOfHour"] as? Int ?: 0
-                val second = nestedMap["secondOfMinute"] as? Int ?: 0
+                val year = nestedMap["year"] as? Long ?: 0
+                val month = nestedMap["monthOfYear"] as? Long ?: 1
+                val day = nestedMap["dayOfMonth"] as? Long ?: 1
+                val hour = nestedMap["hourOfDay"] as? Long ?: 0
+                val minute = nestedMap["minuteOfHour"] as? Long ?: 0
+                val second = nestedMap["secondOfMinute"] as? Long ?: 0
 
-                DateTime(year, month, day, hour, minute, second)
+                DateTime(year.toInt(), month.toInt(), day.toInt(), hour.toInt(), minute.toInt(), second.toInt())
             } else {
                 null
             }

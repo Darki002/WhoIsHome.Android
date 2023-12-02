@@ -10,8 +10,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.core.Person
@@ -40,7 +40,7 @@ class InspectPerson : Fragment() {
         thisWeekEventsLayout = fragment.findViewById(R.id.thisWeekEvents)
         otherEventsLayout = fragment.findViewById(R.id.otherEvents)
 
-        viewModel = ViewModelProvider(this)[InspectPersonViewModel::class.java]
+        viewModel = activityViewModels<InspectPersonViewModel>().value
 
         return fragment
     }
@@ -77,7 +77,7 @@ class InspectPerson : Fragment() {
             return
         }
 
-        service.presenceService.eventService.getEventsForPersonByEmail(viewLifecycleOwner.lifecycleScope, viewModel.person?.email.toString()){ eventsForPerson ->
+        service.presenceService.eventService.getEventsForPersonByEmail(viewLifecycleOwner.lifecycleScope, viewModel.person!!.email){ eventsForPerson ->
             val todayEvents = eventsForPerson.today
             val thisWeekEvents = eventsForPerson.thisWeek
             val otherEvents = eventsForPerson.otherEvents

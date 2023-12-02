@@ -68,9 +68,8 @@ class EventService {
     fun getEventsForPersonByEmail(scope: CoroutineScope, email: String, callback: (EventsForPerson) -> Unit) {
 
         scope.launch {
-
             try {
-                val docs = Firebase.firestore.collection("person")
+                val docs = Firebase.firestore.collection("events")
                     .whereEqualTo(FieldPath.of("person", "email"), email).get().await()
 
                 val deferredList = docs.documents.map { doc ->
