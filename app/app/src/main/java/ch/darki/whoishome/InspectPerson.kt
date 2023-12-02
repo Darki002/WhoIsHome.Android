@@ -50,7 +50,7 @@ class InspectPerson : Fragment() {
 
         val args: InspectPersonArgs = InspectPersonArgs.fromBundle(requireArguments())
 
-        if(viewModel.person == null){
+        if(viewModel.person == null || viewModel.person?.email != args.email){
             service.presenceService.personService.getPersonByEmail(args.email){
                 viewModel.person = it
                 setTitle(view, viewModel.person?.displayName)
