@@ -9,6 +9,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.streams.toList
 
 class PresenceService {
     var personService : PersonService = PersonService()
@@ -38,7 +39,6 @@ class PresenceService {
                 }
 
                 presenceList.addAll(deferredList.awaitAll())
-
                 callback.invoke(presenceList)
             } catch (e: Exception) {
                 Log.e("DB Err", e.message.toString())
@@ -57,12 +57,19 @@ class PresenceService {
             val startOfToday: DateTime = today.toDateTimeAtStartOfDay(now.zone)
             val startOfTomorrow: DateTime = tomorrow.toDateTimeAtStartOfDay(now.zone)
 
-            val result = events.stream().filter {
-                    e -> e!!.relevantForDinner
+            val relevantEventsToday = events.stream().filter {
+                e -> e!!.relevantForDinner
             }.filter {
-                    e -> (e!!.dinnerAt != null && startOfToday <= e.dinnerAt && e.dinnerAt!! < startOfTomorrow)
-            }.max{
-                    e, e2 -> e!!.dinnerAt?.compareTo(e2!!.dinnerAt) ?: -1
+                e -> (startOfToday <= e?.endDate && e?.endDate!! < startOfTomorrow)
+            }.toList()
+
+            if(relevantEventsToday.isEmpty()){
+                callback.invoke(PersonPresence(person, true, null))
+                return@getEventsFromPerson
+            }
+
+            val result = relevantEventsToday.stream().max{
+                    e, e2 -> e!!.dinnerAt?.compareTo(e2!!.dinnerAt) ?: 1
             }.map { it?.dinnerAt }.orElse(null)
 
             callback.invoke(PersonPresence(person, result != null, result))

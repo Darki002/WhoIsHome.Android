@@ -5,6 +5,10 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
+import kotlin.coroutines.suspendCoroutine
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
+import kotlin.coroutines.resume
 
 class EventService {
 
@@ -61,27 +65,32 @@ class EventService {
             }
     }
 
-    fun getEventsForPersonByEmail(email: String, callback: (EventsForPerson) -> Unit) {
+    fun getEventsForPersonByEmail(scope: CoroutineScope, email: String, callback: (EventsForPerson) -> Unit) {
 
-        Firebase.firestore.collection("events")
-            .whereEqualTo(FieldPath.of("person", "email"), email).get()
-            .addOnSuccessListener {
-                val events = arrayListOf<Event?>()
-                it.documents.forEach { e ->
-                    val event = e.toObject(Event::class.java)
-                    events.add(event)
+        scope.launch {
+
+            try {
+                val docs = Firebase.firestore.collection("person")
+                    .whereEqualTo(FieldPath.of("person", "email"), email).get().await()
+
+                val deferredList = docs.documents.map { doc ->
+                    async {
+                        suspendCoroutine { continuation ->
+                            val event = Event.new(doc)
+                            continuation.resume(event)
+                        }
+                    }
                 }
-                val result = getPresences(events)
+                val result = getPresences(deferredList.awaitAll())
                 callback.invoke(result)
             }
-            .addOnFailureListener {
-                Log.e("DB Err", it.message.toString())
+            catch (e: Exception){
+                Log.e("DB Err", e.message.toString())
             }
-
-
+        }
     }
 
-    private fun getPresences(events: ArrayList<Event?>) : EventsForPerson{
+    private fun getPresences(events: List<Event?>) : EventsForPerson{
         val now = DateTime.now()
 
         val todaysEvents = events.stream().filter { e ->
