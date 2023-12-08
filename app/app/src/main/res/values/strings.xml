@@ -25,4 +25,5 @@
     <string name="weiter">Weiter</string>
     <string name="zur_ck">Zurück</string>
     <string name="bin_n_d_da">Bin nöd da</string>
+    <string name="event_name">Event Name</string>
 </resources>
