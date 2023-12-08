@@ -4,16 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
+import org.joda.time.DateTime
 
 class EditEvent : Fragment() {
 
     private lateinit var service: ServiceManager
+    private lateinit var email : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,22 +37,56 @@ class EditEvent : Fragment() {
 
         val args: EditEventArgs = EditEventArgs.fromBundle(requireArguments())
 
-        service.presenceService.eventService.getEventById(args.eventId, viewLifecycleOwner.lifecycleScope) {fillExistingData(it, view)}
+        email = args.email
+        service.presenceService.eventService.getEventById(args.eventId, viewLifecycleOwner.lifecycleScope) {setUpEditWindow(it, view)}
     }
 
-    private fun fillExistingData(event : Event?, view : View){
+    private fun setUpEditWindow(event : Event?, view : View){
         if(event == null){
             return
         }
 
         view.findViewById<TextView>(R.id.edit_event_name).text = event.eventName
-        view.findViewById<EditText>(R.id.event_name_edit).setText(event.eventName)
-        view.findViewById<EditText>(R.id.start_date_edit).setText(event.startDate.toString("dd.MM.yyyy HH:mm"))
-        view.findViewById<EditText>(R.id.end_date_edit).setText(event.endDate.toString("dd.MM.yyyy HH:mm"))
-        view.findViewById<CheckBox>(R.id.is_relevant_for_dinner_edit).isChecked = event.relevantForDinner
-        view.findViewById<CheckBox>(R.id.not_at_home_for_dinner_edit).isChecked = event.relevantForDinner &&  event.dinnerAt != null
+        val editEventName = view.findViewById<EditText>(R.id.event_name_edit)
+        val editStartDate = view.findViewById<EditText>(R.id.start_date_edit)
+        val editEndDate = view.findViewById<EditText>(R.id.end_date_edit)
+        val editRelevantForDinner = view.findViewById<CheckBox>(R.id.is_relevant_for_dinner_edit)
+        val editNotAtHome = view.findViewById<CheckBox>(R.id.not_at_home_for_dinner_edit)
+        val editDinnerAt = view.findViewById<EditText>(R.id.ready_for_dinner_at_edit)
+
+        editEventName.setText(event.eventName)
+        editStartDate.setText(event.startDate.toString("dd.MM.yyyy HH:mm"))
+        editEndDate.setText(event.endDate.toString("dd.MM.yyyy HH:mm"))
+        editRelevantForDinner.isChecked = event.relevantForDinner
+        editNotAtHome.isChecked = event.relevantForDinner &&  event.dinnerAt != null
+
         if(event.dinnerAt != null){
-            view.findViewById<EditText>(R.id.ready_for_dinner_at_edit).setText(event.dinnerAt.toString("dd.MM.yyyy HH:mm"))
+            editDinnerAt.setText(event.dinnerAt.toString("dd.MM.yyyy HH:mm"))
+        }
+
+        view.findViewById<Button>(R.id.cancel_edit_event).setOnClickListener {
+            val action = EditEventDirections.actionEditEventToPersonView(email)
+            NavHostFragment.findNavController(this).navigate(action)
+        }
+
+        view.findViewById<Button>(R.id.save_button).setOnClickListener {
+            Toast.makeText(context, "Event geupdated", Toast.LENGTH_SHORT).show()
+
+            service.presenceService.personService.getPersonByEmail(email) {
+                val updatedEvent = Event(
+                    person = it!!,
+                    eventName = editEventName.toString(),
+                    startDate = DateTime.now(),
+                    endDate = DateTime.now(),
+                    relevantForDinner = editRelevantForDinner.isChecked,
+                    dinnerAt = DateTime.now(),
+                    event.id)
+
+                service.presenceService.eventService.update(updatedEvent)
+            }
+
+            val action = EditEventDirections.actionEditEventToPersonView(email)
+            NavHostFragment.findNavController(this).navigate(action)
         }
     }
 }
