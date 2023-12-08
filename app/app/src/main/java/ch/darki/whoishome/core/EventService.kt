@@ -12,8 +12,21 @@ import kotlin.coroutines.resume
 
 class EventService {
 
+    private val collection = "events"
+
     fun deleteEvent(id : String) {
-        Firebase.firestore.collection("events").document(id).delete()
+        Firebase.firestore.collection(collection).document(id).delete()
+    }
+
+    fun update(event: Event) {
+        val db = Firebase.firestore
+        db.collection(collection).document(event.id).set(event)
+            .addOnSuccessListener {
+            Log.i("Update Event", "Update successfully updated")
+        }
+            .addOnFailureListener {
+                Log.e("Update Event", "Update failed with error message $it")
+            }
     }
 
     fun createEvent(
@@ -38,7 +51,7 @@ class EventService {
             docName
         )
 
-        Firebase.firestore.collection("events").document(docName).set(event)
+        Firebase.firestore.collection(collection).document(docName).set(event)
             .addOnSuccessListener {callback.invoke(true)}
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
@@ -51,7 +64,7 @@ class EventService {
         val result = ArrayList<Event?>()
         val db = Firebase.firestore
 
-        db.collection("events")
+        db.collection(collection)
             .whereEqualTo(FieldPath.of("person", "email"), person.email).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
@@ -69,7 +82,7 @@ class EventService {
 
         scope.launch {
             try {
-                val docs = Firebase.firestore.collection("events")
+                val docs = Firebase.firestore.collection(collection)
                     .whereEqualTo(FieldPath.of("person", "email"), email).get().await()
 
                 val deferredList = docs.documents.map { doc ->
