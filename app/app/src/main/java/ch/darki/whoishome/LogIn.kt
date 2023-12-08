@@ -27,6 +27,7 @@ class LogIn : AppCompatActivity() {
         setContentView(binding.root)
     }
 
+    @Suppress("UNUSED_PARAMETER")
     fun onLogIn(view: View){
         val email = findViewById<TextView>(R.id.emailLogIn).text.toString()
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
