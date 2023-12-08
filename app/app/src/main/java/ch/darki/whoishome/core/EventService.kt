@@ -29,6 +29,19 @@ class EventService {
             }
     }
 
+    fun getEventById(id : String, scope: CoroutineScope, callback: (Event?) -> Unit) {
+        scope.launch {
+            try {
+                val doc = Firebase.firestore.collection(collection)
+                    .document(id).get().await()
+                callback.invoke(Event.new(doc))
+            }
+            catch (e: Exception){
+                Log.e("DB Err", e.message.toString())
+            }
+        }
+    }
+
     fun createEvent(
         person: Person,
         eventName: String,

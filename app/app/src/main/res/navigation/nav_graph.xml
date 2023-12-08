@@ -25,8 +25,26 @@
         <action
             android:id="@+id/action_personView_to_home"
             app:destination="@id/home" />
+        <action
+            android:id="@+id/action_personView_to_ediEvent"
+            app:destination="@id/fragment_edit_event"
+            />
         <argument
             android:name="email"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_edit_event"
+        android:name="ch.darki.whoishome.EditEvent"
+        android:label="Edit Event"
+        tools:layout="@layout/fragment_edit_event"
+        >
+        <action
+            android:id="@+id/action_editEventView_to_home"
+            app:destination="@id/home" />
+        <argument
+            android:name="eventId"
             app:argType="string" />
     </fragment>
 
