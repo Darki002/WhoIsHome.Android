@@ -23,7 +23,7 @@ class EventService {
         db.collection(collection).document(event.id).set(event)
             .addOnSuccessListener {
             Log.i("Update Event", "Update successfully updated")
-        }
+            }
             .addOnFailureListener {
                 Log.e("Update Event", "Update failed with error message $it")
             }
