@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.core.Person
 
@@ -101,6 +102,15 @@ class InspectPerson : Fragment() {
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
                 view.findViewById<TextView>(R.id.date).text = "Heute"
 
+                view.findViewById<Button>(R.id.edit_event).setOnClickListener {
+                    if(viewModel.person?.email != service.logInService.currentPerson?.email){
+                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+                    val action = InspectPersonDirections.actionPersonViewToEdiEvent(e.id, viewModel.person!!.email)
+                    NavHostFragment.findNavController(this).navigate(action)
+                }
+
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 
                     if(viewModel.person?.email != service.logInService.currentPerson?.email){
@@ -127,9 +137,17 @@ class InspectPerson : Fragment() {
         events.forEach (
             fun (e) {
                 val view = layoutInflater.inflate(R.layout.event_view, null)
-                view.findViewById<TextView>(R.id.doc_id).text = e.id
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
                 view.findViewById<TextView>(R.id.date).text = e.startDate.toString("dd.MM.yyyy HH:mm")
+
+                view.findViewById<Button>(R.id.edit_event).setOnClickListener {
+                    if(viewModel.person?.email != service.logInService.currentPerson?.email){
+                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+                        return@setOnClickListener
+                    }
+                    val action = InspectPersonDirections.actionPersonViewToEdiEvent(e.id, viewModel.person!!.email)
+                    NavHostFragment.findNavController(this).navigate(action)
+                }
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 

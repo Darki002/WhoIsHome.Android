@@ -2,64 +2,63 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/doc_id"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:text="null"
-        />
-
-    <RelativeLayout
+    <androidx.cardview.widget.CardView
+        android:id="@+id/event_card"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp">
 
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp">
+            android:padding="10dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/eventName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="10dp">
+                android:gravity="center"
+                android:text="Name"
+                android:textFontWeight="1000"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/eventName"
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="date"
+                android:gravity="center"
+                android:layout_below="@id/eventName"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true">
+
+                <Button
+                    android:id="@+id/edit_event"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/deleteEvent"
-                    android:layout_alignBottom="@id/deleteEvent"
-                    android:gravity="center"
-                    android:text="Name"
-                    android:textFontWeight="1000"
-                    android:textSize="20sp" />
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="date"
-                    android:gravity="center"
-                    android:layout_alignTop="@id/eventName"
-                    android:layout_alignBottom="@id/eventName"
-                    android:layout_centerHorizontal="true"/>
+                    android:paddingLeft="12dp"
+                    android:paddingTop="3dp"
+                    android:paddingRight="12dp"
+                    android:paddingBottom="3dp"
+                    android:text="@string/edit" />
 
                 <Button
                     android:id="@+id/deleteEvent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
                     android:paddingLeft="12dp"
                     android:paddingTop="3dp"
                     android:paddingRight="12dp"
                     android:paddingBottom="3dp"
-                    android:text="Löschen"
+                    android:layout_marginStart="3dp"
+                    android:text="@string/l_schen"
                     android:textSize="12sp" />
-
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-    </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
 </RelativeLayout>

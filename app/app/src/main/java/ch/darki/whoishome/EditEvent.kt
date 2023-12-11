@@ -99,9 +99,9 @@ class EditEvent : Fragment() {
         view.findViewById<Button>(R.id.save_button).setOnClickListener {
             Toast.makeText(context, "Event geupdated", Toast.LENGTH_SHORT).show()
 
-            service.presenceService.personService.getPersonByEmail(email) {
+            service.presenceService.personService.getPersonByEmail(email) {p ->
                 val updatedEvent = Event(
-                    person = it!!,
+                    person = p!!,
                     eventName = editEventName.toString(),
                     startDate = startDate,
                     endDate = endDate,

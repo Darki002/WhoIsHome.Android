@@ -27,4 +27,6 @@
     <string name="bin_n_d_da">Bin nöd da</string>
     <string name="event_name">Event Name</string>
     <string name="speichern">Speichern</string>
+    <string name="l_schen">Löschen</string>
+    <string name="edit">Edit</string>
 </resources>
