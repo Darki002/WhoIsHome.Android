@@ -13,6 +13,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.dialogs.DateTimePicker
+import ch.darki.whoishome.dialogs.TimePicker
 import org.joda.time.DateTime
 
 class EditEvent : Fragment() {
@@ -54,11 +56,36 @@ class EditEvent : Fragment() {
         val editNotAtHome = view.findViewById<CheckBox>(R.id.not_at_home_for_dinner_edit)
         val editDinnerAt = view.findViewById<EditText>(R.id.ready_for_dinner_at_edit)
 
+        var startDate : DateTime = event.startDate
+        var endDate : DateTime = event.endDate
+        var dinnerAt : DateTime? = event.dinnerAt
+
         editEventName.setText(event.eventName)
         editStartDate.setText(event.startDate.toString("dd.MM.yyyy HH:mm"))
         editEndDate.setText(event.endDate.toString("dd.MM.yyyy HH:mm"))
         editRelevantForDinner.isChecked = event.relevantForDinner
         editNotAtHome.isChecked = event.relevantForDinner &&  event.dinnerAt != null
+
+        editStartDate.setOnClickListener {
+            DateTimePicker(requireContext()) { d ->
+                editStartDate.setText(d.toString("dd.MM.yyyy HH:mm"))
+                startDate = d
+            }.show()
+        }
+
+        editEndDate.setOnClickListener {
+            DateTimePicker(requireContext()) { d ->
+                editEndDate.setText(d.toString("dd.MM.yyyy HH:mm"))
+                endDate = d
+            }.show()
+        }
+
+        editDinnerAt.setOnClickListener {
+            TimePicker(requireContext()){d ->
+                editDinnerAt.setText(d.toString("HH:mm"))
+                dinnerAt = d
+            }.show()
+        }
 
         if(event.dinnerAt != null){
             editDinnerAt.setText(event.dinnerAt.toString("dd.MM.yyyy HH:mm"))
@@ -76,10 +103,10 @@ class EditEvent : Fragment() {
                 val updatedEvent = Event(
                     person = it!!,
                     eventName = editEventName.toString(),
-                    startDate = DateTime.now(),
-                    endDate = DateTime.now(),
+                    startDate = startDate,
+                    endDate = endDate,
                     relevantForDinner = editRelevantForDinner.isChecked,
-                    dinnerAt = DateTime.now(),
+                    dinnerAt = dinnerAt,
                     event.id)
 
                 service.presenceService.eventService.update(updatedEvent)
