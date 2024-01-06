@@ -102,7 +102,7 @@ class EditEvent : Fragment() {
             service.presenceService.personService.getPersonByEmail(email) {p ->
                 val updatedEvent = Event(
                     person = p!!,
-                    eventName = editEventName.toString(),
+                    eventName = editEventName.text.toString(),
                     startDate = startDate,
                     endDate = endDate,
                     relevantForDinner = editRelevantForDinner.isChecked,
@@ -112,7 +112,7 @@ class EditEvent : Fragment() {
                 service.presenceService.eventService.update(updatedEvent)
             }
 
-            val action = EditEventDirections.actionEditEventToPersonView(email)
+            val action = EditEventDirections.actionEditEventViewToHome()
             NavHostFragment.findNavController(this).navigate(action)
         }
     }
