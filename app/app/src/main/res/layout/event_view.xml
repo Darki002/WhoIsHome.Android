@@ -45,7 +45,8 @@
                     android:paddingTop="3dp"
                     android:paddingRight="12dp"
                     android:paddingBottom="3dp"
-                    android:text="@string/edit" />
+                    android:text="@string/edit"
+                    style="?android:attr/buttonBarButtonStyle" />
 
                 <Button
                     android:id="@+id/deleteEvent"
@@ -57,7 +58,8 @@
                     android:paddingBottom="3dp"
                     android:layout_marginStart="3dp"
                     android:text="@string/l_schen"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    style="?android:attr/buttonBarButtonStyle" />
             </LinearLayout>
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
