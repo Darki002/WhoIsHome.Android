@@ -147,10 +147,14 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         createButton.setOnClickListener {
             relevantForDinner = relevantForDinnerCb.isChecked
             notAtHomeForDinner = notAtHomeForDinnerCb.isChecked
-            if(relevantForDinner && dinnerAt == null){
-                Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
+
+            if(!(relevantForDinner && notAtHomeForDinner)) {
+                if(relevantForDinner && dinnerAt == null){
+                    Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
             }
+
             this.relevantForDinner = relevantForDinner
             this.dinnerAt = dinnerAt
             this.notAtHomeForDinner = notAtHomeForDinner

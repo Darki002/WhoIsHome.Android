@@ -92,7 +92,7 @@ class EditEvent : Fragment() {
         }
 
         view.findViewById<Button>(R.id.cancel_edit_event).setOnClickListener {
-            val action = EditEventDirections.actionEditEventToPersonView(email)
+            val action = EditEventDirections.actionEditEventViewToHome()
             NavHostFragment.findNavController(this).navigate(action)
         }
 
