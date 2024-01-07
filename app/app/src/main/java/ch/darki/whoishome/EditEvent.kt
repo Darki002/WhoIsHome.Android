@@ -64,7 +64,7 @@ class EditEvent : Fragment() {
         editStartDate.setText(event.startDate.toString("dd.MM.yyyy HH:mm"))
         editEndDate.setText(event.endDate.toString("dd.MM.yyyy HH:mm"))
         editRelevantForDinner.isChecked = event.relevantForDinner
-        editNotAtHome.isChecked = event.relevantForDinner &&  event.dinnerAt != null
+        editNotAtHome.isChecked = event.relevantForDinner &&  event.dinnerAt == null
 
         editStartDate.setOnClickListener {
             DateTimePicker(requireContext()) { d ->
@@ -88,7 +88,7 @@ class EditEvent : Fragment() {
         }
 
         if(event.dinnerAt != null){
-            editDinnerAt.setText(event.dinnerAt.toString("dd.MM.yyyy HH:mm"))
+            editDinnerAt.setText(event.dinnerAt.toString("HH:mm"))
         }
 
         view.findViewById<Button>(R.id.cancel_edit_event).setOnClickListener {

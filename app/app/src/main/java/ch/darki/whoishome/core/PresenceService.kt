@@ -69,7 +69,7 @@ class PresenceService {
             }
 
             val result = relevantEventsToday.stream().max{
-                    e, e2 -> e!!.dinnerAt?.compareTo(e2!!.dinnerAt) ?: 1
+                    e, e2 -> e?.dinnerAt?.compareTo(e2?.dinnerAt) ?: 1
             }.map { it?.dinnerAt }.orElse(null)
 
             callback.invoke(PersonPresence(person, result != null, result))

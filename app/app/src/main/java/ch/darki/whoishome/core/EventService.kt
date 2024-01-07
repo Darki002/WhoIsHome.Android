@@ -129,7 +129,11 @@ class EventService {
                         e.startDate.dayOfWeek > now.dayOfWeek)
         }?.toArray<Event> { arrayOfNulls<Event>(it) }
 
-        val endOfWeek = DateTime.now().withDayOfWeek(7)
+        val endOfWeek = DateTime.now()
+            .withDayOfWeek(7)
+            .withHourOfDay(23)
+            .withMinuteOfHour(59)
+
         val otherEvents = events.stream().filter { e ->
             e != null && e.startDate > endOfWeek
         }?.toArray<Event> { arrayOfNulls<Event>(it) }
