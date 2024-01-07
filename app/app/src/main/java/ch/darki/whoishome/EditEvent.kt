@@ -97,23 +97,52 @@ class EditEvent : Fragment() {
         }
 
         view.findViewById<Button>(R.id.save_button).setOnClickListener {
-            Toast.makeText(context, "Event geupdated", Toast.LENGTH_SHORT).show()
 
-            service.presenceService.personService.getPersonByEmail(email) {p ->
-                val updatedEvent = Event(
-                    person = p!!,
-                    eventName = editEventName.text.toString(),
-                    startDate = startDate,
-                    endDate = endDate,
-                    relevantForDinner = editRelevantForDinner.isChecked,
-                    dinnerAt = dinnerAt,
-                    event.id)
+            val relevantForDinner = editRelevantForDinner.isChecked
+            val notAtHomeForDinner = editNotAtHome.isChecked
 
-                service.presenceService.eventService.update(updatedEvent)
+            if(!(relevantForDinner && notAtHomeForDinner)) {
+                if(relevantForDinner && dinnerAt == null){
+                    Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
             }
-
+            updateEvent(editEventName.text.toString(), startDate, endDate, relevantForDinner, dinnerAt, notAtHomeForDinner, event.id)
+            Toast.makeText(context, "Event geupdated", Toast.LENGTH_SHORT).show()
             val action = EditEventDirections.actionEditEventViewToHome()
             NavHostFragment.findNavController(this).navigate(action)
         }
+    }
+
+    private fun updateEvent(name: String, startDate: DateTime, endDate: DateTime,
+                            relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean, eventId : String) {
+        val person = service.logInService.currentPerson ?: return
+
+        if(notAtHomeForDinner){
+            service.presenceService.eventService.update(
+                Event(
+                    person,
+                    name,
+                    startDate,
+                    endDate,
+                    true,
+                    null,
+                    eventId
+                )
+            )
+            return
+        }
+
+        service.presenceService.eventService.update(
+            Event(
+                person,
+                name,
+                startDate,
+                endDate,
+                relevantForDinner,
+                dinnerAt,
+                eventId
+            )
+        )
     }
 }
