@@ -182,23 +182,43 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/atHomeForDinnerBox"/>
 
-            <EditText
-                android:id="@+id/ready_for_dinner_at_edit"
+            <LinearLayout
+                android:id="@+id/ready_for_dinner_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/ready_um"
-                android:inputType="datetime"
-                android:clickable="true"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:textSize="20sp"
-                android:autofillHints=""
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ready_for_dinner_text" />
+                app:layout_constraintTop_toBottomOf="@id/ready_for_dinner_text"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+
+                <EditText
+                    android:id="@+id/ready_for_dinner_at_edit"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/ready_um"
+                    android:inputType="datetime"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:autofillHints=""
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginBottom="16dp" />
+
+                <Button
+                    android:id="@+id/clear_ready_for_dinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/entfernen"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_gravity="end"
+                    android:layout_marginEnd="10dp" />
+
+            </LinearLayout>
+
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -207,7 +227,7 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="15dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ready_for_dinner_at_edit" >
+                app:layout_constraintTop_toBottomOf="@id/ready_for_dinner_layout" >
 
                 <Button
                     android:id="@+id/cancel_edit_event"

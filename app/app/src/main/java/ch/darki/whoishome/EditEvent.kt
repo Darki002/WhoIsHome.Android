@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.dialogs.DateTimePicker
 import ch.darki.whoishome.dialogs.TimePicker
 import org.joda.time.DateTime
+
 
 class EditEvent : Fragment() {
 
@@ -65,6 +67,7 @@ class EditEvent : Fragment() {
         editEndDate.setText(event.endDate.toString("dd.MM.yyyy HH:mm"))
         editRelevantForDinner.isChecked = event.relevantForDinner
         editNotAtHome.isChecked = event.relevantForDinner &&  event.dinnerAt == null
+        editDinnerAt.setText(event.dinnerAt?.toString("HH:mm"))
 
         editStartDate.setOnClickListener {
             DateTimePicker(requireContext()) { d ->
@@ -89,6 +92,11 @@ class EditEvent : Fragment() {
 
         if(event.dinnerAt != null){
             editDinnerAt.setText(event.dinnerAt.toString("HH:mm"))
+        }
+
+        view.findViewById<Button>(R.id.clear_ready_for_dinner).setOnClickListener {
+            dinnerAt = null
+            editDinnerAt.text.clear()
         }
 
         view.findViewById<Button>(R.id.cancel_edit_event).setOnClickListener {
