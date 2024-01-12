@@ -24,6 +24,10 @@ data class Event(val person: Person, val eventName: String, val date: DateTime, 
         return p0.dinnerAt!!.compareTo(p1.dinnerAt)
     }
 
+    fun toDateTimeString() : String {
+        return date.toString("dd.MM.yyyy") + " " + startTime.toString("HH:mm") + " - " + endTime.toString("HH:mm")
+    }
+
     companion object{
         fun new(doc : DocumentSnapshot) : Event {
 

@@ -138,7 +138,7 @@ class InspectPerson : Fragment() {
             fun (e) {
                 val view = layoutInflater.inflate(R.layout.event_view, null)
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
-                view.findViewById<TextView>(R.id.date).text = e.startDate.toString("dd.MM.yyyy HH:mm")
+                view.findViewById<TextView>(R.id.date).text = e.toDateTimeString()
 
                 view.findViewById<Button>(R.id.edit_event).setOnClickListener {
                     if(viewModel.person?.email != service.logInService.currentPerson?.email){
