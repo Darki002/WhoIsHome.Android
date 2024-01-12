@@ -29,7 +29,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
 
     private fun ok(){
         if(name != null && date != null && startTime != null && endTime != null){
-            createNewEvent(name!!, date!!, startTime!!, endTime!!, relevantForDinner, dinnerAt, notAtHomeForDinner, ){
+            createNewEvent(name!!, date!!, startTime!!, endTime!!, relevantForDinner, dinnerAt, notAtHomeForDinner ){
                 if(it){
                     Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
                 }
