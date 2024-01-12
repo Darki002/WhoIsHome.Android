@@ -28,6 +28,14 @@ data class Event(val person: Person, val eventName: String, val date: DateTime, 
         return date.toString("dd.MM.yyyy") + " " + startTime.toString("HH:mm") + " - " + endTime.toString("HH:mm")
     }
 
+    fun isToday() : Boolean {
+        return (date.year == DateTime.now().year && date.dayOfYear == DateTime.now().dayOfYear)
+    }
+
+    fun isThisWeek() : Boolean {
+        return (date.year == DateTime.now().year && date.weekOfWeekyear == DateTime.now().weekOfWeekyear)
+    }
+
     companion object{
         fun new(doc : DocumentSnapshot) : Event {
 

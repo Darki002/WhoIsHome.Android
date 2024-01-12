@@ -118,27 +118,20 @@ class EventService {
     }
 
     private fun getPresences(events: List<Event?>) : EventsForPerson{
-        val now = DateTime.now()
 
-        val todaysEvents = events.stream().filter { e ->
-            e?.startDate?.year == now.year &&
-                    e.startDate.dayOfYear() == now.dayOfYear()
-        }?.toArray<Event> { arrayOfNulls<Event>(it) }
+        val todaysEvents = events.stream()
+            .filter { e -> e?.isToday() ?: false }
+            ?.toArray<Event> { arrayOfNulls<Event>(it) }
 
-        val thisWeeksEvents = events.stream().filter { e -> (
-                e?.startDate?.year == now.year &&
-                        e.startDate.weekOfWeekyear == now.weekOfWeekyear &&
-                        e.startDate.dayOfWeek > now.dayOfWeek)
-        }?.toArray<Event> { arrayOfNulls<Event>(it) }
+        val thisWeeksEvents = events.stream()
+            .filter { e -> e != null }
+            .filter { e -> (e!!.isThisWeek() && e.date.dayOfWeek > DateTime.now().dayOfWeek) }
+            ?.toArray<Event> { arrayOfNulls<Event>(it) }
 
-        val endOfWeek = DateTime.now()
-            .withDayOfWeek(7)
-            .withHourOfDay(23)
-            .withMinuteOfHour(59)
-
-        val otherEvents = events.stream().filter { e ->
-            e != null && e.startDate > endOfWeek
-        }?.toArray<Event> { arrayOfNulls<Event>(it) }
+        val otherEvents = events.stream()
+            .filter { e -> e != null  }
+            .filter { e -> !e!!.isToday() && !e.isThisWeek() }
+            ?.toArray<Event> { arrayOfNulls<Event>(it) }
 
         return EventsForPerson(
             todaysEvents?.asList() ?: ArrayList(),
