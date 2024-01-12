@@ -14,8 +14,9 @@ import org.joda.time.DateTime
 class CreateNewEntryDialog(private val context : Context, private val service: ServiceManager) {
 
     private var name: String? = null
-    private var startDate: DateTime? = null
-    private var endDate: DateTime? = null
+    private var date: DateTime? = null
+    private var startTime: DateTime? = null
+    private var endTime: DateTime? = null
     private var relevantForDinner: Boolean = false
     private var notAtHomeForDinner : Boolean = false
     private var dinnerAt: DateTime? = null
@@ -27,8 +28,8 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
     }
 
     private fun ok(){
-        if(name != null && startDate != null && endDate != null){
-            createNewEvent(name!!, startDate!!, endDate!!, relevantForDinner, dinnerAt, notAtHomeForDinner, ){
+        if(name != null && date != null && startTime != null && endTime != null){
+            createNewEvent(name!!, date!!, startTime!!, endTime!!, relevantForDinner, dinnerAt, notAtHomeForDinner, ){
                 if(it){
                     Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
                 }
@@ -54,34 +55,43 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         dialog.setContentView(R.layout.new_event_dialog)
 
         val nameEt = dialog.findViewById<EditText>(R.id.event_name)
-        val startDateEt = dialog.findViewById<EditText>(R.id.start_date)
-        val endDateEt = dialog.findViewById<EditText>(R.id.end_date)
+        val dateEt = dialog.findViewById<EditText>(R.id.date)
+        val startTimeEt = dialog.findViewById<EditText>(R.id.start_time)
+        val endTimeEt = dialog.findViewById<EditText>(R.id.end_time)
 
         val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
         val continueButton = dialog.findViewById<Button>(R.id.continueButton)
 
-        var startDate: DateTime? = this.startDate
-        var endDate: DateTime? = this.endDate
+        var date: DateTime? = this.date
+        var startTime: DateTime? = this.startTime
+        var endTime: DateTime? = this.endTime
 
         if(fill){
-
             nameEt.setText(this.name)
-            startDateEt.setText(this.startDate?.toString("dd.MM.yyyy HH:mm"))
-            endDateEt.setText(this.endDate?.toString("dd.MM.yyyy HH:mm"))
+            dateEt.setText(this.date?.toString("dd.MM.yyyy"))
+            startTimeEt.setText(this.startTime?.toString("HH:mm"))
+            endTimeEt.setText(this.endTime?.toString("HH:mm"))
         }
 
-        startDateEt.setOnClickListener {
-            DateTimePicker(context) {d ->
-                startDateEt.setText(d.toString("dd.MM.yyyy HH:mm"))
-                startDate = d
+        dateEt.setOnClickListener {
+            DateTimePicker(context) { d ->
+                dateEt.setText(d.toString("dd.MM.yyyy"))
+                date = d
+            }.show()
+        }
+
+        startTimeEt.setOnClickListener {
+            TimePicker(context) {time ->
+                startTimeEt.setText(time.toString("HH:mm"))
+                startTime = time
             }.show()
 
         }
 
-        endDateEt.setOnClickListener {
-            DateTimePicker(context) { d ->
-                endDateEt.setText(d.toString("dd.MM.yyyy HH:mm"))
-                endDate = d
+        endTimeEt.setOnClickListener {
+            TimePicker(context) { time ->
+                endTimeEt.setText(time.toString("HH:mm"))
+                endTime = time
             }.show()
         }
 
@@ -91,14 +101,15 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         continueButton.setOnClickListener {
             val name = nameEt.text.toString()
 
-            if (name.isEmpty() || startDate == null || endDate == null) {
+            if (name.isEmpty() || date == null || startTime == null || endTime == null) {
                 Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
             this.name = name
-            this.startDate = startDate!!
-            this.endDate = endDate!!
+            this.date = date!!
+            this.startTime = startTime!!
+            this.endTime = endTime!!
             dialog.dismiss()
             callback.invoke()
         }
@@ -165,7 +176,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         dialog.show()
     }
 
-    private fun createNewEvent(name: String, startDate: DateTime, endDate: DateTime,
+    private fun createNewEvent(name: String, date: DateTime, startTime: DateTime, endTime: DateTime,
                                relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean,
                                callback: (Boolean) -> Unit) {
         if (service.logInService.currentPerson != null) {
@@ -174,8 +185,9 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
                 service.presenceService.eventService.createEvent(
                     service.logInService.currentPerson!!,
                     name,
-                    startDate,
-                    endDate,
+                    date,
+                    startTime,
+                    endTime,
                     true,
                     null
                 ){
@@ -187,8 +199,9 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
             service.presenceService.eventService.createEvent(
                 service.logInService.currentPerson!!,
                 name,
-                startDate,
-                endDate,
+                date,
+                startTime,
+                endTime,
                 relevantForDinner,
                 dinnerAt
             ){

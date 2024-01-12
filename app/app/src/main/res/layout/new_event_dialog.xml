@@ -36,13 +36,13 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:text="@string/start_datum" />
+        android:text="@string/datum" />
 
     <EditText
-        android:id="@+id/start_date"
+        android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/start_datum"
+        android:hint="@string/datum"
         android:inputType="datetime"
         android:clickable="true"
         android:cursorVisible="false"
@@ -57,13 +57,34 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="18sp"
-        android:text="@string/end_datum" />
+        android:text="@string/start_zeit" />
 
     <EditText
-        android:id="@+id/end_date"
+        android:id="@+id/start_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/end_datum"
+        android:hint="@string/start_zeit"
+        android:clickable="true"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:inputType="datetime"
+        android:textSize="20sp"
+        android:autofillHints=""
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="@string/endzeit" />
+
+    <EditText
+        android:id="@+id/end_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/endzeit"
         android:clickable="true"
         android:cursorVisible="false"
         android:focusable="false"
