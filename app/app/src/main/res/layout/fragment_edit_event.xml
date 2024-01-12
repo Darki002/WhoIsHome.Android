@@ -54,22 +54,22 @@
                 app:layout_constraintTop_toBottomOf="@id/event_title"/>
 
             <TextView
-                android:id="@+id/start_date_title"
+                android:id="@+id/date_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:text="@string/start_datum"
+                android:text="@string/datum"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/event_name_edit"/>
 
             <EditText
-                android:id="@+id/start_date_edit"
+                android:id="@+id/date_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/start_datum"
+                android:hint="@string/datum"
                 android:inputType="datetime"
                 android:clickable="true"
                 android:cursorVisible="false"
@@ -81,25 +81,25 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/start_date_title"/>
+                app:layout_constraintTop_toBottomOf="@id/date_title"/>
 
             <TextView
-                android:id="@+id/end_date_title"
+                android:id="@+id/start_time_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:text="@string/end_datum"
+                android:text="@string/start_zeit"
                 android:layout_marginTop="10dp"
                 android:layout_marginStart="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/start_date_edit"/>
+                app:layout_constraintTop_toBottomOf="@id/date_edit"/>
 
             <EditText
-                android:id="@+id/end_date_edit"
+                android:id="@+id/start_time_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/start_datum"
+                android:hint="@string/start_zeit"
                 android:inputType="datetime"
                 android:clickable="true"
                 android:cursorVisible="false"
@@ -111,7 +111,38 @@
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="16dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/end_date_title"/>
+                app:layout_constraintTop_toBottomOf="@id/start_time_title"/>
+
+
+            <TextView
+                android:id="@+id/end_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:text="@string/endzeit"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/start_time_edit"/>
+
+            <EditText
+                android:id="@+id/end_time_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/endzeit"
+                android:inputType="datetime"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:textSize="20sp"
+                android:autofillHints="name"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/end_time_title"/>
 
             <RelativeLayout
                 android:id="@+id/relevantForDinnerBox"
@@ -120,7 +151,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/end_date_edit">
+                app:layout_constraintTop_toBottomOf="@id/end_time_edit">
                 <TextView
                     android:id="@+id/relevantForDinnerText"
                     android:layout_width="wrap_content"

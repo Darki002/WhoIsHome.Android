@@ -45,8 +45,9 @@ class EventService {
     fun createEvent(
         person: Person,
         eventName: String,
-        startDate: DateTime,
-        endDate: DateTime,
+        date: DateTime,
+        startTime: DateTime,
+        endTime: DateTime,
         relevantForDinner : Boolean,
         dinnerAt : DateTime?,
         callback: (Boolean) -> Unit
@@ -57,8 +58,9 @@ class EventService {
         val event = Event(
             person,
             eventName,
-            startDate,
-            endDate,
+            date,
+            startTime,
+            endTime,
             relevantForDinner,
             dinnerAt,
             docName

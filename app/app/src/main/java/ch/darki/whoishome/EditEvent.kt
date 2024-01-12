@@ -52,34 +52,44 @@ class EditEvent : Fragment() {
 
         view.findViewById<TextView>(R.id.edit_event_name).text = event.eventName
         val editEventName = view.findViewById<EditText>(R.id.event_name_edit)
-        val editStartDate = view.findViewById<EditText>(R.id.start_date_edit)
-        val editEndDate = view.findViewById<EditText>(R.id.end_date_edit)
+        val editDate = view.findViewById<EditText>(R.id.date_edit)
+        val editStartTime = view.findViewById<EditText>(R.id.start_time_edit)
+        val editEndTime = view.findViewById<EditText>(R.id.end_time_edit)
         val editRelevantForDinner = view.findViewById<CheckBox>(R.id.is_relevant_for_dinner_edit)
         val editNotAtHome = view.findViewById<CheckBox>(R.id.not_at_home_for_dinner_edit)
         val editDinnerAt = view.findViewById<EditText>(R.id.ready_for_dinner_at_edit)
 
-        var startDate : DateTime = event.startDate
-        var endDate : DateTime = event.endDate
+        var date : DateTime = event.date
+        var startTime : DateTime = event.startTime
+        var endTime : DateTime = event.endTime
         var dinnerAt : DateTime? = event.dinnerAt
 
         editEventName.setText(event.eventName)
-        editStartDate.setText(event.startDate.toString("dd.MM.yyyy HH:mm"))
-        editEndDate.setText(event.endDate.toString("dd.MM.yyyy HH:mm"))
+        editDate.setText(event.date.toString("dd.MM.yyyy"))
+        editStartTime.setText(event.startTime.toString("HH:mm"))
+        editEndTime.setText(event.endTime.toString("HH:mm"))
         editRelevantForDinner.isChecked = event.relevantForDinner
         editNotAtHome.isChecked = event.relevantForDinner &&  event.dinnerAt == null
         editDinnerAt.setText(event.dinnerAt?.toString("HH:mm"))
 
-        editStartDate.setOnClickListener {
+        editDate.setOnClickListener {
             DateTimePicker(requireContext()) { d ->
-                editStartDate.setText(d.toString("dd.MM.yyyy HH:mm"))
-                startDate = d
+                editDate.setText(d.toString("dd.MM.yyyy"))
+                date = d
             }.show()
         }
 
-        editEndDate.setOnClickListener {
-            DateTimePicker(requireContext()) { d ->
-                editEndDate.setText(d.toString("dd.MM.yyyy HH:mm"))
-                endDate = d
+        editStartTime.setOnClickListener {
+            TimePicker(requireContext()) { time ->
+                editStartTime.setText(time.toString("HH:mm"))
+                startTime = time
+            }.show()
+        }
+
+        editEndTime.setOnClickListener {
+            TimePicker(requireContext()) { time ->
+                editEndTime.setText(time.toString("HH:mm"))
+                endTime = time
             }.show()
         }
 
@@ -115,14 +125,14 @@ class EditEvent : Fragment() {
                     return@setOnClickListener
                 }
             }
-            updateEvent(editEventName.text.toString(), startDate, endDate, relevantForDinner, dinnerAt, notAtHomeForDinner, event.id)
+            updateEvent(editEventName.text.toString(), date, startTime, endTime, relevantForDinner, dinnerAt, notAtHomeForDinner, event.id)
             Toast.makeText(context, "Event geupdated", Toast.LENGTH_SHORT).show()
             val action = EditEventDirections.actionEditEventViewToHome()
             NavHostFragment.findNavController(this).navigate(action)
         }
     }
 
-    private fun updateEvent(name: String, startDate: DateTime, endDate: DateTime,
+    private fun updateEvent(name: String, date: DateTime, startTime: DateTime, endTime: DateTime,
                             relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean, eventId : String) {
         val person = service.logInService.currentPerson ?: return
 
@@ -131,8 +141,9 @@ class EditEvent : Fragment() {
                 Event(
                     person,
                     name,
-                    startDate,
-                    endDate,
+                    date,
+                    startTime,
+                    endTime,
                     true,
                     null,
                     eventId
@@ -145,8 +156,9 @@ class EditEvent : Fragment() {
             Event(
                 person,
                 name,
-                startDate,
-                endDate,
+                date,
+                startTime,
+                endTime,
                 relevantForDinner,
                 dinnerAt,
                 eventId
