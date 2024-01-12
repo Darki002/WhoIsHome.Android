@@ -179,11 +179,11 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
     private fun createNewEvent(name: String, date: DateTime, startTime: DateTime, endTime: DateTime,
                                relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean,
                                callback: (Boolean) -> Unit) {
-        if (service.logInService.currentPerson != null) {
+        if (service.currentPerson != null) {
 
             if(notAtHomeForDinner){
                 service.presenceService.eventService.createEvent(
-                    service.logInService.currentPerson!!,
+                    service.currentPerson!!,
                     name,
                     date,
                     startTime,
@@ -197,7 +197,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
             }
 
             service.presenceService.eventService.createEvent(
-                service.logInService.currentPerson!!,
+                service.currentPerson!!,
                 name,
                 date,
                 startTime,

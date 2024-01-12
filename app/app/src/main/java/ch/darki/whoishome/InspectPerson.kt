@@ -103,7 +103,7 @@ class InspectPerson : Fragment() {
                 view.findViewById<TextView>(R.id.date).text = "Heute"
 
                 view.findViewById<Button>(R.id.edit_event).setOnClickListener {
-                    if(viewModel.person?.email != service.logInService.currentPerson?.email){
+                    if(viewModel.person?.email != service.currentPerson?.email){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
                     }
@@ -113,7 +113,7 @@ class InspectPerson : Fragment() {
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 
-                    if(viewModel.person?.email != service.logInService.currentPerson?.email){
+                    if(viewModel.person?.email != service.currentPerson?.email){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                     }
                     else{
@@ -141,7 +141,7 @@ class InspectPerson : Fragment() {
                 view.findViewById<TextView>(R.id.date).text = e.toDateTimeString()
 
                 view.findViewById<Button>(R.id.edit_event).setOnClickListener {
-                    if(viewModel.person?.email != service.logInService.currentPerson?.email){
+                    if(viewModel.person?.email != service.currentPerson?.email){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                         return@setOnClickListener
                     }
@@ -151,7 +151,7 @@ class InspectPerson : Fragment() {
 
                 view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
 
-                    if(viewModel.person?.email != service.logInService.currentPerson?.email){
+                    if(viewModel.person?.email != service.currentPerson?.email){
                         Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                     }
                     else{

@@ -2,17 +2,16 @@ package ch.darki.whoishome
 
 import android.app.Application
 import android.content.SharedPreferences
-import ch.darki.whoishome.core.LogInService
+import ch.darki.whoishome.core.Person
 import ch.darki.whoishome.core.PresenceService
 
 class ServiceManager : Application() {
 
-    lateinit var logInService : LogInService
+    var currentPerson : Person? = null
+
     lateinit var presenceService : PresenceService
 
-    fun init(sharedPreferences: SharedPreferences){
+    fun init() {
         presenceService = PresenceService()
-        logInService = LogInService(sharedPreferences, this)
     }
-
 }

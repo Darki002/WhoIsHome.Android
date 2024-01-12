@@ -134,7 +134,7 @@ class EditEvent : Fragment() {
 
     private fun updateEvent(name: String, date: DateTime, startTime: DateTime, endTime: DateTime,
                             relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean, eventId : String) {
-        val person = service.logInService.currentPerson ?: return
+        val person = service.currentPerson ?: return
 
         if(notAtHomeForDinner){
             service.presenceService.eventService.update(

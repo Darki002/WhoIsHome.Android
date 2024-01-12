@@ -49,19 +49,10 @@ class PresenceService {
 
     private fun getPersonPresence(person: Person, callback : (PersonPresence) -> Unit) {
         eventService.getEventsFromPerson(person){events ->
-            val now = DateTime.now()
 
-            val today: LocalDate = now.toLocalDate()
-            val tomorrow: LocalDate = today.plusDays(1)
-
-            val startOfToday: DateTime = today.toDateTimeAtStartOfDay(now.zone)
-            val startOfTomorrow: DateTime = tomorrow.toDateTimeAtStartOfDay(now.zone)
-
-            val relevantEventsToday = events.stream().filter {
-                e -> e!!.relevantForDinner
-            }.filter {
-                e -> (startOfToday <= e?.endDate && e?.endDate!! < startOfTomorrow)
-            }.toList()
+            val relevantEventsToday = events.stream()
+                .filter { e -> e!!.relevantForDinner }
+                .filter { e -> e?.isToday() ?: false }.toList()
 
             if(relevantEventsToday.isEmpty()){
                 callback.invoke(PersonPresence(person, true, null))

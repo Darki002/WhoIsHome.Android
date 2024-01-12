@@ -1,6 +1,7 @@
 package ch.darki.whoishome
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -19,9 +20,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var service: ServiceManager
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
 
         service = applicationContext as ServiceManager
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -50,7 +54,8 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.log_out -> {
-                service.logInService.logout()
+                service.currentPerson = null
+                sharedPreferences.edit().remove("email").apply()
                 startActivity(Intent(this, LogIn::class.java))
                 return true
             }

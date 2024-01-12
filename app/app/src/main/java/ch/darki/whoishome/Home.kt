@@ -61,7 +61,7 @@ class Home : Fragment() {
     }
 
     private fun getDisplayName(person : Person) : String {
-        if(service.logInService.currentPerson?.email?.lowercase() == person.email.lowercase()){
+        if(service.currentPerson?.email?.lowercase() == person.email.lowercase()){
             return person.displayName + " (Du)"
         }
         return person.displayName
