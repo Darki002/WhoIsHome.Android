@@ -130,6 +130,7 @@ class EventService {
 
         val otherEvents = events.stream()
             .filter { e -> e != null  }
+            .filter { e -> e!!.date > DateTime.now() }
             .filter { e -> !e!!.isToday() && !e.isThisWeek() }
             ?.toArray<Event> { arrayOfNulls<Event>(it) }
 
