@@ -74,7 +74,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         }
 
         dateEt.setOnClickListener {
-            DateTimePicker(context) { d ->
+            DatePicker(context) { d ->
                 dateEt.setText(d.toString("dd.MM.yyyy"))
                 date = d
             }.show()
