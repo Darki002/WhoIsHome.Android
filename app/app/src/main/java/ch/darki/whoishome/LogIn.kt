@@ -42,7 +42,7 @@ class LogIn : AppCompatActivity() {
         val email = findViewById<TextView>(R.id.emailLogIn).text.toString()
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
 
-        val person = Person(email, displayName)
+        val person = Person(displayName, email)
         service.presenceService.personService.createPersonIfNotExists(person, this)
         service.currentPerson = person
         sharedPreferences.edit().putString("email", email).apply()
