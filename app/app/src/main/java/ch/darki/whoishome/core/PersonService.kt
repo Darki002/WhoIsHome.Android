@@ -27,8 +27,7 @@ class PersonService {
     fun createPersonIfNotExists(person: Person, context : Context) {
         val db = Firebase.firestore
 
-        db.collection("person").where(Filter.equalTo("email", person.email))
-            .get()
+        db.collection("person").where(Filter.equalTo("email", person.email)).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
                 Toast.makeText(context, "failed to create Person", Toast.LENGTH_SHORT).show() }
