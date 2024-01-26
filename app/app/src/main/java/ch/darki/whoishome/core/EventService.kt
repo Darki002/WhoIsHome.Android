@@ -117,6 +117,30 @@ class EventService {
         }
     }
 
+    fun saveRepeatEvents(repeatEvent: RepeatEvent) {
+        var currentDay = repeatEvent.firstDay
+
+        while(currentDay.isBefore(repeatEvent.lastDay)){
+            val date = currentDay
+
+            createEvent(
+                person = repeatEvent.person,
+                eventName = repeatEvent.name,
+                date = date,
+                startTime = repeatEvent.startTime,
+                endTime = repeatEvent.endTime,
+                relevantForDinner = repeatEvent.relevantForDinner,
+                dinnerAt = repeatEvent.dinnerAt
+            ){
+                if(!it){
+                    Log.e("RepeatEvent", "Failed to create event")
+                }
+            }
+
+            currentDay = currentDay.plusWeeks(1)
+        }
+    }
+
     private fun getPresences(events: List<Event?>) : EventsForPerson{
 
         val todaysEvents = events.stream()
