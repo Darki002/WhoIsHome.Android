@@ -32,7 +32,7 @@ class DinnerDetailDialog(private val context : Context) {
 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
-        dialog.setContentView(R.layout.new_event_dinner_details_dialog)
+        dialog.setContentView(R.layout.dialog_new_event_dinner_details)
 
         val relevantForDinnerCb = dialog.findViewById<CheckBox>(R.id.isRelevantForDinner)
         val notAtHomeForDinnerCb = dialog.findViewById<CheckBox>(R.id.notAteHomeForDinner)

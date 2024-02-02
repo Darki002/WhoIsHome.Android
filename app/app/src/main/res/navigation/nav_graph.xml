@@ -20,7 +20,7 @@
         android:id="@+id/personView"
         android:name="ch.darki.whoishome.InspectPerson"
         android:label="Inspect Person"
-        tools:layout="@layout/inspect_person"
+        tools:layout="@layout/fragment_inspect_person"
         >
         <action
             android:id="@+id/action_personView_to_home"
