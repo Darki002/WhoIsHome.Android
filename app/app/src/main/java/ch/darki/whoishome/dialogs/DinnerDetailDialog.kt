@@ -41,10 +41,6 @@ class DinnerDetailDialog(private val context : Context) {
         val backButton = dialog.findViewById<Button>(R.id.back_button)
         val createButton = dialog.findViewById<Button>(R.id.create_event)
 
-        var relevantForDinner : Boolean
-        var notAtHomeForDinner : Boolean
-        var dinnerAt:  DateTime? = null
-
         relevantForDinnerCb.isChecked = this.relevantForDinner
         notAtHomeForDinnerCb.isChecked = this.notAtHomeForDinner
         if(dinnerAt != null){
@@ -52,6 +48,9 @@ class DinnerDetailDialog(private val context : Context) {
         }
 
         backButton.setOnClickListener {
+            relevantForDinner = relevantForDinnerCb.isChecked
+            notAtHomeForDinner = notAtHomeForDinnerCb.isChecked
+
             dialog.dismiss()
             callback.invoke(false)
         }
@@ -67,10 +66,6 @@ class DinnerDetailDialog(private val context : Context) {
             relevantForDinner = relevantForDinnerCb.isChecked
             notAtHomeForDinner = notAtHomeForDinnerCb.isChecked
 
-            this.relevantForDinner = relevantForDinner
-            this.dinnerAt = dinnerAt
-            this.notAtHomeForDinner = notAtHomeForDinner
-
             if(!isValid()) {
                 Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -84,7 +79,12 @@ class DinnerDetailDialog(private val context : Context) {
     }
 
     private fun isValid() : Boolean {
-        if(!relevantForDinner && dinnerAt == null) {
+
+        if(!relevantForDinner && !notAtHomeForDinner && dinnerAt == null) {
+            return true
+        }
+
+        if(relevantForDinner && dinnerAt != null) {
             return true
         }
 
