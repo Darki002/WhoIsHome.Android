@@ -7,10 +7,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import ch.darki.whoishome.R
-import ch.darki.whoishome.ServiceManager
 import org.joda.time.DateTime
 
-class EventDetailDialog(private val context : Context, private val service: ServiceManager) {
+class EventDetailDialog(private val context : Context) {
 
     var name: String? = null
         private set
@@ -30,7 +29,7 @@ class EventDetailDialog(private val context : Context, private val service: Serv
                 callback.invoke(false)
                 return@showEventDetails
             }
-            if(isOk()) {
+            if(isValid()) {
                 callback.invoke(true)
             }
             else {
@@ -39,7 +38,7 @@ class EventDetailDialog(private val context : Context, private val service: Serv
         }
     }
 
-    private fun isOk() : Boolean {
+    private fun isValid() : Boolean {
         return name != null && date != null && startTime != null && endTime != null
     }
 
@@ -55,7 +54,7 @@ class EventDetailDialog(private val context : Context, private val service: Serv
         val startTimeEt = dialog.findViewById<EditText>(R.id.start_time)
         val endTimeEt = dialog.findViewById<EditText>(R.id.end_time)
 
-        val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
+        val cancelButton = dialog.findViewById<Button>(R.id.back_button)
         val continueButton = dialog.findViewById<Button>(R.id.continueButton)
 
         var date: DateTime? = this.date

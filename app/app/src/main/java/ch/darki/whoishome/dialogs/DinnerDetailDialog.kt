@@ -8,21 +8,22 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Toast
 import ch.darki.whoishome.R
-import ch.darki.whoishome.ServiceManager
 import org.joda.time.DateTime
 
-class DinnerDetailDialog(private val context : Context, private val service: ServiceManager) {
+class DinnerDetailDialog(private val context : Context) {
 
-    private var relevantForDinner: Boolean = false
-    private var notAtHomeForDinner : Boolean = false
-    private var dinnerAt: DateTime? = null
+    var relevantForDinner: Boolean = false
+        private set
 
-    fun show(callback: () -> Unit) {
+    var notAtHomeForDinner : Boolean = false
+        private set
+
+    var dinnerAt: DateTime? = null
+        private set
+
+    fun show(callback: (Boolean) -> Unit) {
         showDinnerDetails {
-            if(it) {
-                //TODO Check for valid input
-                callback.invoke()
-            }
+            callback.invoke(it)
         }
     }
 
@@ -37,7 +38,7 @@ class DinnerDetailDialog(private val context : Context, private val service: Ser
         val notAtHomeForDinnerCb = dialog.findViewById<CheckBox>(R.id.notAteHomeForDinner)
         val dinnerAtEt = dialog.findViewById<EditText>(R.id.readyForDinnerAt)
 
-        val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
+        val backButton = dialog.findViewById<Button>(R.id.back_button)
         val createButton = dialog.findViewById<Button>(R.id.create_event)
 
         var relevantForDinner : Boolean
@@ -50,7 +51,7 @@ class DinnerDetailDialog(private val context : Context, private val service: Ser
             dinnerAtEt.setText(this.dinnerAt!!.toString("HH:mm"))
         }
 
-        cancelButton.setOnClickListener {
+        backButton.setOnClickListener {
             dialog.dismiss()
             callback.invoke(false)
         }
@@ -66,20 +67,27 @@ class DinnerDetailDialog(private val context : Context, private val service: Ser
             relevantForDinner = relevantForDinnerCb.isChecked
             notAtHomeForDinner = notAtHomeForDinnerCb.isChecked
 
-            if(!(relevantForDinner && notAtHomeForDinner)) {
-                if(relevantForDinner && dinnerAt == null){
-                    Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-            }
-
             this.relevantForDinner = relevantForDinner
             this.dinnerAt = dinnerAt
             this.notAtHomeForDinner = notAtHomeForDinner
+
+            if(!isValid()) {
+                Toast.makeText(context, "Nicht genug Informationen", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             dialog.dismiss()
             callback.invoke(true)
         }
 
         dialog.show()
+    }
+
+    private fun isValid() : Boolean {
+        if(!relevantForDinner && dinnerAt == null) {
+            return true
+        }
+
+        return relevantForDinner && notAtHomeForDinner
     }
 }

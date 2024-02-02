@@ -21,6 +21,39 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
     private var notAtHomeForDinner : Boolean = false
     private var dinnerAt: DateTime? = null
 
+    private val eventDetailDialog = EventDetailDialog(context)
+    private val dinnerDetailDialog = DinnerDetailDialog(context)
+
+    fun showV2() {
+        eventDetailDialog.show {
+            if(it){
+                dinnerDetailDialog.show { finish ->
+                    if(finish){
+                        createNewEvent(
+                            eventDetailDialog.name!!,
+                            eventDetailDialog.date!!,
+                            eventDetailDialog.startTime!!,
+                            eventDetailDialog.endTime!!,
+                            dinnerDetailDialog.relevantForDinner,
+                            dinnerDetailDialog.dinnerAt,
+                            dinnerDetailDialog.notAtHomeForDinner
+                        ){ success ->
+                            if(success){
+                                Toast.makeText(context, "Event erstellt", Toast.LENGTH_SHORT).show()
+                            }
+                            else{
+                                Toast.makeText(context, "Something went wrong", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                    else{
+                        showV2()
+                    }
+                }
+            }
+        }
+    }
+
     fun show(fill : Boolean = false) {
         showEventDetails(fill) {
             showDinnerDetails(fill, { ok() }, { back() })
@@ -59,7 +92,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         val startTimeEt = dialog.findViewById<EditText>(R.id.start_time)
         val endTimeEt = dialog.findViewById<EditText>(R.id.end_time)
 
-        val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
+        val cancelButton = dialog.findViewById<Button>(R.id.back_button)
         val continueButton = dialog.findViewById<Button>(R.id.continueButton)
 
         var date: DateTime? = this.date
@@ -128,7 +161,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
         val notAtHomeForDinnerCb = dialog.findViewById<CheckBox>(R.id.notAteHomeForDinner)
         val dinnerAtEt = dialog.findViewById<EditText>(R.id.readyForDinnerAt)
 
-        val cancelButton = dialog.findViewById<Button>(R.id.cancel_create_event)
+        val cancelButton = dialog.findViewById<Button>(R.id.back_button)
         val createButton = dialog.findViewById<Button>(R.id.create_event)
 
         var relevantForDinner : Boolean
