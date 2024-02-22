@@ -73,6 +73,6 @@ class MainActivity : AppCompatActivity() {
     private fun showCreateNewEventDialog() {
 
         val dialog = CreateNewEntryDialog(this, service)
-        dialog.showV2()
+        dialog.show()
     }
 }
