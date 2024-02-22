@@ -35,4 +35,9 @@
     <string name="error">Error</string>
     <string name="zeit_detailes">Zeit Detailes</string>
     <string name="znacht_infos">zNacht Infos</string>
+    <string name="event_not_relevant_for_dinner">Event isch nöd relevant</string>
+    <string name="not_at_home_for_dinner">Bin nöd da für dä zNacht</string>
+    <string name="event_relevant_for_dinner">Ready für zNacht %1$s</string>
+    <string name="event_duration_format">Dauer: %1$s - %2$s</string>
+    <string name="datum_1_s">Datum: %1$s</string>
 </resources>
