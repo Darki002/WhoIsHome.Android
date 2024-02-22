@@ -15,5 +15,5 @@ To set up the project for you do the following:
 
 - Create a Firbase Project and Database
 - Add the `google-services.json` to the `./WhoIsHome/app/app` (shoudl be on the same level as the `src` folder)
-- Create the nessecery Collection in the (firebase)[./docs/firebase.md]
+- Create the nessecery Collection in the [firebase](./docs/firebase.md)
 - and you're free to go
