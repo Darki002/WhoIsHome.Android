@@ -43,7 +43,7 @@ class Home : Fragment() {
     }
 
     private fun showPerson(personPresence: PresenceService.PersonPresence){
-        val view = layoutInflater.inflate(R.layout.person_presence, null)
+        val view = layoutInflater.inflate(R.layout.view_person_presence, null)
 
         view.setOnClickListener {
             val action = HomeDirections.actionHomeToPersonView(personPresence.person.email)

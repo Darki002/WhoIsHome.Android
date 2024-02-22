@@ -47,7 +47,7 @@ class EventDetailDialog(private val context : Context) {
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
-        dialog.setContentView(R.layout.new_event_dialog)
+        dialog.setContentView(R.layout.dialog_new_event)
 
         val nameEt = dialog.findViewById<EditText>(R.id.event_name)
         val dateEt = dialog.findViewById<EditText>(R.id.date)

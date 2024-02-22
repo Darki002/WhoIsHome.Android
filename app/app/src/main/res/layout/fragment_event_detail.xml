@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".EventDetail">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/event_detail_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:text="@string/error"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/time_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/zeit_details"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="@id/event_detail_title"
+                app:layout_constraintTop_toBottomOf="@id/event_detail_title"
+                />
+
+            <TextView
+                android:id="@+id/event_detail_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/datum_1_s"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="@id/time_title"
+                app:layout_constraintTop_toBottomOf="@id/time_title" />
+
+            <TextView
+                android:id="@+id/event_detail_duration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/event_duration_format"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="@id/event_detail_date"
+                app:layout_constraintTop_toBottomOf="@id/event_detail_date" />
+
+            <TextView
+                android:id="@+id/dinner_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/znacht_infos"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="10dp"
+                app:layout_constraintStart_toStartOf="@id/event_detail_duration"
+                app:layout_constraintTop_toBottomOf="@id/event_detail_duration"
+                />
+
+            <TextView
+                android:id="@+id/dinner_detail_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="unknown"
+                android:textSize="18sp"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintStart_toStartOf="@id/dinner_info"
+                app:layout_constraintTop_toBottomOf="@id/dinner_info" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.core.widget.NestedScrollView>

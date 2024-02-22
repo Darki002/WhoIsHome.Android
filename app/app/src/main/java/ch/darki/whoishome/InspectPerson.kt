@@ -34,7 +34,7 @@ class InspectPerson : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        val fragment = inflater.inflate(R.layout.inspect_person, container, false)
+        val fragment = inflater.inflate(R.layout.fragment_inspect_person, container, false)
         service = activity?.applicationContext as ServiceManager
 
         todayEventsLayout = fragment.findViewById(R.id.todayEvents)
@@ -98,7 +98,7 @@ class InspectPerson : Fragment() {
         todayEventsLayout?.removeAllViews()
         todayEvents.forEach (
             fun (e){
-                val view = layoutInflater.inflate(R.layout.event_view, null)
+                val view = layoutInflater.inflate(R.layout.view_event, null)
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
                 view.findViewById<TextView>(R.id.date).text = "Heute"
 
@@ -122,6 +122,11 @@ class InspectPerson : Fragment() {
                     }
                 }
 
+                view.setOnClickListener {
+                    val action = InspectPersonDirections.actionPersonViewToEventDetail(e.id)
+                    NavHostFragment.findNavController(this).navigate(action)
+                }
+
                 todayEventsLayout?.addView(view)
             }
         )
@@ -136,7 +141,7 @@ class InspectPerson : Fragment() {
         layout?.removeAllViews()
         events.forEach (
             fun (e) {
-                val view = layoutInflater.inflate(R.layout.event_view, null)
+                val view = layoutInflater.inflate(R.layout.view_event, null)
                 view.findViewById<TextView>(R.id.eventName).text = e.eventName
                 view.findViewById<TextView>(R.id.date).text = e.toDateTimeString()
 
@@ -158,6 +163,11 @@ class InspectPerson : Fragment() {
                         service.presenceService.eventService.deleteEvent(e.id)
                         (view.parent as ViewManager).removeView(view)
                     }
+                }
+
+                view.setOnClickListener {
+                    val action = InspectPersonDirections.actionPersonViewToEventDetail(e.id)
+                    NavHostFragment.findNavController(this).navigate(action)
                 }
 
                 layout?.addView(view)

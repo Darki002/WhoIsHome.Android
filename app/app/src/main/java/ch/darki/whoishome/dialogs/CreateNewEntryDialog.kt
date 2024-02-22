@@ -39,6 +39,7 @@ class CreateNewEntryDialog(private val context : Context, private val service: S
             }
         }
     }
+
     private fun createNewEvent(name: String, date: DateTime, startTime: DateTime, endTime: DateTime,
                                relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean,
                                callback: (Boolean) -> Unit) {
