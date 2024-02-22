@@ -29,7 +29,7 @@
             android:id="@+id/action_personView_to_ediEvent"
             app:destination="@id/fragment_edit_event" />
         <action
-            android:id="@+id/action_editEvent_to_eventDetail"
+            android:id="@+id/action_personView_to_eventDetail"
             app:destination="@id/eventDetail" />
         <argument
             android:name="email"

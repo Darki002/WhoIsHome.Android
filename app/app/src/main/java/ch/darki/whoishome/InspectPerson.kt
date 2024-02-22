@@ -122,6 +122,11 @@ class InspectPerson : Fragment() {
                     }
                 }
 
+                view.setOnClickListener {
+                    val action = InspectPersonDirections.actionPersonViewToEventDetail(e.id)
+                    NavHostFragment.findNavController(this).navigate(action)
+                }
+
                 todayEventsLayout?.addView(view)
             }
         )
@@ -158,6 +163,11 @@ class InspectPerson : Fragment() {
                         service.presenceService.eventService.deleteEvent(e.id)
                         (view.parent as ViewManager).removeView(view)
                     }
+                }
+
+                view.setOnClickListener {
+                    val action = InspectPersonDirections.actionPersonViewToEventDetail(e.id)
+                    NavHostFragment.findNavController(this).navigate(action)
                 }
 
                 layout?.addView(view)
