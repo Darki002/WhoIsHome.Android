@@ -52,21 +52,17 @@ class EventService {
         dinnerAt : DateTime?,
         callback: (Boolean) -> Unit
     ) {
-
-        val docName = person.email + " - " + DateTime.now().millis
-
-        val event = Event(
+        val event = Event.create(
             person,
             eventName,
             date,
             startTime,
             endTime,
             relevantForDinner,
-            dinnerAt,
-            docName
+            dinnerAt
         )
 
-        Firebase.firestore.collection(collection).document(docName).set(event)
+        Firebase.firestore.collection(collection).document(event.id).set(event)
             .addOnSuccessListener {callback.invoke(true)}
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
