@@ -34,7 +34,7 @@ class EventService {
             try {
                 val doc = Firebase.firestore.collection(collection)
                     .document(id).get().await()
-                callback.invoke(Event.new(doc))
+                callback.invoke(Event.fromDb(doc))
             }
             catch (e: Exception){
                 Log.e("DB Err", e.message.toString())
@@ -83,7 +83,7 @@ class EventService {
             }
             .addOnSuccessListener {
                 for (doc in it.documents){
-                    result.add(Event.new(doc))
+                    result.add(Event.fromDb(doc))
                 }
                 callback.invoke(result)
             }
@@ -99,7 +99,7 @@ class EventService {
                 val deferredList = docs.documents.map { doc ->
                     async {
                         suspendCoroutine { continuation ->
-                            val event = Event.new(doc)
+                            val event = Event.fromDb(doc)
                             continuation.resume(event)
                         }
                     }

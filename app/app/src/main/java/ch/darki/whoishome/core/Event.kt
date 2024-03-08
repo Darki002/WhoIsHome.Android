@@ -1,9 +1,6 @@
 package ch.darki.whoishome.core
 
-import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
 import java.util.Comparator
 
@@ -47,6 +44,7 @@ data class Event(val person: Person, val eventName: String, val date: DateTime, 
         map["eventName"] = eventName
         map["date"] = date.millis
         map["startTime"] = startTime.millis
+        map["endTime"] = endTime.millis
         map["relevantForDinner"] = relevantForDinner
         map["dinnerAt"] = dinnerAt?.millis
 
@@ -78,7 +76,7 @@ data class Event(val person: Person, val eventName: String, val date: DateTime, 
             )
         }
 
-        fun new(doc : DocumentSnapshot) : Event {
+        fun fromDb(doc : DocumentSnapshot) : Event {
 
             val dinnerAt = convertToDateTime(doc, "dinnerAt")
 
