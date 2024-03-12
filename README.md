@@ -4,11 +4,6 @@ A Andoid App writen in Kotlin to manage when who is not at home for dinner in yo
 
 I ended up doing this project, becasue I wanted to replace the daily WhatsApp conversation of who is at which time at home. And keep in mind, it's a side project from me and just for my personal fun.
 
-# Tech Stack
-
-- Android + Kotlin
-- Firebase
-
 # Set Up
 
 To set up the project for you do the following:
