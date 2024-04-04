@@ -34,7 +34,7 @@ class EventService {
             try {
                 val doc = Firebase.firestore.collection(collection)
                     .document(id).get().await()
-                callback.invoke(Event.new(doc))
+                callback.invoke(Event.fromDb(doc))
             }
             catch (e: Exception){
                 Log.e("DB Err", e.message.toString())
@@ -52,21 +52,17 @@ class EventService {
         dinnerAt : DateTime?,
         callback: (Boolean) -> Unit
     ) {
-
-        val docName = person.email + " - " + DateTime.now().millis
-
-        val event = Event(
+        val event = Event.create(
             person,
             eventName,
             date,
             startTime,
             endTime,
             relevantForDinner,
-            dinnerAt,
-            docName
+            dinnerAt
         )
 
-        Firebase.firestore.collection(collection).document(docName).set(event)
+        Firebase.firestore.collection(collection).document(event.id).set(event.toDb())
             .addOnSuccessListener {callback.invoke(true)}
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
@@ -87,7 +83,7 @@ class EventService {
             }
             .addOnSuccessListener {
                 for (doc in it.documents){
-                    result.add(Event.new(doc))
+                    result.add(Event.fromDb(doc))
                 }
                 callback.invoke(result)
             }
@@ -103,7 +99,7 @@ class EventService {
                 val deferredList = docs.documents.map { doc ->
                     async {
                         suspendCoroutine { continuation ->
-                            val event = Event.new(doc)
+                            val event = Event.fromDb(doc)
                             continuation.resume(event)
                         }
                     }
@@ -114,30 +110,6 @@ class EventService {
             catch (e: Exception){
                 Log.e("DB Err", e.message.toString())
             }
-        }
-    }
-
-    fun saveRepeatEvents(repeatEvent: RepeatEvent) {
-        var currentDay = repeatEvent.firstDay
-
-        while(currentDay.isBefore(repeatEvent.lastDay)){
-            val date = currentDay
-
-            createEvent(
-                person = repeatEvent.person,
-                eventName = repeatEvent.name,
-                date = date,
-                startTime = repeatEvent.startTime,
-                endTime = repeatEvent.endTime,
-                relevantForDinner = repeatEvent.relevantForDinner,
-                dinnerAt = repeatEvent.dinnerAt
-            ){
-                if(!it){
-                    Log.e("RepeatEvent", "Failed to create event")
-                }
-            }
-
-            currentDay = currentDay.plusWeeks(1)
         }
     }
 
