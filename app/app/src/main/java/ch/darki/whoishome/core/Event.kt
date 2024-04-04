@@ -78,11 +78,43 @@ data class Event(val person: Person, val eventName: String, val date: DateTime, 
 
         fun fromDb(doc : DocumentSnapshot) : Event {
 
-            val dinnerAt = convertToDateTime(doc, "dinnerAt")
+            val dinnerAtMil = doc.get("dinnerAt") as? Long?
+            val dateMil = doc.get("date") as? Long?
+            val startTimeMil = doc.get("startTime") as? Long?
+            val endTimeMil = doc.get("endTime") as? Long?
 
-            val date = convertToDateTime(doc, "date")
-            val startTime = convertToDateTime(doc, "startTime")
-            val endTime = convertToDateTime(doc, "endTime")
+            // deprecated
+            val dinnerAt =
+                if (dinnerAtMil != null) {
+                    DateTime(dinnerAtMil)
+                }
+                else {
+                    convertToDateTime(doc, "dinnerAt")
+                }
+
+            val date =
+                if (dateMil != null) {
+                    DateTime(dateMil)
+                }
+                else {
+                    convertToDateTime(doc, "date")
+                }
+
+            val startTime =
+                if (startTimeMil != null) {
+                    DateTime(startTimeMil)
+                }
+                else {
+                    convertToDateTime(doc, "startTime")
+                }
+
+            val endTime =
+                if (endTimeMil != null) {
+                    DateTime(endTimeMil)
+                }
+                else {
+                    convertToDateTime(doc, "endTime")
+                }
 
             // deprecated
             val startDate = convertToDateTime(doc, "startDate")

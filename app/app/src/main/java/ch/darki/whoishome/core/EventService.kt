@@ -62,7 +62,7 @@ class EventService {
             dinnerAt
         )
 
-        Firebase.firestore.collection(collection).document(event.id).set(event)
+        Firebase.firestore.collection(collection).document(event.id).set(event.toDb())
             .addOnSuccessListener {callback.invoke(true)}
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
