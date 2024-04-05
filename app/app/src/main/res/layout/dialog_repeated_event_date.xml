@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="24sp"
+        android:text="@string/event_details"
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="@string/erster_tag" />
+
+    <EditText
+        android:id="@+id/firstDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/datum"
+        android:inputType="datetime"
+        android:clickable="true"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textSize="20sp"
+        android:autofillHints=""
+        android:layout_marginBottom="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:text="@string/letzter_tag" />
+
+    <EditText
+        android:id="@+id/lastDay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/datum"
+        android:inputType="datetime"
+        android:clickable="true"
+        android:cursorVisible="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textSize="20sp"
+        android:autofillHints=""
+        android:layout_marginBottom="16dp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/back_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cancle"
+            android:layout_alignParentStart="true"
+            />
+
+        <Button
+            android:id="@+id/continueButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/weiter"
+            android:layout_alignParentEnd="true"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>
