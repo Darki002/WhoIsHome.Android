@@ -36,14 +36,85 @@ data class Event(val person: Person, val eventName: String, val date: DateTime, 
         return (date.year == DateTime.now().year && date.weekOfWeekyear == DateTime.now().weekOfWeekyear)
     }
 
+    fun toDb() : Map<String, Any?> {
+        val map = mutableMapOf<String, Any?>()
+
+        map["id"] = id
+        map["person"] = person
+        map["eventName"] = eventName
+        map["date"] = date.millis
+        map["startTime"] = startTime.millis
+        map["endTime"] = endTime.millis
+        map["relevantForDinner"] = relevantForDinner
+        map["dinnerAt"] = dinnerAt?.millis
+
+        return map
+    }
+
     companion object{
-        fun new(doc : DocumentSnapshot) : Event {
+        fun create(
+            person: Person,
+            eventName: String,
+            date: DateTime,
+            startTime: DateTime,
+            endTime: DateTime,
+            relevantForDinner : Boolean,
+            dinnerAt : DateTime?
+        ) : Event {
 
-            val dinnerAt = convertToDateTime(doc, "dinnerAt")
+            val docName = person.email + " - " + DateTime.now().millis
 
-            val date = convertToDateTime(doc, "date")
-            val startTime = convertToDateTime(doc, "startTime")
-            val endTime = convertToDateTime(doc, "endTime")
+            return Event(
+                person,
+                eventName,
+                date,
+                startTime,
+                endTime,
+                relevantForDinner,
+                dinnerAt,
+                docName
+            )
+        }
+
+        fun fromDb(doc : DocumentSnapshot) : Event {
+
+            val dinnerAtMil = doc.get("dinnerAt") as? Long?
+            val dateMil = doc.get("date") as? Long?
+            val startTimeMil = doc.get("startTime") as? Long?
+            val endTimeMil = doc.get("endTime") as? Long?
+
+            // deprecated
+            val dinnerAt =
+                if (dinnerAtMil != null) {
+                    DateTime(dinnerAtMil)
+                }
+                else {
+                    convertToDateTime(doc, "dinnerAt")
+                }
+
+            val date =
+                if (dateMil != null) {
+                    DateTime(dateMil)
+                }
+                else {
+                    convertToDateTime(doc, "date")
+                }
+
+            val startTime =
+                if (startTimeMil != null) {
+                    DateTime(startTimeMil)
+                }
+                else {
+                    convertToDateTime(doc, "startTime")
+                }
+
+            val endTime =
+                if (endTimeMil != null) {
+                    DateTime(endTimeMil)
+                }
+                else {
+                    convertToDateTime(doc, "endTime")
+                }
 
             // deprecated
             val startDate = convertToDateTime(doc, "startDate")
