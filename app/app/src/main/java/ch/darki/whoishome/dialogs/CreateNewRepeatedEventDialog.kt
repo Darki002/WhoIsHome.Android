@@ -9,6 +9,6 @@ class CreateNewRepeatedEventDialog(private val context : Context, private val se
     val dinnerDetailDialog = DinnerDetailDialog(context)
 
     fun show() {
-        
+
     }
 }

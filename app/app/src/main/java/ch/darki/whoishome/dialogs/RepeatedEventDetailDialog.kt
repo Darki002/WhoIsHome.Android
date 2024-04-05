@@ -13,7 +13,13 @@ class RepeatedEventDetailDialog(private val context : Context) {
     var endTime: DateTime? = null
         private set
 
-    fun show(callback: (Boolean) -> Unit){
+    var firstDay: DateTime? = null
+        private set
 
+    var lastDay: DateTime? = null
+        private set
+
+    fun show(callback: (Boolean) -> Unit){
+        
     }
 }
