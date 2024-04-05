@@ -18,6 +18,9 @@ class PresenceService {
     var eventService : EventService = EventService()
         private set
 
+    var repeatEventService: RepeatEvenService = RepeatEvenService()
+        private set
+
     fun getPresenceListFrom(scope: CoroutineScope, callback: (List<PersonPresence>) -> Unit) {
         val presenceList = ArrayList<PersonPresence>()
         val db = Firebase.firestore
