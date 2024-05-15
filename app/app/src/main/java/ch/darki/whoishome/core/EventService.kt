@@ -20,7 +20,7 @@ class EventService {
 
     fun update(event: Event) {
         val db = Firebase.firestore
-        db.collection(collection).document(event.id).set(event)
+        db.collection(collection).document(event.id).set(event.toDb())
             .addOnSuccessListener {
             Log.i("Update Event", "Update successfully updated")
             }
