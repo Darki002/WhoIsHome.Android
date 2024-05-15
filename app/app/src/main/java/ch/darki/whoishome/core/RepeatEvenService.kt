@@ -1,6 +1,7 @@
 package ch.darki.whoishome.core
 
 import android.util.Log
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
@@ -38,6 +39,24 @@ class RepeatEvenService {
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
                 callback.invoke(false)
+            }
+    }
+
+    fun getRepeatedEventFromPerson(person: Person, callback: (List<RepeatEvent?>) -> Unit) {
+        val result = ArrayList<RepeatEvent?>()
+        val db = Firebase.firestore
+
+        db.collection(collection)
+            .whereEqualTo(FieldPath.of("person", "email"), person.email).get()
+            .addOnFailureListener {
+                Log.e("DB Err", it.message.toString())
+                callback.invoke(listOf())
+            }
+            .addOnSuccessListener {
+                for (doc in it.documents){
+                    result.add(RepeatEvent.fromDb(doc))
+                }
+                callback.invoke(result)
             }
     }
 }
