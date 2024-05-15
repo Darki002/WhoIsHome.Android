@@ -89,7 +89,7 @@ class EventService {
             }
     }
 
-    fun getEventsForPersonByEmail(scope: CoroutineScope, email: String, callback: (EventsForPerson) -> Unit) {
+    fun getAllEventsFromPerson(scope: CoroutineScope, email: String, callback: (EventsForPerson) -> Unit) {
 
         scope.launch {
             try {

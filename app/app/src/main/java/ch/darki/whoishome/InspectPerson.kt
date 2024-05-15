@@ -14,6 +14,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.core.EventService
+import ch.darki.whoishome.core.RepeatEvenService
+import ch.darki.whoishome.core.RepeatEvent
 
 
 class InspectPerson : Fragment() {
@@ -76,18 +79,26 @@ class InspectPerson : Fragment() {
             return
         }
 
-        service.presenceService.eventService.getEventsForPersonByEmail(viewLifecycleOwner.lifecycleScope, viewModel.person!!.email){ eventsForPerson ->
-            val todayEvents = eventsForPerson.today
-            val thisWeekEvents = eventsForPerson.thisWeek
-            val otherEvents = eventsForPerson.otherEvents
-
-            showToday(todayEvents)
-            showEventsAt(thisWeekEvents, thisWeekEventsLayout)
-            showEventsAt(otherEvents, otherEventsLayout)
+        service.presenceService.eventService.getAllEventsFromPerson(viewLifecycleOwner.lifecycleScope, viewModel.person!!.email){ eventsForPerson ->
+            service.presenceService.repeatEventService.getAllRepeatedEventsFromPerson(viewLifecycleOwner.lifecycleScope, viewModel.person!!.email) { repeatedEventsForPerson ->
+                show(eventsForPerson, repeatedEventsForPerson)
+            }
         }
     }
 
-    private fun showToday(todayEvents : List<Event>){
+    private fun show(eventsForPerson: EventService.EventsForPerson, repeatedEventsForPerson: RepeatEvenService.RepeatedEventsForPerson){
+        val todayEvents = eventsForPerson.today
+        val thisWeekEvents = eventsForPerson.thisWeek
+        val otherEvents = eventsForPerson.otherEvents
+
+        showToday(todayEvents, repeatedEventsForPerson.today)
+        showEventsAt(thisWeekEvents, repeatedEventsForPerson.thisWeek, thisWeekEventsLayout)
+        showEventsAt(otherEvents, null, otherEventsLayout)
+
+        // TODO: show other Repeated Event in a separate section below the other Events
+    }
+
+    private fun showToday(todayEvents : List<Event>, todayRepeatedEvents: List<RepeatEvent>){
 
         if(viewModel.person == null){
             return
@@ -97,40 +108,21 @@ class InspectPerson : Fragment() {
         todayEvents.forEach (
             fun (e){
                 val view = layoutInflater.inflate(R.layout.view_event, null)
-                view.findViewById<TextView>(R.id.eventName).text = e.eventName
-                view.findViewById<TextView>(R.id.date).text = "Heute"
+                setUpEventView(view, e.eventName, e.id, "Heute")
+                todayEventsLayout?.addView(view)
+            }
+        )
 
-                view.findViewById<Button>(R.id.edit_event).setOnClickListener {
-                    if(viewModel.person?.email != service.currentPerson?.email){
-                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-                    val action = InspectPersonDirections.actionPersonViewToEdiEvent(e.id, viewModel.person!!.email)
-                    NavHostFragment.findNavController(this).navigate(action)
-                }
-
-                view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
-
-                    if(viewModel.person?.email != service.currentPerson?.email){
-                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        service.presenceService.eventService.deleteEvent(e.id)
-                        (view.parent as ViewManager).removeView(view)
-                    }
-                }
-
-                view.setOnClickListener {
-                    val action = InspectPersonDirections.actionPersonViewToEventDetail(e.id)
-                    NavHostFragment.findNavController(this).navigate(action)
-                }
-
+        todayRepeatedEvents.forEach(
+            fun (e){
+                val view = layoutInflater.inflate(R.layout.view_event, null)
+                setUpRepeatedEventView(view, e.name, e.id, "Heute")
                 todayEventsLayout?.addView(view)
             }
         )
     }
 
-    private fun showEventsAt(events : List<Event>, layout : LinearLayout?){
+    private fun showEventsAt(events : List<Event>, todayRepeatedEvents: List<RepeatEvent>?, layout : LinearLayout?){
 
         if(viewModel.person == null){
             return
@@ -140,35 +132,78 @@ class InspectPerson : Fragment() {
         events.forEach (
             fun (e) {
                 val view = layoutInflater.inflate(R.layout.view_event, null)
-                view.findViewById<TextView>(R.id.eventName).text = e.eventName
-                view.findViewById<TextView>(R.id.date).text = e.toDateTimeString()
-
-                view.findViewById<Button>(R.id.edit_event).setOnClickListener {
-                    if(viewModel.person?.email != service.currentPerson?.email){
-                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
-                        return@setOnClickListener
-                    }
-                    val action = InspectPersonDirections.actionPersonViewToEdiEvent(e.id, viewModel.person!!.email)
-                    NavHostFragment.findNavController(this).navigate(action)
-                }
-
-                view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
-
-                    if(viewModel.person?.email != service.currentPerson?.email){
-                        Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
-                    }
-                    else{
-                        service.presenceService.eventService.deleteEvent(e.id)
-                        (view.parent as ViewManager).removeView(view)
-                    }
-                }
-
-                view.setOnClickListener {
-                    val action = InspectPersonDirections.actionPersonViewToEventDetail(e.id)
-                    NavHostFragment.findNavController(this).navigate(action)
-                }
-
+                setUpEventView(view, e.eventName, e.id, e.toDateTimeString())
                 layout?.addView(view)
-            })
+            }
+        )
+
+        todayRepeatedEvents?.forEach(
+            fun (e){
+                val view = layoutInflater.inflate(R.layout.view_event, null)
+                setUpRepeatedEventView(view, e.name, e.id, e.toDateTimeString())
+                todayEventsLayout?.addView(view)
+            }
+        )
+    }
+
+    private fun setUpEventView(view: View, title: String, id: String, date: String){
+        view.findViewById<TextView>(R.id.eventName).text = title
+        view.findViewById<TextView>(R.id.date).text = date
+
+        view.findViewById<Button>(R.id.edit_event).setOnClickListener {
+            if(viewModel.person?.email != service.currentPerson?.email){
+                Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val action = InspectPersonDirections.actionPersonViewToEdiEvent(id, viewModel.person!!.email)
+            NavHostFragment.findNavController(this).navigate(action)
+        }
+
+        view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
+            if(viewModel.person?.email != service.currentPerson?.email){
+                Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                service.presenceService.eventService.deleteEvent(id)
+                (view.parent as ViewManager).removeView(view)
+            }
+        }
+
+        view.setOnClickListener {
+            val action = InspectPersonDirections.actionPersonViewToEventDetail(id)
+            NavHostFragment.findNavController(this).navigate(action)
+        }
+    }
+
+    private fun setUpRepeatedEventView(view: View, title: String, id: String, date: String){
+
+        // TODO: use different on click handlers, that lead to a different edit view
+
+        view.findViewById<TextView>(R.id.eventName).text = title
+        view.findViewById<TextView>(R.id.date).text = date
+
+        view.findViewById<Button>(R.id.edit_event).setOnClickListener {
+            if(viewModel.person?.email != service.currentPerson?.email){
+                Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            val action = InspectPersonDirections.actionPersonViewToEdiEvent(id, viewModel.person!!.email)
+            NavHostFragment.findNavController(this).navigate(action)
+        }
+
+        view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
+            if(viewModel.person?.email != service.currentPerson?.email){
+                Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                service.presenceService.eventService.deleteEvent(id)
+                (view.parent as ViewManager).removeView(view)
+            }
+        }
+
+        view.setOnClickListener {
+            val action = InspectPersonDirections.actionPersonViewToEventDetail(id)
+            NavHostFragment.findNavController(this).navigate(action)
+        }
     }
 }

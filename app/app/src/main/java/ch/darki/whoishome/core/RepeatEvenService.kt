@@ -4,7 +4,14 @@ import android.util.Log
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import org.joda.time.DateTime
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class RepeatEvenService {
 
@@ -59,4 +66,56 @@ class RepeatEvenService {
                 callback.invoke(result)
             }
     }
+
+    fun getAllRepeatedEventsFromPerson(scope: CoroutineScope, email: String, callback: (RepeatedEventsForPerson) -> Unit) {
+        scope.launch {
+            try {
+                val docs = Firebase.firestore.collection(collection)
+                    .whereEqualTo(FieldPath.of("person", "email"), email).get().await()
+
+                val deferredList = docs.documents.map { doc ->
+                    async {
+                        suspendCoroutine { continuation ->
+                            val event = RepeatEvent.fromDb(doc)
+                            continuation.resume(event)
+                        }
+                    }
+                }
+                val result = getPresences(deferredList.awaitAll())
+                callback.invoke(result)
+            }
+            catch (e: Exception){
+                Log.e("DB Err", e.message.toString())
+            }
+        }
+    }
+
+    private fun getPresences(events: List<RepeatEvent?>) : RepeatedEventsForPerson {
+
+        val todaysEvents = events.stream()
+            .filter { e -> e?.isToday() ?: false }
+            ?.toArray<RepeatEvent> { arrayOfNulls<RepeatEvent>(it) }
+
+        val thisWeeksEvents = events.stream()
+            .filter { e -> e != null && e.hasRelevantDates() }
+            .filter { e -> ((e!!.isThisWeek() && e.nextDateFromToday()!!.dayOfWeek > DateTime.now().dayOfWeek)) }
+            ?.toArray<RepeatEvent> { arrayOfNulls<RepeatEvent>(it) }
+
+        val otherEvents = events.stream()
+            .filter { e -> e != null && e.hasRelevantDates() }
+            .filter { e -> !e!!.isToday() && !e.isThisWeek() }
+            ?.toArray<RepeatEvent> { arrayOfNulls<RepeatEvent>(it) }
+
+        return RepeatedEventsForPerson(
+            todaysEvents?.asList() ?: ArrayList(),
+            thisWeeksEvents?.asList() ?: ArrayList(),
+            otherEvents?.asList() ?: ArrayList()
+        )
+    }
+
+    data class RepeatedEventsForPerson(
+        val today: List<RepeatEvent>,
+        val thisWeek: List<RepeatEvent>,
+        val otherEvents: List<RepeatEvent>
+    )
 }

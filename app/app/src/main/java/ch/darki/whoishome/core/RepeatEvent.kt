@@ -34,6 +34,10 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
         return "404 Not Found :("
     }
 
+    fun hasRelevantDates() : Boolean{
+        return nextDateFromToday() != null
+    }
+
     fun isToday() : Boolean {
         val now = DateTime.now()
         for (date in dates){
@@ -52,6 +56,16 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
             }
         }
         return false
+    }
+
+    fun nextDateFromToday(): DateTime? {
+        val now = DateTime.now()
+
+        return dates.filter {
+            it.year >= now.year && it.dayOfYear >= now.dayOfYear
+        }.minByOrNull {
+            it.millis
+        }
     }
 
     companion object {
