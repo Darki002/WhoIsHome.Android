@@ -155,7 +155,7 @@ class InspectPerson : Fragment() {
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val action = InspectPersonDirections.actionPersonViewToEdiEvent(id, viewModel.person!!.email)
+            val action = InspectPersonDirections.actionPersonViewToEdiEvent(id)
             NavHostFragment.findNavController(this).navigate(action)
         }
 
@@ -187,7 +187,7 @@ class InspectPerson : Fragment() {
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val action = InspectPersonDirections.actionPersonViewToEdiEvent(id, viewModel.person!!.email)
+            val action = InspectPersonDirections.actionPersonViewToEdiEvent(id)
             NavHostFragment.findNavController(this).navigate(action)
         }
 

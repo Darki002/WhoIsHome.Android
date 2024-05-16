@@ -51,9 +51,6 @@
         <argument
             android:name="eventId"
             app:argType="string" />
-        <argument
-            android:name="email"
-            app:argType="string" />
     </fragment>
 
     <fragment

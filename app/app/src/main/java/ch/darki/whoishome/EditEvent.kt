@@ -22,7 +22,6 @@ import org.joda.time.DateTime
 class EditEvent : Fragment() {
 
     private lateinit var service: ServiceManager
-    private lateinit var email : String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +40,6 @@ class EditEvent : Fragment() {
 
         val args: EditEventArgs = EditEventArgs.fromBundle(requireArguments())
 
-        email = args.email
         service.presenceService.eventService.getEventById(args.eventId, viewLifecycleOwner.lifecycleScope) {setUpEditWindow(it, view)}
     }
 
