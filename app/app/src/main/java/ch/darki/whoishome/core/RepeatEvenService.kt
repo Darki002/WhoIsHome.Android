@@ -1,6 +1,7 @@
 package ch.darki.whoishome.core
 
 import android.util.Log
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,6 +17,34 @@ import kotlin.coroutines.suspendCoroutine
 class RepeatEvenService {
 
     private val collection = "repeated-events"
+
+    fun deleteRepeatedEvent(id : String) {
+        Firebase.firestore.collection(collection).document(id).delete()
+    }
+
+    fun update(repeatEvent: RepeatEvent) {
+        val db = Firebase.firestore
+        db.collection(collection).document(repeatEvent.id).set(repeatEvent.toDb())
+            .addOnSuccessListener {
+                Log.i("Update Event", "Update successfully updated")
+            }
+            .addOnFailureListener {
+                Log.e("Update Event", "Update failed with error message $it")
+            }
+    }
+
+    fun getRepeatedEventById(id: String, scope: LifecycleCoroutineScope, callback: (RepeatEvent) -> Unit) {
+        scope.launch {
+            try {
+                val doc = Firebase.firestore.collection(collection)
+                    .document(id).get().await()
+                callback.invoke(RepeatEvent.fromDb(doc))
+            }
+            catch (e: Exception){
+                Log.e("DB Err", e.message.toString())
+            }
+        }
+    }
 
     fun createRepeatedEvent(
         person: Person,

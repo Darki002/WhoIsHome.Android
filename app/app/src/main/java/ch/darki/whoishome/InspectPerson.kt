@@ -210,7 +210,7 @@ class InspectPerson : Fragment() {
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
             }
             else{
-                service.presenceService.eventService.deleteEvent(id)
+                service.presenceService.repeatEventService.deleteRepeatedEvent(id)
                 (view.parent as ViewManager).removeView(view)
             }
         }

@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.dialogs.DatePicker
 import ch.darki.whoishome.dialogs.DateTimePicker
 import ch.darki.whoishome.dialogs.TimePicker
 import org.joda.time.DateTime
@@ -71,7 +72,7 @@ class EditEvent : Fragment() {
         editDinnerAt.setText(event.dinnerAt?.toString("HH:mm"))
 
         editDate.setOnClickListener {
-            DateTimePicker(requireContext()) { d ->
+            DatePicker(requireContext()) { d ->
                 editDate.setText(d.toString("dd.MM.yyyy"))
                 date = d
             }.show()

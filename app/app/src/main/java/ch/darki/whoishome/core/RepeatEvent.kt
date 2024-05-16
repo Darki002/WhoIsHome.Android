@@ -68,6 +68,37 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
         }
     }
 
+    fun update(
+        name: String,
+        startTime: DateTime,
+        endTime: DateTime,
+        firstDay: DateTime,
+        lastDay: DateTime,
+        relevantForDinner: Boolean,
+        dinnerAt: DateTime?
+    ) : RepeatEvent{
+
+        val dates = ArrayList<DateTime>()
+        var current = firstDay
+        while (current < endTime){
+            dates.add(current)
+            current = current.withDayOfMonth(current.dayOfMonth + 7)
+        }
+
+        return RepeatEvent(
+            id = id,
+            person = person,
+            name = name,
+            startTime = startTime,
+            endTime = endTime,
+            firstDay = firstDay,
+            lastDay = lastDay,
+            dates = dates,
+            relevantForDinner = relevantForDinner,
+            dinnerAt = dinnerAt
+        )
+    }
+
     companion object {
         fun create(
             person: Person,
