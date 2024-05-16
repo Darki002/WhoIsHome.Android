@@ -29,6 +29,9 @@
             android:id="@+id/action_personView_to_ediEvent"
             app:destination="@id/fragment_edit_event" />
         <action
+            android:id="@+id/action_personView_to_ediRepeatedEvent"
+            app:destination="@id/fragment_edit_repeated_event" />
+        <action
             android:id="@+id/action_personView_to_eventDetail"
             app:destination="@id/eventDetail" />
         <argument
@@ -50,6 +53,23 @@
             app:destination="@id/personView" />
         <argument
             android:name="eventId"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_edit_repeated_event"
+        android:name="ch.darki.whoishome.EditRepeatedEvent"
+        android:label="Edit Repeated Event"
+        tools:layout="@layout/fragment_edit_repeated_event">
+
+        <action
+            android:id="@+id/action_editRepeatedEventView_to_home"
+            app:destination="@id/home" />
+        <action
+            android:id="@+id/action_editRepeatedEvent_to_personView"
+            app:destination="@id/personView" />
+        <argument
+            android:name="repeatedEventId"
             app:argType="string" />
     </fragment>
 
