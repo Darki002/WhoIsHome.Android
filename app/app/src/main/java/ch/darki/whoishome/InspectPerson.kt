@@ -28,6 +28,7 @@ class InspectPerson : Fragment() {
     private var todayEventsLayout : LinearLayout? = null
     private var thisWeekEventsLayout : LinearLayout? = null
     private var otherEventsLayout : LinearLayout? = null
+    private var otherRepeatedEventsLayout: LinearLayout? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +42,7 @@ class InspectPerson : Fragment() {
         todayEventsLayout = fragment.findViewById(R.id.todayEvents)
         thisWeekEventsLayout = fragment.findViewById(R.id.thisWeekEvents)
         otherEventsLayout = fragment.findViewById(R.id.otherEvents)
+        otherRepeatedEventsLayout = fragment.findViewById(R.id.otherRepeatedEvents)
 
         viewModel = activityViewModels<InspectPersonViewModel>().value
 
@@ -94,8 +96,7 @@ class InspectPerson : Fragment() {
         showToday(todayEvents, repeatedEventsForPerson.today)
         showEventsAt(thisWeekEvents, repeatedEventsForPerson.thisWeek, thisWeekEventsLayout)
         showEventsAt(otherEvents, null, otherEventsLayout)
-
-        // TODO: show other Repeated Event in a separate section below the other Events
+        showOtherRepeatedEvents(repeatedEventsForPerson.otherEvents)
     }
 
     private fun showToday(todayEvents : List<Event>, todayRepeatedEvents: List<RepeatEvent>){
@@ -146,6 +147,21 @@ class InspectPerson : Fragment() {
         )
     }
 
+    private fun showOtherRepeatedEvents(repeatedEvents: List<RepeatEvent>){
+        if(viewModel.person == null){
+            return
+        }
+
+        otherRepeatedEventsLayout?.removeAllViews()
+        repeatedEvents.forEach(
+            fun (e){
+                val view = layoutInflater.inflate(R.layout.view_event, null)
+                setUpRepeatedEventView(view, e.name, e.id, e.toDateTimeString())
+                todayEventsLayout?.addView(view)
+            }
+        )
+    }
+
     private fun setUpEventView(view: View, title: String, id: String, date: String){
         view.findViewById<TextView>(R.id.eventName).text = title
         view.findViewById<TextView>(R.id.date).text = date
@@ -177,8 +193,6 @@ class InspectPerson : Fragment() {
 
     private fun setUpRepeatedEventView(view: View, title: String, id: String, date: String){
 
-        // TODO: use different on click handlers, that lead to a different edit view
-
         view.findViewById<TextView>(R.id.eventName).text = title
         view.findViewById<TextView>(R.id.date).text = date
 
@@ -187,7 +201,7 @@ class InspectPerson : Fragment() {
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val action = InspectPersonDirections.actionPersonViewToEdiEvent(id)
+            val action = InspectPersonDirections.actionPersonViewToEdiRepeatedEvent(id)
             NavHostFragment.findNavController(this).navigate(action)
         }
 
@@ -202,7 +216,7 @@ class InspectPerson : Fragment() {
         }
 
         view.setOnClickListener {
-            val action = InspectPersonDirections.actionPersonViewToEventDetail(id)
+            val action = InspectPersonDirections.actionPersonViewToEdiRepeatedEvent(id)
             NavHostFragment.findNavController(this).navigate(action)
         }
     }

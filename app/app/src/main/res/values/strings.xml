@@ -45,4 +45,6 @@
     <string name="letzter_tag">Letzter Tag</string>
     <string name="event_details">Event Details</string>
     <string name="create_new_repeated_event">Wöchenntliches Event erstellen</string>
+    <string name="widerholende_events">Widerholende Events</string>
+    <string name="weitere">Weitere</string>
 </resources>
