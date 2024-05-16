@@ -6,9 +6,11 @@ import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
+import java.util.stream.Collectors
 import java.util.stream.Stream
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
+import kotlin.streams.toList
 
 class PresenceService {
     var personService : PersonService = PersonService()
@@ -59,32 +61,38 @@ class PresenceService {
     private fun calculatePersonPresence(person: Person, events: List<Event?>, repeatedEvents: List<RepeatEvent?>, callback : (PersonPresence) -> Unit){
         val relevantEventsToday = events.stream()
             .filter { e -> e!!.relevantForDinner }
-            .filter { e -> e?.isToday() ?: false }.toList()
+            .filter { e -> e?.isToday() ?: false }.collect(Collectors.toList())
 
         val relevantRepeatedEventsToday = repeatedEvents.stream()
             .filter { e -> e!!.relevantForDinner }
-            .filter { e -> e?.isToday() ?: false }.toList()
+            .filter { e -> e?.isToday() ?: false }.collect(Collectors.toList())
 
         if(relevantEventsToday.isEmpty() && relevantRepeatedEventsToday.isEmpty()){
             callback.invoke(PersonPresence(person, true, null))
             return
         }
 
-        val resultEvent = getLatestDateFromList(
-            relevantEventsToday.stream().map { it?.dinnerAt }
-        )
+        val eventDinnerAt = relevantEventsToday.stream().map { it?.dinnerAt }.collect(Collectors.toList())
+        val repeatedDinnerAt = relevantRepeatedEventsToday.stream().map { it?.dinnerAt }.collect(Collectors.toList())
 
-        val resultRepeatedEvent = getLatestDateFromList(
-            relevantRepeatedEventsToday.stream().map { it?.dinnerAt }
-        )
+        val resultRepeatedEvent = if(repeatedDinnerAt != null){
+            getLatestDateFromList(repeatedDinnerAt)
+        } else{ null }
+
+        val resultEvent = if(eventDinnerAt != null){
+            getLatestDateFromList(eventDinnerAt)
+        } else{ null }
 
         val latestDinnerAt: DateTime? = getLatestDateTime(resultEvent, resultRepeatedEvent)
 
         callback.invoke(PersonPresence(person, latestDinnerAt != null, latestDinnerAt))
     }
 
-    private fun getLatestDateFromList(dateTimes: Stream<DateTime?>) : DateTime?{
-        return dateTimes.max { o1, o2 -> o1?.compareTo(o2) ?: 1 }.map { it }.orElse(null)
+    private fun getLatestDateFromList(dateTimes: List<DateTime?>) : DateTime?{
+        return dateTimes.stream()
+            .filter { it != null }
+            .max { o1, o2 -> o1?.compareTo(o2) ?: 1 }
+            .map { it }.orElse(null)
     }
 
     private fun getLatestDateTime(dateTime1: DateTime?, dateTime2: DateTime?): DateTime? {
