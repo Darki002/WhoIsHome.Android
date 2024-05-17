@@ -13,6 +13,7 @@ import android.view.MenuItem
 import androidx.navigation.NavController
 import ch.darki.whoishome.databinding.ActivityMainBinding
 import ch.darki.whoishome.dialogs.CreateNewEntryDialog
+import ch.darki.whoishome.dialogs.CreateNewRepeatedEventDialog
 
 class MainActivity : AppCompatActivity() {
 
@@ -53,6 +54,11 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
 
+            R.id.create_new_repeated_event -> {
+                showCreateNewRepeatedEventDialog()
+                return true
+            }
+
             R.id.log_out -> {
                 service.currentPerson = null
                 sharedPreferences.edit().remove("email").apply()
@@ -73,6 +79,11 @@ class MainActivity : AppCompatActivity() {
     private fun showCreateNewEventDialog() {
 
         val dialog = CreateNewEntryDialog(this, service)
+        dialog.show()
+    }
+
+    private fun showCreateNewRepeatedEventDialog(){
+        val dialog = CreateNewRepeatedEventDialog(this, service)
         dialog.show()
     }
 }

@@ -1,40 +1,44 @@
 package ch.darki.whoishome.core
 
 import android.util.Log
+import androidx.lifecycle.LifecycleCoroutineScope
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import org.joda.time.DateTime
-import kotlin.coroutines.suspendCoroutine
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.joda.time.DateTime
 import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
-class EventService {
+class RepeatEvenService {
 
-    private val collection = "events"
+    private val collection = "repeated-events"
 
-    fun deleteEvent(id : String) {
+    fun deleteRepeatedEvent(id : String) {
         Firebase.firestore.collection(collection).document(id).delete()
     }
 
-    fun update(event: Event) {
+    fun update(repeatEvent: RepeatEvent) {
         val db = Firebase.firestore
-        db.collection(collection).document(event.id).set(event.toDb())
+        db.collection(collection).document(repeatEvent.id).set(repeatEvent.toDb())
             .addOnSuccessListener {
-            Log.i("Update Event", "Update successfully updated")
+                Log.i("Update Event", "Update successfully updated")
             }
             .addOnFailureListener {
                 Log.e("Update Event", "Update failed with error message $it")
             }
     }
 
-    fun getEventById(id : String, scope: CoroutineScope, callback: (Event?) -> Unit) {
+    fun getRepeatedEventById(id: String, scope: LifecycleCoroutineScope, callback: (RepeatEvent) -> Unit) {
         scope.launch {
             try {
                 val doc = Firebase.firestore.collection(collection)
                     .document(id).get().await()
-                callback.invoke(Event.fromDb(doc))
+                callback.invoke(RepeatEvent.fromDb(doc))
             }
             catch (e: Exception){
                 Log.e("DB Err", e.message.toString())
@@ -42,37 +46,40 @@ class EventService {
         }
     }
 
-    fun createEvent(
+    fun createRepeatedEvent(
         person: Person,
-        eventName: String,
-        date: DateTime,
+        name: String,
         startTime: DateTime,
         endTime: DateTime,
-        relevantForDinner : Boolean,
-        dinnerAt : DateTime?,
+        firstDay: DateTime,
+        lastDay: DateTime,
+        relevantForDinner: Boolean,
+        dinnerAt: DateTime?,
         callback: (Boolean) -> Unit
-    ) {
-        val event = Event.create(
-            person,
-            eventName,
-            date,
-            startTime,
-            endTime,
-            relevantForDinner,
-            dinnerAt
+    ){
+        val repeatEvent = RepeatEvent.create(
+            person = person,
+            name = name,
+            startTime = startTime,
+            endTime = endTime,
+            firstDay = firstDay,
+            lastDay = lastDay,
+            relevantForDinner = relevantForDinner,
+            dinnerAt = dinnerAt
         )
 
-        Firebase.firestore.collection(collection).document(event.id).set(event.toDb())
-            .addOnSuccessListener {callback.invoke(true)}
+        Firebase.firestore.collection(collection).document(repeatEvent.id).set(repeatEvent.toDb())
+            .addOnSuccessListener {
+                callback.invoke(true)
+            }
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
                 callback.invoke(false)
             }
     }
 
-    fun getEventsFromPerson(person: Person, callback: (List<Event?>) -> Unit) {
-
-        val result = ArrayList<Event?>()
+    fun getRepeatedEventFromPerson(person: Person, callback: (List<RepeatEvent?>) -> Unit) {
+        val result = ArrayList<RepeatEvent?>()
         val db = Firebase.firestore
 
         db.collection(collection)
@@ -83,14 +90,13 @@ class EventService {
             }
             .addOnSuccessListener {
                 for (doc in it.documents){
-                    result.add(Event.fromDb(doc))
+                    result.add(RepeatEvent.fromDb(doc))
                 }
                 callback.invoke(result)
             }
     }
 
-    fun getAllEventsFromPerson(scope: CoroutineScope, email: String, callback: (EventsForPerson) -> Unit) {
-
+    fun getAllRepeatedEventsFromPerson(scope: CoroutineScope, email: String, callback: (RepeatedEventsForPerson) -> Unit) {
         scope.launch {
             try {
                 val docs = Firebase.firestore.collection(collection)
@@ -99,7 +105,7 @@ class EventService {
                 val deferredList = docs.documents.map { doc ->
                     async {
                         suspendCoroutine { continuation ->
-                            val event = Event.fromDb(doc)
+                            val event = RepeatEvent.fromDb(doc)
                             continuation.resume(event)
                         }
                     }
@@ -113,33 +119,32 @@ class EventService {
         }
     }
 
-    private fun getPresences(events: List<Event?>) : EventsForPerson{
+    private fun getPresences(events: List<RepeatEvent?>) : RepeatedEventsForPerson {
 
         val todaysEvents = events.stream()
             .filter { e -> e?.isToday() ?: false }
-            ?.toArray<Event> { arrayOfNulls<Event>(it) }
+            ?.toArray<RepeatEvent> { arrayOfNulls<RepeatEvent>(it) }
 
         val thisWeeksEvents = events.stream()
-            .filter { e -> e != null }
-            .filter { e -> (e!!.isThisWeek() && e.date.dayOfWeek > DateTime.now().dayOfWeek) }
-            ?.toArray<Event> { arrayOfNulls<Event>(it) }
+            .filter { e -> e != null && e.hasRelevantDates() }
+            .filter { e -> ((e!!.isThisWeek() && e.nextDateFromToday()!!.dayOfWeek > DateTime.now().dayOfWeek)) }
+            ?.toArray<RepeatEvent> { arrayOfNulls<RepeatEvent>(it) }
 
         val otherEvents = events.stream()
-            .filter { e -> e != null  }
-            .filter { e -> e!!.date > DateTime.now() }
+            .filter { e -> e != null && e.hasRelevantDates() }
             .filter { e -> !e!!.isToday() && !e.isThisWeek() }
-            ?.toArray<Event> { arrayOfNulls<Event>(it) }
+            ?.toArray<RepeatEvent> { arrayOfNulls<RepeatEvent>(it) }
 
-        return EventsForPerson(
+        return RepeatedEventsForPerson(
             todaysEvents?.asList() ?: ArrayList(),
             thisWeeksEvents?.asList() ?: ArrayList(),
             otherEvents?.asList() ?: ArrayList()
         )
     }
 
-    data class EventsForPerson(
-        val today: List<Event>,
-        val thisWeek: List<Event>,
-        val otherEvents: List<Event>
+    data class RepeatedEventsForPerson(
+        val today: List<RepeatEvent>,
+        val thisWeek: List<RepeatEvent>,
+        val otherEvents: List<RepeatEvent>
     )
 }

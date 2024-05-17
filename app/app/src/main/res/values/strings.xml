@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">WhoIsHome</string>
-    <string name="create_new_event">Neues Event erstellen</string>
+    <string name="create_new_event">Event hinzufügen</string>
     <string name="home_fragment_label">Home</string>
     <string name="diese_woche">Diese Woche</string>
     <string name="heute">Heute</string>
@@ -40,4 +40,11 @@
     <string name="event_relevant_for_dinner">Ready für zNacht %1$s</string>
     <string name="event_duration_format">Dauer: %1$s - %2$s</string>
     <string name="datum_1_s">Datum: %1$s</string>
+    <string name="neues_wiederholendes_event">Neues wiederholendes Event</string>
+    <string name="erster_tag">Erster Tag</string>
+    <string name="letzter_tag">Letzter Tag</string>
+    <string name="event_details">Event Details</string>
+    <string name="create_new_repeated_event">Wöchenntliches Event erstellen</string>
+    <string name="widerholende_events">Widerholende Events</string>
+    <string name="weitere">Weitere</string>
 </resources>
