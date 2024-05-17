@@ -33,10 +33,10 @@ class RepeatedEventDetailDialog(private val context : Context) {
             }
             if(isDetailsValid()){
                 showRepeatedEventDates {datesSuccess ->
-                    if(!datesSuccess){
+                    if(datesSuccess == false){
                         show(callback)
                     }
-                    if(isDatesValid()){
+                    else if(isDatesValid()){
                         callback.invoke(true)
                     }
                     else{
@@ -51,7 +51,7 @@ class RepeatedEventDetailDialog(private val context : Context) {
     }
 
     private fun isDetailsValid() : Boolean {
-        return firstDay != null && lastDay != null
+        return name != null || startTime == null || endTime == null
     }
 
     private fun isDatesValid() : Boolean{
@@ -84,7 +84,6 @@ class RepeatedEventDetailDialog(private val context : Context) {
                 startTimeEt.setText(time.toString("HH:mm"))
                 startTime = time
             }.show()
-
         }
 
         endTimeEt.setOnClickListener {
