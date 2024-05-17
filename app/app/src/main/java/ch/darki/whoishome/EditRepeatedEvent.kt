@@ -46,7 +46,7 @@ class EditRepeatedEvent : Fragment() {
             return
         }
 
-        view.findViewById<TextView>(R.id.edit_event_name).text = event.name
+        view.findViewById<TextView>(R.id.edit_event_name).text = event.eventName
         val editEventName = view.findViewById<EditText>(R.id.event_name_edit)
         val editFirstDayDate = view.findViewById<EditText>(R.id.firstDay_edit)
         val editLastDayDate = view.findViewById<EditText>(R.id.lastDay_edit)
@@ -62,7 +62,7 @@ class EditRepeatedEvent : Fragment() {
         var endTime : DateTime = event.endTime
         var dinnerAt : DateTime? = event.dinnerAt
 
-        editEventName.setText(event.name)
+        editEventName.setText(event.eventName)
         editFirstDayDate.setText(event.firstDay.toString("dd.MM.yyyy"))
         editLastDayDate.setText(event.lastDay.toString("dd.MM.yyyy"))
         editStartTime.setText(event.startTime.toString("HH:mm"))

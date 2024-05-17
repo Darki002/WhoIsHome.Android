@@ -117,7 +117,7 @@ class InspectPerson : Fragment() {
         todayRepeatedEvents.forEach(
             fun (e){
                 val view = layoutInflater.inflate(R.layout.view_event, null)
-                setUpRepeatedEventView(view, e.name, e.id, "Heute")
+                setUpRepeatedEventView(view, e.eventName, e.id, "Heute")
                 todayEventsLayout?.addView(view)
             }
         )
@@ -141,7 +141,7 @@ class InspectPerson : Fragment() {
         todayRepeatedEvents?.forEach(
             fun (e){
                 val view = layoutInflater.inflate(R.layout.view_event, null)
-                setUpRepeatedEventView(view, e.name, e.id, e.toDateTimeString())
+                setUpRepeatedEventView(view, e.eventName, e.id, e.toDateTimeString())
                 todayEventsLayout?.addView(view)
             }
         )
@@ -156,7 +156,7 @@ class InspectPerson : Fragment() {
         repeatedEvents.forEach(
             fun (e){
                 val view = layoutInflater.inflate(R.layout.view_event, null)
-                setUpRepeatedEventView(view, e.name, e.id, e.toDateTimeString())
+                setUpRepeatedEventView(view, e.eventName, e.id, e.toDateTimeString())
                 todayEventsLayout?.addView(view)
             }
         )

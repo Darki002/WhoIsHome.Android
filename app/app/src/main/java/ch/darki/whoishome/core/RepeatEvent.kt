@@ -3,7 +3,7 @@ package ch.darki.whoishome.core
 import com.google.firebase.firestore.DocumentSnapshot
 import org.joda.time.DateTime
 
-data class RepeatEvent(val person : Person, val name : String, val startTime : DateTime,
+data class RepeatEvent(val person : Person, val eventName : String, val startTime : DateTime,
                        val endTime : DateTime, val firstDay : DateTime, val lastDay : DateTime, val dates: List<DateTime>,
                        val relevantForDinner : Boolean, val dinnerAt : DateTime?, val id : String){
 
@@ -12,7 +12,7 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
 
         map["id"] = id
         map["person"] = person
-        map["name"] = name
+        map["eventName"] = eventName
         map["startTime"] = startTime.millis
         map["endTime"] = endTime.millis
         map["firstDay"] = firstDay.millis
@@ -80,7 +80,7 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
 
         val dates = ArrayList<DateTime>()
         var current = firstDay
-        while (current < endTime){
+        while (current < lastDay){
             dates.add(current)
             current = current.withDayOfMonth(current.dayOfMonth + 7)
         }
@@ -88,7 +88,7 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
         return RepeatEvent(
             id = id,
             person = person,
-            name = name,
+            eventName = name,
             startTime = startTime,
             endTime = endTime,
             firstDay = firstDay,
@@ -115,7 +115,7 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
 
             val dates = ArrayList<DateTime>()
             var current = firstDay
-            while (current < endTime){
+            while (current < lastDay){
                 dates.add(current)
                 current = current.withDayOfMonth(current.dayOfMonth + 7)
             }
@@ -123,7 +123,7 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
             return RepeatEvent(
                 id = id,
                 person = person,
-                name = name,
+                eventName = name,
                 startTime = startTime,
                 endTime = endTime,
                 firstDay = firstDay,
@@ -141,20 +141,22 @@ data class RepeatEvent(val person : Person, val name : String, val startTime : D
             val lastDayMil = doc.get("lastDay") as? Long?
             val dinnerAtMil = doc.get("dinnerAt") as? Long?
 
+            val dinnerAt = if (dinnerAtMil != null) { DateTime(dinnerAtMil) } else { null }
+
             val dateMillisList = doc.get("dates") as? List<Long> ?: emptyList()
             val dates = dateMillisList.map { DateTime(it) }
 
             return RepeatEvent(
                 id = doc.get("id").toString(),
                 person = Person(doc.getString("person.displayName").toString(), doc.getString("person.email").toString()),
-                name = doc.getString("eventName").toString(),
+                eventName = doc.getString("eventName").toString(),
                 startTime = DateTime(startTimeMil),
                 endTime = DateTime(endTimeMil),
                 firstDay = DateTime(firstDayMil),
                 lastDay = DateTime(lastDayMil),
                 dates = dates,
                 relevantForDinner = doc.getBoolean("relevantForDinner") ?: false,
-                dinnerAt = DateTime(dinnerAtMil)
+                dinnerAt = dinnerAt
             )
         }
     }
