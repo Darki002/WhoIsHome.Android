@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.Event
 import ch.darki.whoishome.core.EventService
+import ch.darki.whoishome.core.Person
 import ch.darki.whoishome.core.RepeatEvenService
 import ch.darki.whoishome.core.RepeatEvent
 
@@ -23,7 +24,7 @@ class InspectPerson : Fragment() {
 
     private lateinit var service: ServiceManager
 
-    private lateinit var viewModel: InspectPersonViewModel
+    private var person: Person? = null
 
     private var todayEventsLayout : LinearLayout? = null
     private var thisWeekEventsLayout : LinearLayout? = null
@@ -44,8 +45,6 @@ class InspectPerson : Fragment() {
         otherEventsLayout = fragment.findViewById(R.id.otherEvents)
         otherRepeatedEventsLayout = fragment.findViewById(R.id.otherRepeatedEvents)
 
-        viewModel = activityViewModels<InspectPersonViewModel>().value
-
         return fragment
     }
 
@@ -54,15 +53,9 @@ class InspectPerson : Fragment() {
 
         val args: InspectPersonArgs = InspectPersonArgs.fromBundle(requireArguments())
 
-        if(viewModel.person == null || viewModel.person?.email != args.email){
-            service.presenceService.personService.getPersonByEmail(args.email){
-                viewModel.person = it
-                setTitle(view, viewModel.person?.displayName)
-                showAllEvents()
-            }
-        }
-        else{
-            setTitle(view, viewModel.person?.displayName)
+        service.presenceService.personService.getPersonByEmail(args.email){
+            person = it
+            setTitle(view, person?.displayName)
             showAllEvents()
         }
     }
@@ -77,12 +70,12 @@ class InspectPerson : Fragment() {
     }
 
     private fun showAllEvents(){
-        if(viewModel.person == null){
+        if(person == null){
             return
         }
 
-        service.presenceService.eventService.getAllEventsFromPerson(viewLifecycleOwner.lifecycleScope, viewModel.person!!.email){ eventsForPerson ->
-            service.presenceService.repeatEventService.getAllRepeatedEventsFromPerson(viewLifecycleOwner.lifecycleScope, viewModel.person!!.email) { repeatedEventsForPerson ->
+        service.presenceService.eventService.getAllEventsFromPerson(viewLifecycleOwner.lifecycleScope, person!!.email){ eventsForPerson ->
+            service.presenceService.repeatEventService.getAllRepeatedEventsFromPerson(viewLifecycleOwner.lifecycleScope, person!!.email) { repeatedEventsForPerson ->
                 show(eventsForPerson, repeatedEventsForPerson)
             }
         }
@@ -101,7 +94,7 @@ class InspectPerson : Fragment() {
 
     private fun showToday(todayEvents : List<Event>, todayRepeatedEvents: List<RepeatEvent>){
 
-        if(viewModel.person == null){
+        if(person == null){
             return
         }
 
@@ -125,7 +118,7 @@ class InspectPerson : Fragment() {
 
     private fun showEventsAt(events : List<Event>, todayRepeatedEvents: List<RepeatEvent>?, layout : LinearLayout?){
 
-        if(viewModel.person == null){
+        if(person == null){
             return
         }
 
@@ -148,7 +141,7 @@ class InspectPerson : Fragment() {
     }
 
     private fun showOtherRepeatedEvents(repeatedEvents: List<RepeatEvent>){
-        if(viewModel.person == null){
+        if(person == null){
             return
         }
 
@@ -167,7 +160,7 @@ class InspectPerson : Fragment() {
         view.findViewById<TextView>(R.id.date).text = date
 
         view.findViewById<Button>(R.id.edit_event).setOnClickListener {
-            if(viewModel.person?.email != service.currentPerson?.email){
+            if(person?.email != service.currentPerson?.email){
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -176,7 +169,7 @@ class InspectPerson : Fragment() {
         }
 
         view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
-            if(viewModel.person?.email != service.currentPerson?.email){
+            if(person?.email != service.currentPerson?.email){
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
             }
             else{
@@ -197,7 +190,7 @@ class InspectPerson : Fragment() {
         view.findViewById<TextView>(R.id.date).text = date
 
         view.findViewById<Button>(R.id.edit_event).setOnClickListener {
-            if(viewModel.person?.email != service.currentPerson?.email){
+            if(person?.email != service.currentPerson?.email){
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -206,7 +199,7 @@ class InspectPerson : Fragment() {
         }
 
         view.findViewById<Button>(R.id.deleteEvent).setOnClickListener {
-            if(viewModel.person?.email != service.currentPerson?.email){
+            if(person?.email != service.currentPerson?.email){
                 Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
             }
             else{

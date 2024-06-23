@@ -1,7 +1,9 @@
 package ch.darki.whoishome.core
 
+import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import org.joda.time.DateTime
+import kotlin.math.log
 
 data class RepeatEvent(val person : Person, val eventName : String, val startTime : DateTime,
                        val endTime : DateTime, val firstDay : DateTime, val lastDay : DateTime, val dates: List<DateTime>,
@@ -25,13 +27,8 @@ data class RepeatEvent(val person : Person, val eventName : String, val startTim
     }
 
     fun toDateTimeString() : String {
-        val now = DateTime.now()
-        for (date in dates){
-            if(date.year == now.year && date.dayOfYear == now.dayOfYear){
-                date.toString("dd.MM.yyyy") + " " + startTime.toString("HH:mm") + " - " + endTime.toString("HH:mm")
-            }
-        }
-        return "404 Not Found :("
+        val date = nextDateFromToday() ?: return "404 Not Found :("
+        return date.toString("dd.MM.yyyy") + "   " + startTime.toString("HH:mm") + " - " + endTime.toString("HH:mm")
     }
 
     fun hasRelevantDates() : Boolean{
