@@ -117,6 +117,7 @@ data class RepeatEvent(val person : Person, val eventName : String, val startTim
             var current = firstDay
             while (current < lastDay){
                 dates.add(current)
+                // TODO handle if the day goes over a month
                 current = current.withDayOfMonth(current.dayOfMonth + 7)
             }
 
