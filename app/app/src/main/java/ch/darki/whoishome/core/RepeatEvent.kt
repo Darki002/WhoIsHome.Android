@@ -111,14 +111,17 @@ data class RepeatEvent(val person : Person, val eventName : String, val startTim
             dinnerAt: DateTime?
         ) : RepeatEvent
         {
+            if (firstDay > lastDay){
+                throw IllegalArgumentException("firstDay must be less then lastDay")
+            }
+
             val id = person.email + " - " + DateTime.now().millis
 
             val dates = ArrayList<DateTime>()
             var current = firstDay
             while (current < lastDay){
                 dates.add(current)
-                // TODO handle if the day goes over a month
-                current = current.withDayOfMonth(current.dayOfMonth + 7)
+                current = current.plusDays(7)
             }
 
             return RepeatEvent(
