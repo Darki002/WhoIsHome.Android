@@ -44,45 +44,22 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_main, menu)
 
         if(BuildConfig.DEBUG == false) {
-            menu.removeItem(R.id.crash)
+            hideDevFunctions(menu)
         }
 
         return true
     }
 
+    private fun hideDevFunctions(menu: Menu) {
+        menu.removeItem(R.id.crash)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // If it is in Debug, there will be Dev Functions available.
+        return if (BuildConfig.DEBUG) debugOptionItemSelected(item) else releaseOptionItemSelected(item)
+    }
 
-        // In this Switch you can define developer functions, only available in Debug mode, not in Release!
-        if(BuildConfig.DEBUG) {
-            return when (item.itemId) {
-                R.id.create_new_event -> {
-                    showCreateNewEventDialog()
-                    return true
-                }
-
-                R.id.create_new_repeated_event -> {
-                    showCreateNewRepeatedEventDialog()
-                    return true
-                }
-
-                R.id.log_out -> {
-                    service.logOut()
-                    sharedPreferences.edit().remove("email").apply()
-                    startActivity(Intent(this, LogIn::class.java))
-                    return true
-                }
-
-                R.id.crash -> {
-                    throw NotImplementedError("Dev Error for testing!")
-                }
-
-                else -> super.onOptionsItemSelected(item)
-            }
-        }
-
+    private fun releaseOptionItemSelected(item: MenuItem) : Boolean {
         return when (item.itemId) {
             R.id.create_new_event -> {
                 showCreateNewEventDialog()
@@ -99,6 +76,33 @@ class MainActivity : AppCompatActivity() {
                 sharedPreferences.edit().remove("email").apply()
                 startActivity(Intent(this, LogIn::class.java))
                 return true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun debugOptionItemSelected(item: MenuItem) : Boolean {
+        return when (item.itemId) {
+            R.id.create_new_event -> {
+                showCreateNewEventDialog()
+                return true
+            }
+
+            R.id.create_new_repeated_event -> {
+                showCreateNewRepeatedEventDialog()
+                return true
+            }
+
+            R.id.log_out -> {
+                service.logOut()
+                sharedPreferences.edit().remove("email").apply()
+                startActivity(Intent(this, LogIn::class.java))
+                return true
+            }
+
+            R.id.crash -> {
+                throw NotImplementedError("Dev Error for testing!")
             }
 
             else -> super.onOptionsItemSelected(item)
