@@ -47,8 +47,9 @@
     <string name="create_new_repeated_event">Wöchenntliches Event erstellen</string>
     <string name="widerholende_events">Widerholende Events</string>
     <string name="weitere">Weitere</string>
-    <string name="crash">Einstellungen</string>
+    <string name="crash">Crash</string>
     <string name="settings">Einstellungen</string>
+    <string name="back_home">back_home</string>
 
     <string-array name="theme_options">
         <item>Dark</item>

@@ -35,6 +35,9 @@
         <activity
             android:name=".settings.SettingsActivity"
             android:theme="@style/Theme.WhoIsHome">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mainActivity.MainActivity" />
         </activity>
     </application>
 
