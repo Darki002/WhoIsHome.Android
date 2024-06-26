@@ -32,6 +32,10 @@
             android:name=".mainActivity.MainActivity"
             android:theme="@style/Theme.WhoIsHome" >
         </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:theme="@style/Theme.WhoIsHome">
+        </activity>
     </application>
 
 </manifest>
