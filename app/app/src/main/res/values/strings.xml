@@ -47,4 +47,5 @@
     <string name="create_new_repeated_event">Wöchenntliches Event erstellen</string>
     <string name="widerholende_events">Widerholende Events</string>
     <string name="weitere">Weitere</string>
+    <string name="crash">Crash</string>
 </resources>

@@ -14,6 +14,7 @@ import androidx.navigation.NavController
 import ch.darki.whoishome.databinding.ActivityMainBinding
 import ch.darki.whoishome.dialogs.CreateNewEntryDialog
 import ch.darki.whoishome.dialogs.CreateNewRepeatedEventDialog
+import com.google.firebase.BuildConfig
 
 class MainActivity : AppCompatActivity() {
 
@@ -41,6 +42,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
+
+        if(BuildConfig.DEBUG == false) {
+            menu.removeItem(R.id.crash)
+        }
+
         return true
     }
 
@@ -48,6 +54,35 @@ class MainActivity : AppCompatActivity() {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
+        // In this Switch you can define developer functions, only available in Debug mode, not in Release!
+        if(BuildConfig.DEBUG) {
+            return when (item.itemId) {
+                R.id.create_new_event -> {
+                    showCreateNewEventDialog()
+                    return true
+                }
+
+                R.id.create_new_repeated_event -> {
+                    showCreateNewRepeatedEventDialog()
+                    return true
+                }
+
+                R.id.log_out -> {
+                    service.logOut()
+                    sharedPreferences.edit().remove("email").apply()
+                    startActivity(Intent(this, LogIn::class.java))
+                    return true
+                }
+
+                R.id.crash -> {
+                    throw NotImplementedError("Dev Error for testing!")
+                }
+
+                else -> super.onOptionsItemSelected(item)
+            }
+        }
+
         return when (item.itemId) {
             R.id.create_new_event -> {
                 showCreateNewEventDialog()
