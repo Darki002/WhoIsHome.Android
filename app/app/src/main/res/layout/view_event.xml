@@ -58,7 +58,7 @@
                     android:paddingRight="12dp"
                     android:paddingBottom="3dp"
                     android:layout_marginStart="3dp"
-                    android:text="@string/l_schen"
+                    android:text="@string/delete"
                     android:textSize="12sp"
                     style="?android:attr/buttonBarButtonStyle" />
             </LinearLayout>

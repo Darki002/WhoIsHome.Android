@@ -43,46 +43,15 @@ class MainActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
 
-        if(BuildConfig.DEBUG == false) {
-            hideDevFunctions(menu)
+        // If it is in Debug, there will be Dev Functions available, but default hidden for production.
+        if(BuildConfig.DEBUG) {
+            menuInflater.inflate(R.menu.menu_dev, menu)
         }
 
         return true
     }
 
-    private fun hideDevFunctions(menu: Menu) {
-        menu.removeItem(R.id.crash)
-    }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // If it is in Debug, there will be Dev Functions available.
-        return if (BuildConfig.DEBUG) debugOptionItemSelected(item) else releaseOptionItemSelected(item)
-    }
-
-    private fun releaseOptionItemSelected(item: MenuItem) : Boolean {
-        return when (item.itemId) {
-            R.id.create_new_event -> {
-                showCreateNewEventDialog()
-                return true
-            }
-
-            R.id.create_new_repeated_event -> {
-                showCreateNewRepeatedEventDialog()
-                return true
-            }
-
-            R.id.log_out -> {
-                service.logOut()
-                sharedPreferences.edit().remove("email").apply()
-                startActivity(Intent(this, LogIn::class.java))
-                return true
-            }
-
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
-    private fun debugOptionItemSelected(item: MenuItem) : Boolean {
         return when (item.itemId) {
             R.id.create_new_event -> {
                 showCreateNewEventDialog()

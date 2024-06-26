@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:textStyle="bold"
         android:textSize="24sp"
-        android:text="@string/neues_event"
+        android:text="@string/new_event"
         android:layout_marginBottom="16dp" />
 
     <RelativeLayout
@@ -98,7 +98,7 @@
             android:id="@+id/create_event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/erstellen"
+            android:text="@string/create"
             android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
