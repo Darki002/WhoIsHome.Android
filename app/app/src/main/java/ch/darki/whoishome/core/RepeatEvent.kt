@@ -143,8 +143,13 @@ data class RepeatEvent(val person : Person, val eventName : String, val startTim
 
             val dinnerAt = if (dinnerAtMil != null) { DateTime(dinnerAtMil) } else { null }
 
-            val dateMillisList = doc.get("dates") as? List<Long> ?: emptyList()
-            val dates = dateMillisList.map { DateTime(it) }
+            val rawDates = doc.get("dates")
+            val dates = if (rawDates is List<*>) {
+                rawDates.mapNotNull { it as Long }.map { DateTime(it) }
+            }
+            else {
+                emptyList()
+            }
 
             return RepeatEvent(
                 id = doc.get("id").toString(),
