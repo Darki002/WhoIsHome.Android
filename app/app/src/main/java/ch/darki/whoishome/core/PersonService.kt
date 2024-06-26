@@ -24,7 +24,7 @@ class PersonService {
             }
     }
 
-    fun createPersonIfNotExists(person: Person, context : Context) {
+    fun createPersonIfNotExists(person: Person, context : Context, callback: (Person?) -> Unit) {
         val db = Firebase.firestore
 
         db.collection("person").where(Filter.equalTo("email", person.email)).get()
@@ -33,8 +33,18 @@ class PersonService {
                 Toast.makeText(context, "failed to create Person", Toast.LENGTH_SHORT).show() }
             .addOnSuccessListener { result ->
                 if(result.isEmpty){
-                    db.collection("person").add(person)
+                    db.collection("person").add(person.toDb())
                 }
+            }
+
+        db.collection("person").where(Filter.equalTo("email", person.email)).get()
+            .addOnSuccessListener {
+                val dbPerson = Person.new(it.documents[0])
+                callback(dbPerson)
+            }
+            .addOnFailureListener {
+                Log.e("DB Err", "Person with Email ${person.email} not found after Login. ${it.message.toString()}")
+                callback(null)
             }
     }
 }
