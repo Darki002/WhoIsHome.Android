@@ -24,4 +24,9 @@ class ServiceManager : Application() {
             Firebase.crashlytics.setUserId(currentPerson!!.id!!)
         }
     }
+
+    fun logOut() {
+        currentPerson = null
+        Firebase.crashlytics.setUserId("")
+    }
 }

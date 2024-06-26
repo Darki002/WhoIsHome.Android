@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.log_out -> {
-                service.currentPerson = null
+                service.logOut()
                 sharedPreferences.edit().remove("email").apply()
                 startActivity(Intent(this, LogIn::class.java))
                 return true
