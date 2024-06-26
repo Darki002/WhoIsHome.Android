@@ -134,7 +134,7 @@ class RepeatEvenService {
 
         val otherEvents = events.stream()
             .filter { e -> e != null && e.hasRelevantDates() }
-            .filter { e -> !e!!.isToday() && !e.isThisWeek() }
+            .filter { e -> !e!!.isToday() && !((e.isThisWeek() && e.nextDateFromToday()!!.dayOfWeek > DateTime.now().dayOfWeek)) }
             ?.toArray<RepeatEvent> { arrayOfNulls<RepeatEvent>(it) }
 
         return RepeatedEventsForPerson(
