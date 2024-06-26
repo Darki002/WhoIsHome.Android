@@ -10,12 +10,11 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import ch.darki.whoishome.core.models.Event
 import ch.darki.whoishome.core.EventService
-import ch.darki.whoishome.core.Person
+import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.core.RepeatEvenService
 import ch.darki.whoishome.core.models.RepeatEvent
 

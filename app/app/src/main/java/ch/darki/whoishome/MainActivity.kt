@@ -44,9 +44,8 @@ class MainActivity : AppCompatActivity() {
 
         // If it is in Debug, there will be Dev Functions available, but default hidden for production.
         if(BuildConfig.DEBUG) {
-            val devGroup = menu.findItem(R.id.dev_group)
-            devGroup.isEnabled = true
-            devGroup.isVisible = true
+            menu.setGroupEnabled(R.id.dev_group, true)
+            menu.setGroupVisible(R.id.dev_group, true)
         }
 
         return true
