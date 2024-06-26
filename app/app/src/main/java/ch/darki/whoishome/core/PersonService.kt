@@ -3,6 +3,7 @@ package ch.darki.whoishome.core
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import ch.darki.whoishome.core.models.Person
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

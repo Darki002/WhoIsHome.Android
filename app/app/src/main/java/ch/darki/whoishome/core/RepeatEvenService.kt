@@ -2,6 +2,8 @@ package ch.darki.whoishome.core
 
 import android.util.Log
 import androidx.lifecycle.LifecycleCoroutineScope
+import ch.darki.whoishome.core.models.Person
+import ch.darki.whoishome.core.models.RepeatEvent
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

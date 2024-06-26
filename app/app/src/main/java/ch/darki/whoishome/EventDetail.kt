@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.core.models.Event
 
 class EventDetail : Fragment() {
 

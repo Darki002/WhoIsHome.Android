@@ -1,16 +1,17 @@
 package ch.darki.whoishome.core
 
 import android.util.Log
+import ch.darki.whoishome.core.models.Event
+import ch.darki.whoishome.core.models.Person
+import ch.darki.whoishome.core.models.RepeatEvent
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
 import kotlinx.coroutines.*
 import kotlinx.coroutines.tasks.await
 import java.util.stream.Collectors
-import java.util.stream.Stream
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
-import kotlin.streams.toList
 
 class PresenceService {
     var personService : PersonService = PersonService()

@@ -1,4 +1,4 @@
-package ch.darki.whoishome.core
+package ch.darki.whoishome.core.models
 
 import com.google.firebase.firestore.DocumentSnapshot
 import org.joda.time.DateTime
@@ -76,7 +76,7 @@ data class RepeatEvent(val person : Person, val eventName : String, val startTim
         lastDay: DateTime,
         relevantForDinner: Boolean,
         dinnerAt: DateTime?
-    ) : RepeatEvent{
+    ) : RepeatEvent {
 
         val dates = ArrayList<DateTime>()
         var current = firstDay

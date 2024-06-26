@@ -13,10 +13,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.core.models.Event
 import ch.darki.whoishome.core.EventService
 import ch.darki.whoishome.core.RepeatEvenService
-import ch.darki.whoishome.core.RepeatEvent
+import ch.darki.whoishome.core.models.RepeatEvent
 
 
 class InspectPerson : Fragment() {

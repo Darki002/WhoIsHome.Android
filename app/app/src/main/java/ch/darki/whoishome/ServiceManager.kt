@@ -1,7 +1,7 @@
 package ch.darki.whoishome
 
 import android.app.Application
-import ch.darki.whoishome.core.Person
+import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.core.PresenceService
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase

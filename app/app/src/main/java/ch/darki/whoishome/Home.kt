@@ -10,7 +10,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.Person
+import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.core.PresenceService
 import org.joda.time.DateTime
 
