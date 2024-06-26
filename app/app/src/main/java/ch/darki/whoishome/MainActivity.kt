@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import ch.darki.whoishome.databinding.ActivityMainBinding
 import ch.darki.whoishome.dialogs.CreateNewEntryDialog
 import ch.darki.whoishome.dialogs.CreateNewRepeatedEventDialog
-import com.google.firebase.BuildConfig
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,7 +44,9 @@ class MainActivity : AppCompatActivity() {
 
         // If it is in Debug, there will be Dev Functions available, but default hidden for production.
         if(BuildConfig.DEBUG) {
-            menuInflater.inflate(R.menu.menu_dev, menu)
+            val devGroup = menu.findItem(R.id.dev_group)
+            devGroup.isEnabled = true
+            devGroup.isVisible = true
         }
 
         return true
