@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="Developer">
+        <SwitchPreferenceCompat
+            android:key="show_dev_options"
+            android:title="Show"
+            android:summary="Show developer options"
+            android:defaultValue="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.databinding.ActivityLogInBinding
+import ch.darki.whoishome.mainActivity.MainActivity
 
 class LogIn : AppCompatActivity() {
 

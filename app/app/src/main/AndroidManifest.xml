@@ -29,8 +29,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".mainActivity.MainActivity"
             android:theme="@style/Theme.WhoIsHome" >
+        </activity>
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:theme="@style/Theme.WhoIsHome">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".mainActivity.MainActivity" />
         </activity>
     </application>
 
