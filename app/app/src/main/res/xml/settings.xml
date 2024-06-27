@@ -1,18 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="General">
-        <ListPreference
-            android:key="theme_preference"
-            android:title="Theme"
-            android:dialogTitle="Choose Theme"
-            android:entries="@array/theme_options"
-            android:entryValues="@array/theme_values"
-            android:defaultValue="auto"
-            android:summary="%s" />
-    </PreferenceCategory>
-
-    <PreferenceCategory android:title="Dev">
+    <PreferenceCategory android:title="Developer">
         <SwitchPreferenceCompat
             android:key="show_dev_options"
             android:title="Show"
