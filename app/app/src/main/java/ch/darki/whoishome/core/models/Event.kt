@@ -1,4 +1,4 @@
-package ch.darki.whoishome.core
+package ch.darki.whoishome.core.models
 
 import com.google.firebase.firestore.DocumentSnapshot
 import org.joda.time.DateTime

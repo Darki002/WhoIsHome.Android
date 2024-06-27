@@ -1,4 +1,4 @@
-package ch.darki.whoishome
+package ch.darki.whoishome.mainActivity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,7 +12,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.RepeatEvent
+import ch.darki.whoishome.R
+import ch.darki.whoishome.ServiceManager
+import ch.darki.whoishome.core.models.RepeatEvent
 import ch.darki.whoishome.dialogs.DatePicker
 import ch.darki.whoishome.dialogs.TimePicker
 import org.joda.time.DateTime
@@ -149,7 +151,8 @@ class EditRepeatedEvent : Fragment() {
     }
 
     private fun updateRepeatedEvent(name: String, firstDayDate: DateTime, lastDayDate: DateTime, startTime: DateTime, endTime: DateTime,
-                            relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean, oldRepeatedEvent: RepeatEvent) {
+                            relevantForDinner : Boolean, dinnerAt : DateTime?, notAtHomeForDinner : Boolean, oldRepeatedEvent: RepeatEvent
+    ) {
         if(notAtHomeForDinner){
             service.presenceService.repeatEventService.update(
                 oldRepeatedEvent.update(

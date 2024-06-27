@@ -1,6 +1,8 @@
 package ch.darki.whoishome.core
 
 import android.util.Log
+import ch.darki.whoishome.core.models.Event
+import ch.darki.whoishome.core.models.Person
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase

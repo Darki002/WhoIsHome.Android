@@ -7,8 +7,9 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import ch.darki.whoishome.core.Person
+import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.databinding.ActivityLogInBinding
+import ch.darki.whoishome.mainActivity.MainActivity
 
 class LogIn : AppCompatActivity() {
 
@@ -26,10 +27,11 @@ class LogIn : AppCompatActivity() {
 
         if(sharedPreferences.contains("email")){
             service.presenceService.personService.getPersonByEmail(sharedPreferences.getString("email", "")!!) {
-                service.currentPerson = it
-                if(service.currentPerson != null){
-                    startActivity(Intent(this, MainActivity::class.java))
+                if (it == null) {
+                    return@getPersonByEmail
                 }
+                service.setPerson(it)
+                startActivity(Intent(this, MainActivity::class.java))
             }
         }
 
@@ -43,11 +45,12 @@ class LogIn : AppCompatActivity() {
         val displayName = findViewById<TextView>(R.id.displayNameLogIn).text.toString()
 
         val person = Person(displayName, email)
-        service.presenceService.personService.createPersonIfNotExists(person, this)
-        service.currentPerson = person
-        sharedPreferences.edit().putString("email", email).apply()
+        service.presenceService.personService.createPersonIfNotExists(person, this) {
+            service.setPerson(person)
+            sharedPreferences.edit().putString("email", email).apply()
 
-        startActivity(Intent(this, MainActivity::class.java))
-        Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, MainActivity::class.java))
+            Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
+        }
     }
 }

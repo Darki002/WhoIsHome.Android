@@ -1,4 +1,4 @@
-package ch.darki.whoishome
+package ch.darki.whoishome.mainActivity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,15 +7,15 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.R
+import ch.darki.whoishome.ServiceManager
+import ch.darki.whoishome.core.models.Event
 import ch.darki.whoishome.dialogs.DatePicker
-import ch.darki.whoishome.dialogs.DateTimePicker
 import ch.darki.whoishome.dialogs.TimePicker
 import org.joda.time.DateTime
 

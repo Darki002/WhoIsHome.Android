@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="ch.darki.whoishome.Home"
+        android:name="ch.darki.whoishome.mainActivity.Home"
         android:label="@string/home_fragment_label"
         tools:layout="@layout/fragment_home" >
         <action
@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/personView"
-        android:name="ch.darki.whoishome.InspectPerson"
+        android:name="ch.darki.whoishome.mainActivity.InspectPerson"
         android:label="Inspect Person"
         tools:layout="@layout/fragment_inspect_person"
         >
@@ -41,7 +41,7 @@
 
     <fragment
         android:id="@+id/fragment_edit_event"
-        android:name="ch.darki.whoishome.EditEvent"
+        android:name="ch.darki.whoishome.mainActivity.EditEvent"
         android:label="Edit Event"
         tools:layout="@layout/fragment_edit_event"
         >
@@ -58,7 +58,7 @@
 
     <fragment
         android:id="@+id/fragment_edit_repeated_event"
-        android:name="ch.darki.whoishome.EditRepeatedEvent"
+        android:name="ch.darki.whoishome.mainActivity.EditRepeatedEvent"
         android:label="Edit Repeated Event"
         tools:layout="@layout/fragment_edit_repeated_event">
 
@@ -75,7 +75,7 @@
 
     <fragment
         android:id="@+id/eventDetail"
-        android:name="ch.darki.whoishome.EventDetail"
+        android:name="ch.darki.whoishome.mainActivity.EventDetail"
         android:label="Event Detail"
         tools:layout="@layout/fragment_event_detail" >
         <action

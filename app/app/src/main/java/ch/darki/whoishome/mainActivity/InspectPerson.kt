@@ -1,4 +1,4 @@
-package ch.darki.whoishome
+package ch.darki.whoishome.mainActivity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,14 +10,15 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
-import ch.darki.whoishome.core.Event
+import ch.darki.whoishome.R
+import ch.darki.whoishome.ServiceManager
+import ch.darki.whoishome.core.models.Event
 import ch.darki.whoishome.core.EventService
-import ch.darki.whoishome.core.Person
+import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.core.RepeatEvenService
-import ch.darki.whoishome.core.RepeatEvent
+import ch.darki.whoishome.core.models.RepeatEvent
 
 
 class InspectPerson : Fragment() {
