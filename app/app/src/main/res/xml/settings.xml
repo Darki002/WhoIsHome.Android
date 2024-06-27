@@ -8,5 +8,4 @@
             android:summary="Show developer options"
             android:defaultValue="false" />
     </PreferenceCategory>
-
 </PreferenceScreen>
