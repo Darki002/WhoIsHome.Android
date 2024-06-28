@@ -31,9 +31,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        service = applicationContext as ServiceManager
         sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
 
-        service = applicationContext as ServiceManager
+        if(!sharedPreferences.contains("email")) {
+            startActivity(Intent(this, LogIn::class.java))
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)

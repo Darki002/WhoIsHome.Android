@@ -1,6 +1,5 @@
 package ch.darki.whoishome
 
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
@@ -9,7 +8,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.databinding.ActivityLogInBinding
-import ch.darki.whoishome.mainActivity.MainActivity
 
 class LogIn : AppCompatActivity() {
 
@@ -21,8 +19,6 @@ class LogIn : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         service = applicationContext as ServiceManager
-        service.init()
-
         sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
 
         if(sharedPreferences.contains("email")){
@@ -31,7 +27,7 @@ class LogIn : AppCompatActivity() {
                     return@getPersonByEmail
                 }
                 service.setPerson(it)
-                startActivity(Intent(this, MainActivity::class.java))
+                finish()
             }
         }
 
@@ -49,8 +45,8 @@ class LogIn : AppCompatActivity() {
             service.setPerson(person)
             sharedPreferences.edit().putString("email", email).apply()
 
-            startActivity(Intent(this, MainActivity::class.java))
             Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 }

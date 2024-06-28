@@ -11,11 +11,7 @@ class ServiceManager : Application() {
     var currentPerson : Person? = null
         private set
 
-    lateinit var presenceService : PresenceService
-
-    fun init() {
-        presenceService = PresenceService()
-    }
+    val presenceService : PresenceService = PresenceService()
 
     fun setPerson(person: Person) {
         currentPerson = person
