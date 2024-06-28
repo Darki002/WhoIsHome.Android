@@ -44,10 +44,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_main, menu)
 
-        // If it is in Debug, there will be Dev Functions available, but default hidden for production.
         val preferenceManager = PreferenceManager.getDefaultSharedPreferences(this)
         val devFunctionsActive = preferenceManager.getBoolean("show_dev_options", false)
         if(devFunctionsActive) {
@@ -83,7 +81,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             R.id.crash -> {
-                throw Error("Test Error for Developer!")
+                throw RuntimeException("Test Error for Developer!")
             }
 
             else -> super.onOptionsItemSelected(item)
