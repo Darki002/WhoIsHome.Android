@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:name=".ServiceManager"
         android:allowBackup="true"
@@ -18,13 +20,16 @@
             android:name="firebase_crashlytics_collection_enabled"
             android:value="true" />
 
+        <meta-data
+            android:name="firebase_messaging_auto_init_enabled"
+            android:value="false" />
+
         <activity
             android:name=".mainActivity.MainActivity"
             android:theme="@style/Theme.WhoIsHome"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -39,6 +44,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".mainActivity.MainActivity" />
         </activity>
+
+        <service
+            android:name=".pushup.FirebaseMessageHandler"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
