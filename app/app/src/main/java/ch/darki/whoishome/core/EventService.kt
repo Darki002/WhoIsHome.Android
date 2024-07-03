@@ -3,6 +3,8 @@ package ch.darki.whoishome.core
 import android.util.Log
 import ch.darki.whoishome.core.models.Event
 import ch.darki.whoishome.core.models.Person
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.crashlytics.setCustomKeys
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -68,6 +70,7 @@ class EventService {
             .addOnSuccessListener {callback.invoke(true)}
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
+                Firebase.crashlytics.recordException(it)
                 callback.invoke(false)
             }
     }
@@ -81,6 +84,7 @@ class EventService {
             .whereEqualTo(FieldPath.of("person", "email"), person.email).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
+                Firebase.crashlytics.recordException(it)
                 callback.invoke(listOf())
             }
             .addOnSuccessListener {
@@ -111,6 +115,7 @@ class EventService {
             }
             catch (e: Exception){
                 Log.e("DB Err", e.message.toString())
+                Firebase.crashlytics.recordException(e)
             }
         }
     }

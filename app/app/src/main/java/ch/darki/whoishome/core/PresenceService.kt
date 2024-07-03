@@ -4,6 +4,7 @@ import android.util.Log
 import ch.darki.whoishome.core.models.Event
 import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.core.models.RepeatEvent
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import org.joda.time.DateTime
@@ -46,6 +47,7 @@ class PresenceService {
                 callback.invoke(presenceList)
             } catch (e: Exception) {
                 Log.e("DB Err", e.message.toString())
+                Firebase.crashlytics.recordException(e)
                 callback.invoke(emptyList())
             }
         }

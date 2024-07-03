@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import ch.darki.whoishome.core.models.Person
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.Filter
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -16,6 +17,7 @@ class PersonService {
         db.collection("person").whereEqualTo("email", email).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
+                Firebase.crashlytics.recordException(it)
                 callback.invoke(null)
             }
             .addOnSuccessListener {
@@ -31,6 +33,7 @@ class PersonService {
         db.collection("person").where(Filter.equalTo("email", person.email)).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
+                Firebase.crashlytics.recordException(it)
                 Toast.makeText(context, "failed to create Person", Toast.LENGTH_SHORT).show() }
             .addOnSuccessListener { result ->
                 if(result.isEmpty){
@@ -45,6 +48,7 @@ class PersonService {
             }
             .addOnFailureListener {
                 Log.e("DB Err", "Person with Email ${person.email} not found after Login. ${it.message.toString()}")
+                Firebase.crashlytics.recordException(it)
                 callback(null)
             }
     }

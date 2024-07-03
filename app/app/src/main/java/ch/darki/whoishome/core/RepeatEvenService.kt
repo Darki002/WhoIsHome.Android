@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleCoroutineScope
 import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.core.models.RepeatEvent
+import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -32,6 +33,7 @@ class RepeatEvenService {
             }
             .addOnFailureListener {
                 Log.e("Update Event", "Update failed with error message $it")
+                Firebase.crashlytics.recordException(it)
             }
     }
 
@@ -44,6 +46,7 @@ class RepeatEvenService {
             }
             catch (e: Exception){
                 Log.e("DB Err", e.message.toString())
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
@@ -76,6 +79,7 @@ class RepeatEvenService {
             }
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
+                Firebase.crashlytics.recordException(it)
                 callback.invoke(false)
             }
     }
@@ -88,6 +92,7 @@ class RepeatEvenService {
             .whereEqualTo(FieldPath.of("person", "email"), person.email).get()
             .addOnFailureListener {
                 Log.e("DB Err", it.message.toString())
+                Firebase.crashlytics.recordException(it)
                 callback.invoke(listOf())
             }
             .addOnSuccessListener {
@@ -117,6 +122,7 @@ class RepeatEvenService {
             }
             catch (e: Exception){
                 Log.e("DB Err", e.message.toString())
+                Firebase.crashlytics.recordException(e)
             }
         }
     }
