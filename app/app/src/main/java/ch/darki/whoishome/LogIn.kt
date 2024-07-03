@@ -21,12 +21,8 @@ class LogIn : AppCompatActivity() {
         service = applicationContext as ServiceManager
         sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
 
-        if(sharedPreferences.contains("email")){
-            service.presenceService.personService.getPersonByEmail(sharedPreferences.getString("email", "")!!) {
-                if (it == null) {
-                    return@getPersonByEmail
-                }
-                service.setPerson(it)
+        service.tryLogin { success ->
+            if(success) {
                 finish()
             }
         }
@@ -42,9 +38,7 @@ class LogIn : AppCompatActivity() {
 
         val person = Person(displayName, email)
         service.presenceService.personService.createPersonIfNotExists(person, this) {
-            service.setPerson(person)
-            sharedPreferences.edit().putString("email", email).apply()
-
+            service.login(person)
             Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
             finish()
         }

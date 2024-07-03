@@ -35,14 +35,7 @@ class MainActivity : AppCompatActivity() {
         service = applicationContext as ServiceManager
         sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
 
-        if(!sharedPreferences.contains("email")) {
-            startActivity(Intent(this, LogIn::class.java))
-        }
-
-        service.login(sharedPreferences.getString("email", null)) {
-            Toast.makeText(this, "Eingeloggt als ${it?.displayName}", Toast.LENGTH_SHORT)
-                .show()
-        }
+        checkLogin()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -118,5 +111,16 @@ class MainActivity : AppCompatActivity() {
     private fun showCreateNewRepeatedEventDialog(){
         val dialog = CreateNewRepeatedEventDialog(this, service)
         dialog.show()
+    }
+
+    private fun checkLogin() {
+        service.tryLogin { success ->
+            if (success) {
+                Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
+            } else {
+                service.logOut()
+                startActivity(Intent(this, LogIn::class.java))
+            }
+        }
     }
 }

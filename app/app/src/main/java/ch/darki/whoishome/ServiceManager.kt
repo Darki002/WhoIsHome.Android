@@ -13,27 +13,47 @@ class ServiceManager : Application() {
 
     val presenceService : PresenceService = PresenceService()
 
-    fun setPerson(person: Person) {
+    private val sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
+
+    fun tryLogin(callback : (Boolean) -> Unit) {
+
+        val email = sharedPreferences.getString(KEY, null)
+
+        if (email == null) {
+            callback(false)
+            return
+        }
+
+        presenceService.personService.getPersonByEmail(email) {
+            if (it != null) {
+                login(it)
+            }
+            callback(it != null)
+        }
+    }
+
+    fun login(person: Person) {
+        setPerson(person)
+        sharedPreferences.edit().putString(KEY, person.email).apply()
+    }
+
+    fun logOut() {
+        setPerson(null)
+        sharedPreferences.edit().remove(KEY).apply()
+    }
+
+    private fun setPerson(person: Person?) {
         currentPerson = person
 
         if(currentPerson?.id != null) {
             Firebase.crashlytics.setUserId(currentPerson!!.id!!)
         }
-    }
-
-    fun login(email: String?, callback : (Person?) -> Unit) {
-        if (email == null) {
-            callback(null)
-        }
-
-        presenceService.personService.getPersonByEmail(email!!) {
-            currentPerson = it
-            callback(it)
+        else {
+            Firebase.crashlytics.setUserId("")
         }
     }
 
-    fun logOut() {
-        currentPerson = null
-        Firebase.crashlytics.setUserId("")
+    companion object {
+        const val KEY = "email"
     }
 }
