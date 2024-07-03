@@ -10,6 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.navigation.NavController
 import androidx.preference.PreferenceManager
 import ch.darki.whoishome.LogIn
@@ -36,6 +37,11 @@ class MainActivity : AppCompatActivity() {
 
         if(!sharedPreferences.contains("email")) {
             startActivity(Intent(this, LogIn::class.java))
+        }
+
+        service.login(sharedPreferences.getString("email", null)) {
+            Toast.makeText(this, "Eingeloggt als ${it?.displayName}", Toast.LENGTH_SHORT)
+                .show()
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)

@@ -21,6 +21,17 @@ class ServiceManager : Application() {
         }
     }
 
+    fun login(email: String?, callback : (Person?) -> Unit) {
+        if (email == null) {
+            callback(null)
+        }
+
+        presenceService.personService.getPersonByEmail(email!!) {
+            currentPerson = it
+            callback(it)
+        }
+    }
+
     fun logOut() {
         currentPerson = null
         Firebase.crashlytics.setUserId("")
