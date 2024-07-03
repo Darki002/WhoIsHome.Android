@@ -35,8 +35,6 @@ class MainActivity : AppCompatActivity() {
         service = applicationContext as ServiceManager
         sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
 
-        checkLogin()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
@@ -44,6 +42,8 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        checkForLogin()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -113,7 +113,7 @@ class MainActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun checkLogin() {
+    private fun checkForLogin() {
         service.tryLogin { success ->
             if (success) {
                 Toast.makeText(this, "Logged In", Toast.LENGTH_SHORT).show()
