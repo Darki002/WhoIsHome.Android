@@ -1,6 +1,8 @@
 package ch.darki.whoishome
 
 import android.app.Application
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
 import ch.darki.whoishome.core.models.Person
 import ch.darki.whoishome.core.PresenceService
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -13,7 +15,12 @@ class ServiceManager : Application() {
 
     val presenceService : PresenceService = PresenceService()
 
-    private val sharedPreferences = getSharedPreferences("ch.darki.whoishome", MODE_PRIVATE)
+    private lateinit var sharedPreferences : SharedPreferences
+
+    override fun onCreate() {
+        super.onCreate()
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
+    }
 
     fun tryLogin(callback : (Boolean) -> Unit) {
 
