@@ -33,18 +33,26 @@ class Home : Fragment() {
         layout = fragment.findViewById(R.id.home_presence_container)
         service = activity?.applicationContext as ServiceManager
 
-        service.presenceService.getPresenceListFrom(viewLifecycleOwner.lifecycleScope) {
-            personPresences = it
-
-            personPresences!!.forEach { p ->
-                showPerson(p)
+        service.currentPerson.observe(viewLifecycleOwner) { person ->
+            if (person != null) {
+                showPresences(person)
             }
         }
 
         return fragment
     }
 
-    private fun showPerson(personPresence: PresenceService.PersonPresence){
+    private fun showPresences(loggedInPerson: Person) {
+        service.presenceService.getPresenceListFrom(viewLifecycleOwner.lifecycleScope) {
+            personPresences = it
+
+            personPresences!!.forEach { p ->
+                showPerson(p, loggedInPerson)
+            }
+        }
+    }
+
+    private fun showPerson(personPresence: PresenceService.PersonPresence, loggedInPerson: Person){
         val view = layoutInflater.inflate(R.layout.view_person_presence, null)
 
         view.setOnClickListener {
@@ -52,7 +60,7 @@ class Home : Fragment() {
             NavHostFragment.findNavController(this).navigate(action)
         }
 
-        view.findViewById<TextView>(R.id.personName).text = getDisplayName(personPresence.person)
+        view.findViewById<TextView>(R.id.personName).text = getDisplayName(personPresence.person, loggedInPerson)
         view.findViewById<TextView>(R.id.lastEventAt).text = getDinnerAtText(personPresence.dinnerAt, personPresence.isPresent)
 
         val imageView = view.findViewById<ImageView>(R.id.isPresent)
@@ -62,8 +70,8 @@ class Home : Fragment() {
         layout?.addView(view)
     }
 
-    private fun getDisplayName(person : Person) : String {
-        if(service.currentPerson?.email?.lowercase() == person.email.lowercase()){
+    private fun getDisplayName(person : Person, loggedInPerson: Person) : String {
+        if(loggedInPerson.email.lowercase() == person.email.lowercase()){
             return person.displayName + " (Du)"
         }
         return person.displayName
